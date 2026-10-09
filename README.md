@@ -67,3 +67,8 @@ npm run dev:ui      # or: npm run dev:api
 ```
 
 Both decks use `theme: ./theme`. Logos on the title slide are set via `themeConfig.logoOne` / `logoTwo` in a deck's headmatter.
+
+## Licence
+
+The training material is licensed under [CC BY-NC-SA 4.0](LICENSE): share and adapt it with credit, non-commercially, under the same licence.
+The test object, [booker-platform](https://github.com/Ghislain89/booker-platform), is MIT licensed.

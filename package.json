@@ -27,5 +27,6 @@
     "@iconify-json/simple-icons": "^1.2.11",
     "playwright-chromium": "^1.48.2",
     "sass": "^1.80.6"
-  }
+  },
+  "license": "CC-BY-NC-SA-4.0"
 }
