@@ -263,43 +263,6 @@
 
     .talk-links { display: flex; flex-wrap: wrap; gap: 6px 18px; margin-top: 10px; font-weight: 600; }
 
-    /* Background */
-    .split {
-      display: grid;
-      grid-template-columns: minmax(0, 1.3fr) minmax(0, 1fr);
-      gap: 22px;
-    }
-
-    .certs { display: grid; gap: 12px; margin: 16px 0 0; padding: 0; list-style: none; }
-
-    .certs li {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 4px 12px;
-      justify-content: space-between;
-      padding-bottom: 12px;
-      border-bottom: 1px dashed #c9cdc6;
-    }
-
-    .certs li:last-child { padding-bottom: 0; border-bottom: 0; }
-    .certs strong { font-weight: 600; }
-    .certs span { color: var(--muted); font-size: 0.95rem; }
-
-    .facts { display: grid; gap: 18px; margin: 0; }
-    .facts dt { color: var(--accent-dark); font-size: 0.82rem; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; }
-    .facts dd { margin: 2px 0 0; }
-    .muted { color: var(--muted); }
-
-    .chips { display: flex; flex-wrap: wrap; gap: 8px; margin: 6px 0 0; padding: 0; list-style: none; }
-
-    .chips li {
-      padding: 3px 12px;
-      border: 1px solid #c9cdc6;
-      border-radius: 999px;
-      background: var(--paper);
-      font-size: 0.9rem;
-    }
-
     /* AI */
     .ai {
       padding: clamp(26px, 4vw, 44px);
@@ -401,7 +364,6 @@
 
     @media (max-width: 860px) {
       .grid-3 { grid-template-columns: 1fr; }
-      .split { grid-template-columns: 1fr; }
       .pillars { grid-template-columns: 1fr; }
     }
 
@@ -420,7 +382,6 @@
       .talk { grid-template-columns: 1fr; gap: 10px; }
       .year { justify-self: start; padding-inline: 16px; }
       .card { padding: 22px; }
-      .certs li { flex-direction: column; gap: 0; }
     }
 
     @media (prefers-reduced-motion: reduce) {
@@ -549,50 +510,6 @@
           </div>
         </li>
       </ol>
-    </section>
-
-    <section aria-labelledby="background">
-      <p class="kicker">Background</p>
-      <h2 id="background">Certified, and still curious</h2>
-      <div class="split">
-        <div class="card">
-          <h3>Certifications</h3>
-          <ul class="certs">
-            <li><strong>TMAP: High-performance quality engineering</strong><span>Accredited trainer · 2023</span></li>
-            <li><strong>TMAP: Quality for cross-functional teams</strong><span>Accredited trainer · 2020</span></li>
-            <li><strong>AZ-900: Azure Fundamentals</strong><span>Microsoft · 2020</span></li>
-            <li><strong>Selenium Certified Tester</strong><span>iSQI · 2019</span></li>
-            <li><strong>Certified Agile Tester</strong><span>iSQI · 2015</span></li>
-            <li><strong>TMap NEXT Test Engineer</strong><span>EXIN · 2014</span></li>
-          </ul>
-        </div>
-        <div class="card">
-          <dl class="facts">
-            <div>
-              <dt>Education</dt>
-              <dd>Business IT &amp; Management, honours degree<br /><span class="muted">Hogeschool Rotterdam</span></dd>
-            </div>
-            <div>
-              <dt>Languages</dt>
-              <dd>Dutch and English</dd>
-            </div>
-            <div>
-              <dt>Toolbox</dt>
-              <dd>
-                <ul class="chips">
-                  <li>Playwright</li>
-                  <li>TypeScript</li>
-                  <li>Java &amp; Quarkus</li>
-                  <li>Kubernetes</li>
-                  <li>GitHub Actions</li>
-                  <li>GitHub Copilot</li>
-                  <li>AI agents &amp; MCP</li>
-                </ul>
-              </dd>
-            </div>
-          </dl>
-        </div>
-      </div>
     </section>
 
   </main>
