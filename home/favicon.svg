@@ -1,0 +1,73 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="98 34 164 164">
+  <defs>
+    <clipPath id="fav-shirt-clip">
+      <path id="shirt-shape" d="M148 242 C116 246 84 254 64 272 C46 288 36 318 32 352 L86 362 L84 470 L276 470 L274 362 L328 352 C324 318 314 288 296 272 C276 254 244 246 212 242 Z"/>
+    </clipPath>
+  </defs>
+  <g stroke="#1f2328" stroke-width="3.5" stroke-linejoin="round" stroke-linecap="round">
+    <!-- upper arms -->
+    <path d="M36 346 C30 380 32 430 38 470 L92 470 C92 420 90 386 86 356 Z" fill="#eebb9b"/>
+    <!-- neck -->
+    <path d="M160 196 L160 250 Q180 262 200 250 L200 196 Z" fill="#e6ad8c"/>
+    <path d="M160 214 Q180 226 200 214" fill="none" stroke="#c98d6e" stroke-width="2.5"/>
+    <!-- shirt -->
+    <use href="#shirt-shape" fill="#efe9df"/>
+    <g clip-path="url(#fav-shirt-clip)" stroke="none">
+      <rect x="0" y="274" width="360" height="14" fill="#e58d84"/>
+      <rect x="0" y="296" width="360" height="16" fill="#93aaa9"/>
+      <rect x="0" y="332" width="360" height="14" fill="#e58d84"/>
+      <rect x="0" y="354" width="360" height="16" fill="#93aaa9"/>
+      <rect x="0" y="392" width="360" height="14" fill="#e58d84"/>
+      <rect x="0" y="414" width="360" height="16" fill="#93aaa9"/>
+      <rect x="0" y="452" width="360" height="14" fill="#e58d84"/>
+    </g>
+    <use href="#shirt-shape" fill="none"/>
+    <path d="M90 300 C88 320 87 340 86 362" fill="none" stroke-width="2.5"/>
+    <path d="M270 300 C272 320 273 340 274 362" fill="none" stroke-width="2.5"/>
+    <!-- collar -->
+    <path d="M148 242 Q180 274 212 242" fill="none" stroke="#fffdf8" stroke-width="9"/>
+    <path d="M146 240 Q180 280 214 240" fill="none"/>
+    <!-- back forearm (his left): runs to the right, hand hidden under the right upper arm -->
+    <path d="M46 410 C52 386 76 376 100 378 L274 368 L278 408 L98 426 C72 430 50 426 46 410 Z" fill="#eebb9b"/>
+    <!-- right upper arm, over the tucked-in left hand -->
+    <path d="M324 346 C330 380 328 430 322 470 L268 470 C268 420 270 386 274 356 Z" fill="#eebb9b"/>
+    <!-- front forearm (his right): runs to the left, hand resting on the left upper arm -->
+    <path d="M308 420 C302 444 282 452 258 452 L118 452 L112 414 L256 404 C282 402 304 404 308 420 Z" fill="#f2c4a4"/>
+    <path d="M118 452 C100 454 80 450 70 440 C62 430 66 418 78 414 C90 410 104 410 114 414" fill="#f2c4a4"/>
+    <path d="M74 426 Q88 424 100 430" fill="none" stroke-width="2.5"/>
+    <path d="M74 438 Q88 437 100 442" fill="none" stroke-width="2.5"/>
+    <!-- ears -->
+    <path d="M131 136 C118 130 112 146 116 160 C119 170 126 174 132 170" fill="#eab394"/>
+    <path d="M229 136 C242 130 248 146 244 160 C241 170 234 174 228 170" fill="#eab394"/>
+    <!-- face -->
+    <path d="M130 116 C130 76 230 76 230 116 L230 160 C230 198 210 224 180 226 C150 224 130 198 130 160 Z" fill="#f2c4a4"/>
+    <!-- beard and moustache -->
+    <path d="M131 156 C132 196 150 232 180 236 C210 232 228 196 229 156 C226 172 220 182 212 188 C206 184 200 182 196 182 C190 176 170 176 164 182 C160 182 154 184 148 188 C140 182 134 172 131 156 Z" fill="#8a4b2e"/>
+    <path d="M150 210 Q160 222 172 224" fill="none" stroke="#6b3820" stroke-width="2"/>
+    <path d="M210 210 Q200 222 188 224" fill="none" stroke="#6b3820" stroke-width="2"/>
+    <!-- smile -->
+    <path d="M163 194 Q180 202 197 194 Q192 210 180 211 Q168 210 163 194 Z" fill="#fff"/>
+    <!-- nose -->
+    <path d="M182 138 Q178 156 173 164 Q181 169 189 164" fill="none" stroke-width="3"/>
+    <!-- eyes -->
+    <path d="M148 142 Q157 136 166 142" fill="none" stroke-width="3"/>
+    <path d="M194 142 Q203 136 212 142" fill="none" stroke-width="3"/>
+    <ellipse cx="157" cy="146" rx="4.5" ry="4" fill="#2b2420" stroke="none"/>
+    <ellipse cx="203" cy="146" rx="4.5" ry="4" fill="#2b2420" stroke="none"/>
+    <circle cx="158.5" cy="144.5" r="1.3" fill="#fff" stroke="none"/>
+    <circle cx="204.5" cy="144.5" r="1.3" fill="#fff" stroke="none"/>
+    <path d="M150 153 Q157 156 164 153" fill="none" stroke-width="1.8" stroke="#c98d6e"/>
+    <path d="M196 153 Q203 156 210 153" fill="none" stroke-width="1.8" stroke="#c98d6e"/>
+    <!-- eyebrows -->
+    <path d="M145 128 Q156 121 169 126" fill="none" stroke="#3b281d" stroke-width="5.5"/>
+    <path d="M191 126 Q204 121 215 128" fill="none" stroke="#3b281d" stroke-width="5.5"/>
+    <!-- hair: short sides, swept-up quiff -->
+    <path d="M128 140 C122 112 126 84 144 66 C150 48 176 36 204 40 C226 44 242 60 238 82 C240 102 236 124 232 140 C230 122 226 108 220 100 C214 92 206 90 198 94 C184 88 170 88 158 92 C146 96 136 112 128 140 Z" fill="#4a3022"/>
+    <path d="M152 70 C170 56 200 52 224 62" fill="none" stroke="#7a5640" stroke-width="3"/>
+    <path d="M160 82 C178 70 204 70 228 80" fill="none" stroke="#7a5640" stroke-width="3"/>
+    <path d="M140 86 C146 76 152 72 160 68" fill="none" stroke="#7a5640" stroke-width="2.5"/>
+    <!-- cheeks -->
+    <ellipse cx="146" cy="164" rx="7" ry="4" fill="#e9a08a" stroke="none" opacity=".55"/>
+    <ellipse cx="214" cy="164" rx="7" ry="4" fill="#e9a08a" stroke="none" opacity=".55"/>
+  </g>
+</svg>
