@@ -416,6 +416,7 @@ expect(asAdmin.status()).toBe(201);
 - Add a new room as admin. Construction will surely be done before you go 🙂
 - Book your new room as a regular user
 - The kids bring the flu home from daycare: cancel the booking and verify it's cancelled
+- Tip: the API rejects bookings in the past and bookings that overlap. Check the status codes in Swagger
 
 <div style="display: flex; justify-content: center; gap: 20px; align-items: center; margin-top: 20px;">
   <img src="/programming.png" alt="Programming" width="150">
@@ -449,6 +450,33 @@ export function createRandomUser() {
 - Factories build request bodies with unique data, so tests can run in parallel
 - Helpers wrap repeated actions, such as logging in
 - Balance DRY and KISS: these principles *can, and probably will,* bite each other
+
+<!-- Ghislain -->
+
+---
+
+## Test data through a test-support API
+
+```ts
+test.beforeAll(async ({ request }, testInfo) => {
+  const namespace = `w${testInfo.workerIndex}`; // one namespace per worker
+  const response = await request.post('testing/seed', {
+    data: {
+      namespace,
+      users: [{ username: 'alice' }],
+      rooms: [{ number: '101', type: 'SUITE', price: 150, capacity: 2 }],
+    },
+  });
+  const { users, rooms } = (await response.json()).data; // users[0].token, rooms[0].id
+});
+
+test.afterAll(({ request }, testInfo) => request.delete(`testing/namespace/w${testInfo.workerIndex}`));
+```
+
+- Many apps have a backdoor like this for tests. Seeding through an API is faster and more reliable than through the UI
+- A namespace per worker keeps parallel workers out of each other's data
+- `POST testing/reset` restores the seed data, but don't call it while other workers are running
+- Only in development and test environments. See `/api-docs` → Testing
 
 <!-- Ghislain -->
 
@@ -547,8 +575,11 @@ export const expect = baseExpect.extend({
   },
 });
 
-expect(responseBody).toMatchSchema(getApiRoomsResponse);
+const responseBody: unknown = await response.json();
+await expect(responseBody).toMatchSchema(getApiRoomsResponse);
 ```
+
+- `json()` returns `any`, and Playwright's types hide custom matchers on `any` values. Type the body as `unknown` (or a real type) first
 
 <!-- Lars -->
 

@@ -40,7 +40,7 @@ The UI assignment numbers match §8 of the booker-platform frontend spec.
 | 2 | Setup (booker-platform, config, `request` fixture, `test.step`) | — |
 | 3 | First requests (GET, POST, headers, assertions) | 1 |
 | 4 | Resources & roles (params, PUT/DELETE, 401 vs 403) | 2 |
-| 5 | Scaling up (factories, hooks, fixtures, shared auth, schema validation, typed responses) | Bonus |
+| 5 | Scaling up (factories, test-support API, hooks, fixtures, shared auth, schema validation, typed responses) | Bonus |
 | 6 | Extras (request options, traces, hybrid tests) | — |
 
 ## Usage
