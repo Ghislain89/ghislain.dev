@@ -4,9 +4,9 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Ghislain Gabriëlse · Test automation</title>
-  <meta name="description" content="Ghislain Gabriëlse, test automation consultant at DeTesters. Playwright trainings, tools and test automation." />
+  <meta name="description" content="Ghislain Gabriëlse, senior test automation consultant at deTesters. Playwright trainings, talks and workshops on test automation." />
   <meta property="og:title" content="Ghislain Gabriëlse · Test automation" />
-  <meta property="og:description" content="Test automation consultant at DeTesters. Playwright trainings, tools and test automation." />
+  <meta property="og:description" content="Senior test automation consultant at deTesters. Playwright trainings, talks and workshops on test automation." />
   <meta property="og:image" content="https://ghislain.dev/og-image.png" />
   <meta property="og:url" content="https://ghislain.dev/" />
   <meta name="theme-color" content="#f4f3ef" />
@@ -15,53 +15,72 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Patrick+Hand&family=Space+Grotesk:wght@600;700&display=swap" />
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Person",
+    "name": "Ghislain Gabriëlse",
+    "url": "https://ghislain.dev/",
+    "image": "https://ghislain.dev/ghislain.webp",
+    "jobTitle": "Senior test automation consultant",
+    "worksFor": { "@type": "Organization", "name": "deTesters", "url": "https://detesters.nl/" },
+    "address": { "@type": "PostalAddress", "addressLocality": "Woerden", "addressCountry": "NL" },
+    "sameAs": ["https://www.linkedin.com/in/ggabrielse/", "https://github.com/Ghislain89"]
+  }
+  </script>
   <style>
     :root {
       --ink: #1b1f24;
+      --line: #1f2328;
       --muted: #59616a;
       --paper: #f4f3ef;
       --accent: #2d8a34;
       --accent-dark: #216b27;
+      --accent-soft: #e5f0e3;
       --coral: #d65348;
+      --coral-dark: #b23b31;
+      --shadow: 6px 6px 0 rgba(31, 35, 40, 0.12);
     }
 
     * { box-sizing: border-box; }
 
+    html { scroll-behavior: smooth; }
+
     body {
-      display: flex;
-      flex-direction: column;
-      min-height: 100vh;
-      min-height: 100dvh;
       margin: 0;
       background:
-        radial-gradient(circle at 78% 30%, rgba(45, 138, 52, 0.09), transparent 42%),
-        radial-gradient(circle at 18% 85%, rgba(214, 83, 72, 0.07), transparent 40%),
+        radial-gradient(circle at 78% 12%, rgba(45, 138, 52, 0.09), transparent 32%),
+        radial-gradient(circle at 12% 40%, rgba(214, 83, 72, 0.06), transparent 30%),
         var(--paper);
       color: var(--ink);
       font-family: "Inter", sans-serif;
-      line-height: 1.55;
+      line-height: 1.6;
       -webkit-font-smoothing: antialiased;
     }
 
     body::before {
       content: "";
+      display: block;
       height: 10px;
       background: linear-gradient(90deg, var(--accent) 0 70%, var(--coral) 70% 100%);
     }
 
-    main {
+    a { color: var(--accent-dark); }
+    a:focus-visible { outline: 3px solid var(--accent); outline-offset: 3px; border-radius: 4px; }
+
+    .wrap { width: min(100% - 48px, 1040px); margin: 0 auto; }
+
+    /* Hero */
+    .hero {
       display: grid;
-      flex: 1;
       grid-template-columns: minmax(0, 1fr) minmax(280px, 400px);
-      gap: 48px;
+      gap: 56px;
       align-items: center;
-      width: min(100% - 48px, 1000px);
-      margin: 0 auto;
-      padding: 48px 0 24px;
+      padding: 72px 0 40px;
     }
 
     h1 {
-      margin: 0 0 18px;
+      margin: 0 0 16px;
       font-family: "Space Grotesk", sans-serif;
       font-size: clamp(2.6rem, 6vw, 4.2rem);
       letter-spacing: -0.04em;
@@ -83,23 +102,26 @@
       font-size: 1.1rem;
     }
 
-    .bio a { color: var(--accent-dark); }
+    .actions { display: flex; flex-wrap: wrap; gap: 12px; }
 
-    .cta {
+    .button {
       display: inline-flex;
       gap: 10px;
       align-items: center;
-      padding: 14px 22px;
+      padding: 13px 22px;
+      border: 2px solid var(--ink);
       border-radius: 999px;
       background: var(--ink);
       color: #fff;
       font-weight: 600;
       text-decoration: none;
-      transition: background 0.15s, transform 0.15s;
+      transition: background 0.15s, border-color 0.15s, transform 0.15s;
     }
 
-    .cta:hover { background: var(--accent-dark); transform: translateY(-2px); }
-    .cta:focus-visible, .links a:focus-visible { outline: 3px solid var(--accent); outline-offset: 3px; }
+    .button:hover { border-color: var(--accent-dark); background: var(--accent-dark); transform: translateY(-2px); }
+    .button.secondary { background: transparent; color: var(--ink); }
+    .button.secondary:hover { border-color: var(--accent-dark); background: transparent; color: var(--accent-dark); }
+    .button svg { width: 16px; height: 16px; }
 
     .figure {
       position: relative;
@@ -111,7 +133,7 @@
       display: block;
       width: 100%;
       height: auto;
-      border: 3px solid #1f2328;
+      border: 3px solid var(--line);
       border-radius: 24px;
       box-shadow: 8px 8px 0 rgba(31, 35, 40, 0.12);
     }
@@ -123,7 +145,7 @@
       z-index: 1;
       margin: 0;
       padding: 14px 22px;
-      border: 3px solid #1f2328;
+      border: 3px solid var(--line);
       border-radius: 22px;
       background: #fff;
       font-family: "Patrick Hand", cursive;
@@ -140,8 +162,8 @@
       bottom: -21px;
       width: 26px;
       height: 26px;
-      border-right: 3px solid #1f2328;
-      border-bottom: 3px solid #1f2328;
+      border-right: 3px solid var(--line);
+      border-bottom: 3px solid var(--line);
       background: #fff;
       transform: skewX(-45deg) rotate(20deg);
     }
@@ -150,12 +172,167 @@
       from { opacity: 0; transform: rotate(-4deg) scale(0.6); }
     }
 
-    footer {
+    /* Sections */
+    section { padding: 64px 0 0; }
+
+    .kicker {
+      margin: 0 0 6px;
+      color: var(--coral-dark);
+      font-family: "Patrick Hand", cursive;
+      font-size: 1.35rem;
+      line-height: 1.2;
+    }
+
+    h2 {
+      margin: 0 0 28px;
+      font-family: "Space Grotesk", sans-serif;
+      font-size: clamp(1.8rem, 3.6vw, 2.4rem);
+      letter-spacing: -0.03em;
+      line-height: 1.1;
+    }
+
+    h3 {
+      margin: 0 0 8px;
+      font-family: "Space Grotesk", sans-serif;
+      font-size: 1.2rem;
+      line-height: 1.25;
+    }
+
+    .card {
+      padding: 26px;
+      border: 2px solid var(--line);
+      border-radius: 18px;
+      background: #fff;
+      box-shadow: var(--shadow);
+    }
+
+    .card p { margin: 0; color: var(--muted); }
+
+    .grid-3 {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 22px;
+    }
+
+    .icon {
+      display: grid;
+      width: 46px;
+      height: 46px;
+      margin-bottom: 16px;
+      border: 2px solid var(--line);
+      border-radius: 12px;
+      background: var(--accent-soft);
+      place-items: center;
+    }
+
+    .icon svg { width: 24px; height: 24px; fill: none; stroke: var(--line); stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+    .grid-3 .card:nth-child(2) .icon { background: #fbe4e1; }
+    .grid-3 .card:nth-child(3) .icon { background: #e3eef8; }
+
+    .more { display: inline-block; margin-top: 14px; font-weight: 600; }
+
+    /* Talks */
+    .talks { display: grid; gap: 16px; margin: 0; padding: 0; list-style: none; }
+
+    .talk {
+      display: grid;
+      grid-template-columns: 96px minmax(0, 1fr);
+      gap: 22px;
+      align-items: start;
+    }
+
+    .year {
+      padding: 6px 0;
+      border: 2px solid var(--line);
+      border-radius: 999px;
+      background: var(--accent-soft);
+      font-family: "Space Grotesk", sans-serif;
+      font-weight: 700;
+      text-align: center;
+    }
+
+    .talk .type {
+      margin: 0 0 4px;
+      color: var(--accent-dark);
+      font-size: 0.82rem;
+      font-weight: 600;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+    }
+
+    .talk-links { display: flex; flex-wrap: wrap; gap: 6px 18px; margin-top: 10px; font-weight: 600; }
+
+    /* Background */
+    .split {
+      display: grid;
+      grid-template-columns: minmax(0, 1.3fr) minmax(0, 1fr);
+      gap: 22px;
+    }
+
+    .certs { display: grid; gap: 12px; margin: 16px 0 0; padding: 0; list-style: none; }
+
+    .certs li {
       display: flex;
       flex-wrap: wrap;
-      gap: 10px;
-      justify-content: center;
-      padding: 8px 24px 32px;
+      gap: 4px 12px;
+      justify-content: space-between;
+      padding-bottom: 12px;
+      border-bottom: 1px dashed #c9cdc6;
+    }
+
+    .certs li:last-child { padding-bottom: 0; border-bottom: 0; }
+    .certs strong { font-weight: 600; }
+    .certs span { color: var(--muted); font-size: 0.95rem; }
+
+    .facts { display: grid; gap: 18px; margin: 0; }
+    .facts dt { color: var(--accent-dark); font-size: 0.82rem; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; }
+    .facts dd { margin: 2px 0 0; }
+    .muted { color: var(--muted); }
+
+    .chips { display: flex; flex-wrap: wrap; gap: 8px; margin: 6px 0 0; padding: 0; list-style: none; }
+
+    .chips li {
+      padding: 3px 12px;
+      border: 1px solid #c9cdc6;
+      border-radius: 999px;
+      background: var(--paper);
+      font-size: 0.9rem;
+    }
+
+    /* Off the clock */
+    .ride {
+      display: grid;
+      grid-template-columns: auto minmax(0, 1fr);
+      gap: 36px;
+      align-items: center;
+      background: linear-gradient(135deg, #fff 55%, #fbe4e1);
+    }
+
+    .stats { display: flex; gap: 28px; margin: 0; }
+    .stats div { display: flex; flex-direction: column-reverse; }
+    .stats dt { color: var(--muted); font-size: 0.9rem; }
+
+    .stats dd {
+      margin: 0;
+      font-family: "Space Grotesk", sans-serif;
+      font-size: clamp(2.2rem, 5vw, 3.2rem);
+      font-weight: 700;
+      letter-spacing: -0.04em;
+      line-height: 1;
+    }
+
+    .stats div:first-child dd { color: var(--accent-dark); }
+    .stats div:last-child dd { color: var(--coral-dark); }
+    .ride p + p { margin-top: 10px; }
+
+    /* Footer */
+    footer { padding: 72px 0 36px; text-align: center; }
+
+    .disclaimer {
+      margin: 0 0 18px;
+      font-family: "Patrick Hand", cursive;
+      font-size: 1.35rem;
+      line-height: 1.3;
     }
 
     .links {
@@ -186,8 +363,14 @@
     .links a:hover { border-color: var(--accent); color: var(--accent-dark); }
     .links svg { width: 18px; height: 18px; fill: currentColor; }
 
+    @media (max-width: 860px) {
+      .grid-3 { grid-template-columns: 1fr; }
+      .split { grid-template-columns: 1fr; }
+      .ride { grid-template-columns: 1fr; gap: 20px; }
+    }
+
     @media (max-width: 760px) {
-      main {
+      .hero {
         grid-template-columns: 1fr;
         gap: 8px;
         padding-top: 32px;
@@ -196,44 +379,178 @@
       .figure { order: -1; width: min(300px, 82%); margin: 0 auto 16px; padding-top: 48px; }
       .bubble { left: 10%; font-size: 1.45rem; }
       .bio { margin-inline: auto; }
+      .actions { justify-content: center; }
+      section { padding-top: 52px; }
+      .talk { grid-template-columns: 1fr; gap: 10px; }
+      .year { justify-self: start; padding-inline: 16px; }
+      .card { padding: 22px; }
+      .certs li { flex-direction: column; gap: 0; }
     }
 
     @media (prefers-reduced-motion: reduce) {
+      html { scroll-behavior: auto; }
       .bubble { animation: none; }
-      .cta { transition: none; }
+      .button { transition: none; }
     }
   </style>
 </head>
 <body>
-  <main>
-    <div>
-      <h1>Ghislain Gabriëlse</h1>
-      <p class="role">Test automation consultant at DeTesters</p>
-      <p class="bio">
-        About twelve years in testing, mostly building the tools that make complex
-        tasks simple. I also teach teams to write stable tests with Playwright.
-        Based in Woerden, father of two, butler to a cat.
-      </p>
-      <a class="cta" href="/playwright/">
-        Playwright training
-        <svg width="16" height="16" viewBox="0 0 16 16" aria-hidden="true"><path d="M3 8h9M8.5 4 12.5 8l-4 4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
-      </a>
+  <main class="wrap">
+    <div class="hero">
+      <div>
+        <h1>Ghislain Gabriëlse</h1>
+        <p class="role">Senior test automation consultant at deTesters</p>
+        <p class="bio">
+          About twelve years in testing, mostly building the tools that make complex
+          tasks simple. I help teams write tests they can trust, and teach them to do
+          it themselves with Playwright.
+        </p>
+        <div class="actions">
+          <a class="button" href="/playwright/">
+            Playwright training
+            <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M3 8h9M8.5 4 12.5 8l-4 4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </a>
+          <a class="button secondary" href="#talks">Talks &amp; workshops</a>
+        </div>
+      </div>
+
+      <figure class="figure">
+        <p class="bubble" aria-hidden="true">Hi, I'm Ghislain!</p>
+        <img src="ghislain.webp" width="800" height="800" alt="Illustrated portrait of Ghislain, smiling, in a navy sweater over a white collar, standing in an industrial hall." />
+      </figure>
     </div>
 
-    <figure class="figure">
-      <p class="bubble" aria-hidden="true">Hi, I'm Ghislain!</p>
-      <img src="ghislain.webp" width="800" height="800" alt="Illustrated portrait of Ghislain, smiling, in a navy sweater over a white collar, standing in an industrial hall." />
-    </figure>
+    <section aria-labelledby="what">
+      <p class="kicker">What I do</p>
+      <h2 id="what">Test automation that teams keep using</h2>
+      <div class="grid-3">
+        <article class="card">
+          <div class="icon"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m9 12 2 2 4-4"/><path d="M12 3 4 6v6c0 4.5 3.4 8.3 8 9 4.6-.7 8-4.5 8-9V6Z"/></svg></div>
+          <h3>Consulting</h3>
+          <p>As a consultant at deTesters I help teams set up test automation that is stable, fast and easy to maintain, from the first test to the CI pipeline.</p>
+        </article>
+        <article class="card">
+          <div class="icon"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="4" width="18" height="12" rx="2"/><path d="M8 20h8M12 16v4M7 9l2 2-2 2M12 13h4"/></svg></div>
+          <h3>Training</h3>
+          <p>Hands-on Playwright trainings for UI and API testing, built around a realistic practice app and plenty of exercises.</p>
+          <a class="more" href="/playwright/">Prepare for the training →</a>
+        </article>
+        <article class="card">
+          <div class="icon"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3a3 3 0 0 0-3 3v5a3 3 0 0 0 6 0V6a3 3 0 0 0-3-3Z"/><path d="M5 11a7 7 0 0 0 14 0M12 18v3"/></svg></div>
+          <h3>Knowledge sharing</h3>
+          <p>Talks and workshops at the bi-monthly test automation meetups of deTesters, TestCoders and TechChamps in the Werkspoorkathedraal in Utrecht.</p>
+        </article>
+      </div>
+    </section>
+
+    <section id="talks" aria-labelledby="talks-title">
+      <p class="kicker">On stage</p>
+      <h2 id="talks-title">Talks &amp; workshops</h2>
+      <ol class="talks">
+        <li class="card talk">
+          <span class="year">2026</span>
+          <div>
+            <p class="type">Talk · Meetup, Utrecht</p>
+            <h3>Agents, Skills &amp; MCP Servers: a practical 101</h3>
+            <p>How a team of AI agents, skills and MCP servers takes an issue from ticket to tested feature, and what that means for the way we work.</p>
+            <div class="talk-links"><a href="https://github.com/Ghislain89/Agents-skills-101-presentation">Slides source</a></div>
+          </div>
+        </li>
+        <li class="card talk">
+          <span class="year">2026</span>
+          <div>
+            <p class="type">Talk</p>
+            <h3>Introduction to Testcontainers</h3>
+            <p>Real Docker containers in your tests, and how Quarkus Dev Services makes integration testing almost effortless.</p>
+            <div class="talk-links"><a href="https://github.com/Ghislain89/testcontainers-presentation">Slides source</a></div>
+          </div>
+        </li>
+        <li class="card talk">
+          <span class="year">2025</span>
+          <div>
+            <p class="type">Workshop · Meetup, Utrecht</p>
+            <h3>API testing with Playwright</h3>
+            <p>A workshop for people who already know their way around Playwright. It was full within a day, so we ran it a second time.</p>
+          </div>
+        </li>
+        <li class="card talk">
+          <span class="year">Now</span>
+          <div>
+            <p class="type">Training</p>
+            <h3>Playwright UI &amp; API training</h3>
+            <p>A full training with slides, exercises and the Booker platform as a practice app.</p>
+            <div class="talk-links">
+              <a href="/playwright/">Preparation</a>
+              <a href="/playwright/slides.html">Slides</a>
+              <a href="/playwright/assignments.html">Assignments</a>
+              <a href="https://github.com/Ghislain89/booker-platform">Booker platform</a>
+            </div>
+          </div>
+        </li>
+      </ol>
+    </section>
+
+    <section aria-labelledby="background">
+      <p class="kicker">Background</p>
+      <h2 id="background">Certified, and still curious</h2>
+      <div class="split">
+        <div class="card">
+          <h3>Certifications</h3>
+          <ul class="certs">
+            <li><strong>Selenium Tester Foundation</strong><span>iSQI · 2019</span></li>
+            <li><strong>Certified Agile Tester</strong><span>iSQI · 2015</span></li>
+            <li><strong>ITIL Foundation</strong><span>EXIN · 2014</span></li>
+            <li><strong>TMap NEXT Test Engineer</strong><span>EXIN · 2014</span></li>
+            <li><strong>Agile Foundation</strong><span>Agile Consortium</span></li>
+          </ul>
+        </div>
+        <div class="card">
+          <dl class="facts">
+            <div>
+              <dt>Education</dt>
+              <dd>Business IT &amp; Management, honours degree<br /><span class="muted">Hogeschool Rotterdam</span></dd>
+            </div>
+            <div>
+              <dt>Languages</dt>
+              <dd>Dutch and English</dd>
+            </div>
+            <div>
+              <dt>Toolbox</dt>
+              <dd>
+                <ul class="chips">
+                  <li>Playwright</li>
+                  <li>TypeScript</li>
+                  <li>Java</li>
+                  <li>Testcontainers</li>
+                  <li>GitHub Actions</li>
+                  <li>AI agents &amp; MCP</li>
+                </ul>
+              </dd>
+            </div>
+          </dl>
+        </div>
+      </div>
+    </section>
+
+    <section aria-labelledby="clock">
+      <p class="kicker">Off the clock</p>
+      <h2 id="clock">1,000 km for a good cause</h2>
+      <div class="card ride">
+        <dl class="stats">
+          <div><dt>cycled</dt><dd>1,093 km</dd></div>
+          <div><dt>raised</dt><dd>€906</dd></div>
+        </dl>
+        <div>
+          <p>In September 2025 I cycled for KWF Kankerbestrijding (the Dutch Cancer Society): 200 km, plus one extra kilometre for every euro donated. I seriously underestimated how generous people are.</p>
+          <p>The rest of the time I live in Woerden, as a father of two and a butler to a cat.</p>
+        </div>
+      </div>
+    </section>
   </main>
 
-  <footer>
+  <footer class="wrap">
+    <p class="disclaimer">Not looking for a new job, not even latently. Always happy to talk testing, though.</p>
     <ul class="links">
-      <li>
-        <a href="https://github.com/Ghislain89" rel="me">
-          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 .3a12 12 0 0 0-3.8 23.4c.6.1.8-.3.8-.6v-2c-3.3.7-4-1.6-4-1.6-.6-1.4-1.4-1.8-1.4-1.8-1-.7.1-.7.1-.7 1.2.1 1.8 1.2 1.8 1.2 1 1.8 2.8 1.3 3.5 1 0-.8.4-1.3.7-1.6-2.7-.3-5.5-1.3-5.5-6 0-1.2.5-2.3 1.3-3.1-.2-.4-.6-1.6 0-3.2 0 0 1-.3 3.4 1.2a11.5 11.5 0 0 1 6 0c2.3-1.5 3.3-1.2 3.3-1.2.6 1.6.2 2.8.1 3.2.8.8 1.3 1.9 1.3 3.2 0 4.6-2.8 5.6-5.5 5.9.5.4.9 1.1.9 2.2v3.3c0 .3.1.7.8.6A12 12 0 0 0 12 .3"/></svg>
-          GitHub
-        </a>
-      </li>
       <li>
         <a href="https://www.linkedin.com/in/ggabrielse/" rel="me">
           <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20.45 20.45h-3.56v-5.57c0-1.33-.02-3.04-1.85-3.04-1.85 0-2.14 1.45-2.14 2.94v5.67H9.35V9h3.41v1.56h.05c.48-.9 1.64-1.85 3.37-1.85 3.6 0 4.27 2.37 4.27 5.46v6.28ZM5.34 7.43a2.06 2.06 0 1 1 0-4.13 2.06 2.06 0 0 1 0 4.13ZM7.12 20.45H3.56V9h3.56v11.45ZM22.22 0H1.77C.79 0 0 .77 0 1.73v20.54C0 23.23.79 24 1.77 24h20.45c.98 0 1.78-.77 1.78-1.73V1.73C24 .77 23.2 0 22.22 0Z"/></svg>
@@ -241,9 +558,15 @@
         </a>
       </li>
       <li>
+        <a href="https://github.com/Ghislain89" rel="me">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 .3a12 12 0 0 0-3.8 23.4c.6.1.8-.3.8-.6v-2c-3.3.7-4-1.6-4-1.6-.6-1.4-1.4-1.8-1.4-1.8-1-.7.1-.7.1-.7 1.2.1 1.8 1.2 1.8 1.2 1 1.8 2.8 1.3 3.5 1 0-.8.4-1.3.7-1.6-2.7-.3-5.5-1.3-5.5-6 0-1.2.5-2.3 1.3-3.1-.2-.4-.6-1.6 0-3.2 0 0 1-.3 3.4 1.2a11.5 11.5 0 0 1 6 0c2.3-1.5 3.3-1.2 3.3-1.2.6 1.6.2 2.8.1 3.2.8.8 1.3 1.9 1.3 3.2 0 4.6-2.8 5.6-5.5 5.9.5.4.9 1.1.9 2.2v3.3c0 .3.1.7.8.6A12 12 0 0 0 12 .3"/></svg>
+          GitHub
+        </a>
+      </li>
+      <li>
         <a href="https://detesters.nl/">
           <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 3h6a2 2 0 0 1 2 2v2h3a2 2 0 0 1 2 2v4H2V9a2 2 0 0 1 2-2h3V5a2 2 0 0 1 2-2Zm0 4h6V5H9Zm-7 8h8v1a1 1 0 0 0 1 1h2a1 1 0 0 0 1-1v-1h8v4a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2Z"/></svg>
-          DeTesters
+          deTesters
         </a>
       </li>
     </ul>
