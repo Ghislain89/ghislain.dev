@@ -966,7 +966,7 @@ Pick one (or more):
 
 - Cancel a booking (confirm dialog) and download its invoice; check the file name and content
 - Two contexts: a guest books, the admin approves, the guest sees the status change
-- `page.clock`: the "Check in" button becomes enabled at 15:00
+- `page.clock`: the check-in countdown on My bookings reaches "is open" at 15:00
 - Add a `mobile` project and run your tests with the `nl-NL` locale and dark mode
 - Admin: upload a room image and reorder the rooms with drag & drop
 - Open the terms in a new tab, then pay in the payment widget (shadow DOM)
@@ -977,7 +977,9 @@ Pick one (or more):
 </div>
 
 <!--
-These exercises rely on booker-platform features from phase 2 of the frontend spec (invoices, approvals, check-in countdown, i18n).
+All of these exist in booker-platform. Payment test card: 4242 4242 4242 4242 (any future date and CVC); 4000 0000 0000 0002 is declined.
+Hints: page.waitForEvent('download'), browser.newContext() with the admin storage state, page.clock.setFixedTime (not install+pauseAt: that freezes React Query timers), devices['Pixel 7'] + locale + colorScheme, setInputFiles with a buffer, locator.dragTo, context.waitForEvent('page'). The payment form is in an open shadow root, so ordinary locators reach it.
+Reference solutions: the assignment5.*.spec.ts files on the solutions branch.
 -->
 
 ---
@@ -1273,10 +1275,24 @@ The trainer switches on chaos mode: slow rooms, flaky bookings, random order and
 - Without `waitForTimeout` and without adding retries
 - Use what you learned today: traces, web-first assertions, mocking, `addLocatorHandler`
 
-<div class="flex justify-center gap-5 mt-6">
-  <img src="/programming.png" alt="Programming" width="150">
-  <img src="/exam-time.png" alt="Exam time" width="150">
-</div>
+Practise on your own with a `chaos` project:
+
+```ts
+{
+  name: 'chaos',
+  use: {
+    extraHTTPHeaders: {
+      'x-booker-flags': 'slow-rooms,flaky-booking,random-order,popup-cookie',
+    },
+  },
+}
+```
+
+<!--
+The trainer switches flags on for everyone at /__trainer (admin only); participants can also use the x-booker-flags header (see the README for the full list of flags).
+Expected fixes: addLocatorHandler for the "We value your privacy" dialog, find rooms by name instead of position, rely on web-first assertions for slow-rooms, and use expect(...).toPass() only around the confirm step (flaky-booking fails before the booking is saved).
+Reference solution: assignment10.chaos.spec.ts on the solutions branch.
+-->
 
 ---
 
