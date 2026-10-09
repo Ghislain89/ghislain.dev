@@ -42,10 +42,11 @@ jobs:
 
       # Same upload action as the ghislain.dev site: only changed files are sent.
       - name: Upload to mijn.host
-        uses: Ghislain89/ghislain.dev/.github/actions/ftps-upload@main
+        uses: Ghislain89/ghislain.dev/.github/actions/sftp-upload@main
         with:
           local-dir: dist
           server-dir: public_html/playwright/slides
+          public-url: https://ghislain.dev/playwright/slides
           password: ${{ secrets.FTP_PASSWORD }}
 
       - name: Check the live decks
