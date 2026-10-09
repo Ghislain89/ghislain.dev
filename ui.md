@@ -252,7 +252,7 @@ Locators are **lazy**: they find the element again every time you use them, so t
 ```ts
 // chain: search inside another locator
 const card = page.getByRole('article').filter({ hasText: 'Deluxe' });
-await card.getByRole('button', { name: 'Book now' }).click();
+await card.getByRole('link', { name: 'Book now' }).click();
 
 // filter by a child locator or by visibility
 page.getByRole('listitem').filter({ has: page.getByText('Cancelled') });
@@ -325,16 +325,20 @@ await expect(heading).toBeVisible({ timeout: 10_000 });
 Assert the structure of the page as assistive technology sees it (1.49):
 
 ```ts
-await expect(page.getByRole('navigation')).toMatchAriaSnapshot(`
-  - navigation:
-    - link "Rooms"
-    - link "My bookings"
+await expect(page.getByRole('navigation', { name: 'Main' })).toMatchAriaSnapshot(`
+  - navigation "Main":
+    - list:
+      - listitem:
+        - link "Rooms"
+      - listitem:
+        - link "My bookings"
     - button "Log out"
 `);
 ```
 
 - Generate them with codegen or the aria view in UI mode and the trace viewer
 - Less brittle than screenshots, more complete than single assertions
+- Partial matching: you can leave out elements ("Signed in as user"), but not levels (the `list`)
 - Update them with `--update-snapshots`
 
 ---
@@ -1069,7 +1073,7 @@ npx playwright test --update-snapshots=none       # never write
 import AxeBuilder from '@axe-core/playwright';
 
 test('the booking wizard has no detectable a11y issues', async ({ page }) => {
-  await page.goto('/book/1');
+  await page.goto('/book/101');
   const results = await new AxeBuilder({ page })
     .withTags(['wcag2a', 'wcag2aa'])
     .analyze();
@@ -1077,7 +1081,7 @@ test('the booking wizard has no detectable a11y issues', async ({ page }) => {
 });
 ```
 
-- Install `@axe-core/playwright` first
+- `@axe-core/playwright` is already installed in booker-platform
 - axe scans the **current** state: open dialogs and menus before you scan them
 - Automated scans find only part of the issues; keep testing manually as well
 
