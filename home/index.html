@@ -3,10 +3,10 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Ghislain Gabriëlse · Test automation</title>
-  <meta name="description" content="Ghislain Gabriëlse, senior test automation consultant at deTesters. Playwright trainings, talks and workshops on test automation." />
-  <meta property="og:title" content="Ghislain Gabriëlse · Test automation" />
-  <meta property="og:description" content="Senior test automation consultant at deTesters. Playwright trainings, talks and workshops on test automation." />
+  <title>Ghislain Gabriëlse · Test automation &amp; AI</title>
+  <meta name="description" content="Ghislain Gabriëlse, senior test automation consultant at deTesters. Making AI-assisted development predictable with MCP servers, agent harnesses and skills, plus Playwright trainings and talks." />
+  <meta property="og:title" content="Ghislain Gabriëlse · Test automation &amp; AI" />
+  <meta property="og:description" content="Senior test automation consultant at deTesters. Making AI-assisted development predictable, and teaching Playwright." />
   <meta property="og:image" content="https://ghislain.dev/og-image.png" />
   <meta property="og:url" content="https://ghislain.dev/" />
   <meta name="theme-color" content="#f4f3ef" />
@@ -23,6 +23,7 @@
     "url": "https://ghislain.dev/",
     "image": "https://ghislain.dev/ghislain.webp",
     "jobTitle": "Senior test automation consultant",
+    "knowsAbout": ["Test automation", "Playwright", "AI-assisted development", "Model Context Protocol", "Harness engineering"],
     "worksFor": { "@type": "Organization", "name": "deTesters", "url": "https://detesters.nl/" },
     "address": { "@type": "PostalAddress", "addressLocality": "Woerden", "addressCountry": "NL" },
     "sameAs": ["https://www.linkedin.com/in/ggabrielse/", "https://github.com/Ghislain89"]
@@ -299,31 +300,66 @@
       font-size: 0.9rem;
     }
 
-    /* Off the clock */
-    .ride {
+    /* AI */
+    .ai {
+      padding: clamp(26px, 4vw, 44px);
+      border: 2px solid var(--line);
+      border-radius: 22px;
+      background:
+        radial-gradient(circle at 92% 8%, rgba(45, 138, 52, 0.35), transparent 38%),
+        radial-gradient(circle at 4% 96%, rgba(214, 83, 72, 0.22), transparent 34%),
+        var(--ink);
+      box-shadow: var(--shadow);
+      color: #eef0ec;
+    }
+
+    .ai .kicker { color: #f3a097; }
+    .ai h2 { margin-bottom: 14px; color: #fff; }
+    .ai .lead { max-width: 760px; margin: 0 0 30px; color: #c9cfd6; font-size: 1.08rem; }
+    .ai .lead strong { color: #fff; font-weight: 600; }
+
+    .pillars {
       display: grid;
-      grid-template-columns: auto minmax(0, 1fr);
-      gap: 36px;
-      align-items: center;
-      background: linear-gradient(135deg, #fff 55%, #fbe4e1);
-    }
-
-    .stats { display: flex; gap: 28px; margin: 0; }
-    .stats div { display: flex; flex-direction: column-reverse; }
-    .stats dt { color: var(--muted); font-size: 0.9rem; }
-
-    .stats dd {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 18px;
       margin: 0;
-      font-family: "Space Grotesk", sans-serif;
-      font-size: clamp(2.2rem, 5vw, 3.2rem);
-      font-weight: 700;
-      letter-spacing: -0.04em;
-      line-height: 1;
+      padding: 0;
+      list-style: none;
     }
 
-    .stats div:first-child dd { color: var(--accent-dark); }
-    .stats div:last-child dd { color: var(--coral-dark); }
-    .ride p + p { margin-top: 10px; }
+    .pillars li {
+      padding: 22px;
+      border: 1px solid rgba(255, 255, 255, 0.16);
+      border-radius: 16px;
+      background: rgba(255, 255, 255, 0.05);
+    }
+
+    .pillars .tag {
+      display: inline-block;
+      margin-bottom: 10px;
+      padding: 2px 10px;
+      border-radius: 999px;
+      background: rgba(122, 200, 128, 0.16);
+      color: #9ad79f;
+      font-size: 0.78rem;
+      font-weight: 600;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+    }
+
+    .pillars h3 { color: #fff; }
+    .pillars p { margin: 0; color: #c9cfd6; }
+
+    .ai-foot {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px 22px;
+      align-items: center;
+      margin-top: 26px;
+      color: #c9cfd6;
+    }
+
+    .ai-foot a { color: #9ad79f; font-weight: 600; }
 
     /* Footer */
     footer { padding: 72px 0 36px; text-align: center; }
@@ -366,7 +402,7 @@
     @media (max-width: 860px) {
       .grid-3 { grid-template-columns: 1fr; }
       .split { grid-template-columns: 1fr; }
-      .ride { grid-template-columns: 1fr; gap: 20px; }
+      .pillars { grid-template-columns: 1fr; }
     }
 
     @media (max-width: 760px) {
@@ -401,16 +437,16 @@
         <h1>Ghislain Gabriëlse</h1>
         <p class="role">Senior test automation consultant at deTesters</p>
         <p class="bio">
-          About twelve years in testing, mostly building the tools that make complex
-          tasks simple. I help teams write tests they can trust, and teach them to do
-          it themselves with Playwright.
+          Over eleven years in test automation, mostly building the tools that make
+          complex tasks simple. These days that means making AI-assisted development
+          predictable, and teaching teams to write tests they can trust with Playwright.
         </p>
         <div class="actions">
           <a class="button" href="/playwright/">
             Playwright training
             <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M3 8h9M8.5 4 12.5 8l-4 4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
           </a>
-          <a class="button secondary" href="#talks">Talks &amp; workshops</a>
+          <a class="button secondary" href="#ai">My AI work</a>
         </div>
       </div>
 
@@ -420,6 +456,39 @@
       </figure>
     </div>
 
+    <section id="ai" aria-labelledby="ai-title">
+      <div class="ai">
+        <p class="kicker">Now · BMW Financial Services</p>
+        <h2 id="ai-title">Making AI predictable</h2>
+        <p class="lead">
+          At BMW Financial Services, more than 25 feature teams build on one platform. I build
+          the tooling that lets them use AI in their daily work. The hard part isn't getting
+          an agent to do something; it's getting it to do <strong>the same right thing every time</strong>.
+        </p>
+        <ul class="pillars">
+          <li>
+            <span class="tag">Harness engineering</span>
+            <h3>Fixed phases, clear rules</h3>
+            <p>An AI harness that takes agents through fixed phases instead of letting them roam. Nothing moves on without proof that quality is in order, and it's agreed in advance which review findings block. A run behaves the same on a laptop as on a cloud agent.</p>
+          </li>
+          <li>
+            <span class="tag">MCP servers</span>
+            <h3>Real context, not guesswork</h3>
+            <p>MCP servers that connect agents to the platform and tools teams already use, so they act on real data through well-defined, controlled actions.</p>
+          </li>
+          <li>
+            <span class="tag">Skills &amp; agents</span>
+            <h3>A tested toolkit</h3>
+            <p>Reusable GitHub Copilot skills and specialised agents, shared through a skill marketplace, covering analysis and planning through to implementation, testing and review. Every new skill or agent is tested automatically in CI.</p>
+          </li>
+        </ul>
+        <p class="ai-foot">
+          <span>Want the short version?</span>
+          <a href="https://github.com/Ghislain89/Agents-skills-101-presentation">Agents, Skills &amp; MCP Servers: a practical 101 →</a>
+        </p>
+      </div>
+    </section>
+
     <section aria-labelledby="what">
       <p class="kicker">What I do</p>
       <h2 id="what">Test automation that teams keep using</h2>
@@ -427,7 +496,7 @@
         <article class="card">
           <div class="icon"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m9 12 2 2 4-4"/><path d="M12 3 4 6v6c0 4.5 3.4 8.3 8 9 4.6-.7 8-4.5 8-9V6Z"/></svg></div>
           <h3>Consulting</h3>
-          <p>As a consultant at deTesters I help teams set up test automation that is stable, fast and easy to maintain, from the first test to the CI pipeline.</p>
+          <p>As a consultant at deTesters I help teams with test automation, platform tooling and CI. At BMW Financial Services I built a self-service platform that runs more than 100 test environments and automates releases and hotfixes.</p>
         </article>
         <article class="card">
           <div class="icon"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="4" width="18" height="12" rx="2"/><path d="M8 20h8M12 16v4M7 9l2 2-2 2M12 13h4"/></svg></div>
@@ -489,11 +558,12 @@
         <div class="card">
           <h3>Certifications</h3>
           <ul class="certs">
-            <li><strong>Selenium Tester Foundation</strong><span>iSQI · 2019</span></li>
+            <li><strong>TMAP: High-performance quality engineering</strong><span>Accredited trainer · 2023</span></li>
+            <li><strong>TMAP: Quality for cross-functional teams</strong><span>Accredited trainer · 2020</span></li>
+            <li><strong>AZ-900: Azure Fundamentals</strong><span>Microsoft · 2020</span></li>
+            <li><strong>Selenium Certified Tester</strong><span>iSQI · 2019</span></li>
             <li><strong>Certified Agile Tester</strong><span>iSQI · 2015</span></li>
-            <li><strong>ITIL Foundation</strong><span>EXIN · 2014</span></li>
             <li><strong>TMap NEXT Test Engineer</strong><span>EXIN · 2014</span></li>
-            <li><strong>Agile Foundation</strong><span>Agile Consortium</span></li>
           </ul>
         </div>
         <div class="card">
@@ -512,9 +582,10 @@
                 <ul class="chips">
                   <li>Playwright</li>
                   <li>TypeScript</li>
-                  <li>Java</li>
-                  <li>Testcontainers</li>
+                  <li>Java &amp; Quarkus</li>
+                  <li>Kubernetes</li>
                   <li>GitHub Actions</li>
+                  <li>GitHub Copilot</li>
                   <li>AI agents &amp; MCP</li>
                 </ul>
               </dd>
@@ -524,20 +595,6 @@
       </div>
     </section>
 
-    <section aria-labelledby="clock">
-      <p class="kicker">Off the clock</p>
-      <h2 id="clock">1,000 km for a good cause</h2>
-      <div class="card ride">
-        <dl class="stats">
-          <div><dt>cycled</dt><dd>1,093 km</dd></div>
-          <div><dt>raised</dt><dd>€906</dd></div>
-        </dl>
-        <div>
-          <p>In September 2025 I cycled for KWF Kankerbestrijding (the Dutch Cancer Society): 200 km, plus one extra kilometre for every euro donated. I seriously underestimated how generous people are.</p>
-          <p>The rest of the time I live in Woerden, as a father of two and a butler to a cat.</p>
-        </div>
-      </div>
-    </section>
   </main>
 
   <footer class="wrap">
