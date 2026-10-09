@@ -1,0 +1,6 @@
+/* Keep markdown screenshots within the slide */
+.slidev-layout p > img {
+  max-height: 340px;
+  width: auto;
+  margin: 0 auto;
+}

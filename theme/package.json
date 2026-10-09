@@ -1,0 +1,22 @@
+{
+  "name": "slidev-theme-playwright-training",
+  "private": true,
+  "description": "Shared Slidev theme for the Playwright trainings, based on slidev-theme-penguin by Alvaro Saburido (MIT)",
+  "keywords": ["slidev-theme", "slidev"],
+  "license": "MIT",
+  "engines": {
+    "slidev": ">=51.0.0"
+  },
+  "slidev": {
+    "colorSchema": "both",
+    "highlighter": "shiki",
+    "defaults": {
+      "aspectRatio": "16/9",
+      "fonts": {
+        "sans": "Inter",
+        "title": "Gilroy",
+        "mono": "Fira Code"
+      }
+    }
+  }
+}
