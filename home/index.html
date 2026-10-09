@@ -264,65 +264,28 @@
     .talk-links { display: flex; flex-wrap: wrap; gap: 6px 18px; margin-top: 10px; font-weight: 600; }
 
     /* AI */
-    .ai {
-      padding: clamp(26px, 4vw, 44px);
-      border: 2px solid var(--line);
-      border-radius: 22px;
-      background:
-        radial-gradient(circle at 92% 8%, rgba(45, 138, 52, 0.35), transparent 38%),
-        radial-gradient(circle at 4% 96%, rgba(214, 83, 72, 0.22), transparent 34%),
-        var(--ink);
-      box-shadow: var(--shadow);
-      color: #eef0ec;
-    }
+    .lead { max-width: 760px; margin: -12px 0 28px; color: var(--muted); font-size: 1.08rem; }
+    .lead strong { color: var(--ink); font-weight: 600; }
 
-    .ai .kicker { color: #f3a097; }
-    .ai h2 { margin-bottom: 14px; color: #fff; }
-    .ai .lead { max-width: 760px; margin: 0 0 30px; color: #c9cfd6; font-size: 1.08rem; }
-    .ai .lead strong { color: #fff; font-weight: 600; }
-
-    .pillars {
-      display: grid;
-      grid-template-columns: repeat(3, minmax(0, 1fr));
-      gap: 18px;
-      margin: 0;
-      padding: 0;
-      list-style: none;
-    }
-
-    .pillars li {
-      padding: 22px;
-      border: 1px solid rgba(255, 255, 255, 0.16);
-      border-radius: 16px;
-      background: rgba(255, 255, 255, 0.05);
-    }
-
-    .pillars .tag {
+    .tag {
       display: inline-block;
-      margin-bottom: 10px;
+      margin-bottom: 12px;
       padding: 2px 10px;
+      border: 1px solid var(--line);
       border-radius: 999px;
-      background: rgba(122, 200, 128, 0.16);
-      color: #9ad79f;
+      background: var(--accent-soft);
+      color: var(--accent-dark);
       font-size: 0.78rem;
       font-weight: 600;
       letter-spacing: 0.06em;
       text-transform: uppercase;
     }
 
-    .pillars h3 { color: #fff; }
-    .pillars p { margin: 0; color: #c9cfd6; }
+    .grid-3 .card:nth-child(2) .tag { background: #fbe4e1; color: var(--coral-dark); }
+    .grid-3 .card:nth-child(3) .tag { background: #e3eef8; color: #1f5a8a; }
 
-    .ai-foot {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 8px 22px;
-      align-items: center;
-      margin-top: 26px;
-      color: #c9cfd6;
-    }
-
-    .ai-foot a { color: #9ad79f; font-weight: 600; }
+    .ai-foot { display: flex; flex-wrap: wrap; gap: 6px 16px; margin: 22px 0 0; color: var(--muted); }
+    .ai-foot a { font-weight: 600; }
 
     /* Footer */
     footer { padding: 72px 0 36px; text-align: center; }
@@ -364,7 +327,6 @@
 
     @media (max-width: 860px) {
       .grid-3 { grid-template-columns: 1fr; }
-      .pillars { grid-template-columns: 1fr; }
     }
 
     @media (max-width: 760px) {
@@ -418,36 +380,34 @@
     </div>
 
     <section id="ai" aria-labelledby="ai-title">
-      <div class="ai">
-        <p class="kicker">Now · BMW Financial Services</p>
-        <h2 id="ai-title">Making AI predictable</h2>
-        <p class="lead">
-          At BMW Financial Services, more than 25 feature teams build on one platform. I build
-          the tooling that lets them use AI in their daily work. The hard part isn't getting
-          an agent to do something; it's getting it to do <strong>the same right thing every time</strong>.
-        </p>
-        <ul class="pillars">
-          <li>
-            <span class="tag">Harness engineering</span>
-            <h3>Fixed phases, clear rules</h3>
-            <p>An AI harness that takes agents through fixed phases instead of letting them roam. Nothing moves on without proof that quality is in order, and it's agreed in advance which review findings block. A run behaves the same on a laptop as on a cloud agent.</p>
-          </li>
-          <li>
-            <span class="tag">MCP servers</span>
-            <h3>Real context, not guesswork</h3>
-            <p>MCP servers that connect agents to the platform and tools teams already use, so they act on real data through well-defined, controlled actions.</p>
-          </li>
-          <li>
-            <span class="tag">Skills &amp; agents</span>
-            <h3>A tested toolkit</h3>
-            <p>Reusable GitHub Copilot skills and specialised agents, shared through a skill marketplace, covering analysis and planning through to implementation, testing and review. Every new skill or agent is tested automatically in CI.</p>
-          </li>
-        </ul>
-        <p class="ai-foot">
-          <span>Want the short version?</span>
-          <a href="https://github.com/Ghislain89/Agents-skills-101-presentation">Agents, Skills &amp; MCP Servers: a practical 101 →</a>
-        </p>
+      <p class="kicker">Now · BMW Financial Services</p>
+      <h2 id="ai-title">Making AI predictable</h2>
+      <p class="lead">
+        At BMW Financial Services, more than 25 feature teams build on one platform. I build
+        the tooling that lets them use AI in their daily work. The hard part isn't getting
+        an agent to do something; it's getting it to do <strong>the same right thing every time</strong>.
+      </p>
+      <div class="grid-3">
+        <article class="card">
+          <span class="tag">Harness engineering</span>
+          <h3>Fixed phases, clear rules</h3>
+          <p>An AI harness that takes agents through fixed phases instead of letting them roam. Nothing moves on without proof that quality is in order, and it's agreed in advance which review findings block. A run behaves the same on a laptop as on a cloud agent.</p>
+        </article>
+        <article class="card">
+          <span class="tag">MCP servers</span>
+          <h3>Real context, not guesswork</h3>
+          <p>MCP servers that connect agents to the platform and tools teams already use, so they act on real data through well-defined, controlled actions.</p>
+        </article>
+        <article class="card">
+          <span class="tag">Skills &amp; agents</span>
+          <h3>A tested toolkit</h3>
+          <p>Reusable GitHub Copilot skills and specialised agents, shared through a skill marketplace, covering analysis and planning through to implementation, testing and review. Every new skill or agent is tested automatically in CI.</p>
+        </article>
       </div>
+      <p class="ai-foot">
+        <span>Want the short version?</span>
+        <a href="https://github.com/Ghislain89/Agents-skills-101-presentation">Agents, Skills &amp; MCP Servers: a practical 101 →</a>
+      </p>
     </section>
 
     <section aria-labelledby="what">
