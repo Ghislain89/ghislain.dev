@@ -1,0 +1,104 @@
+name: Upload to mijn.host
+description: >
+  Uploads a folder over SFTP. Only files that changed since the last upload are
+  sent (tracked in .deploy-manifest on the server). Never deletes files.
+
+inputs:
+  local-dir:
+    description: Folder to upload
+    required: true
+  server-dir:
+    description: Target folder on the server, for example public_html/playwright
+    required: true
+  password:
+    description: FTP password (the same account works for SFTP)
+    required: true
+  host:
+    description: SFTP host
+    default: h64.mijn.host
+  host-key-fingerprint:
+    description: SHA256 fingerprint of the server's SSH host key (ssh-keygen -lf)
+    default: SHA256:F/xu4aXJHQju41j1JT2D1zMMoySqu0b6EFkUpxng54w
+  username:
+    description: FTP user
+    default: ghislain@ghislain.dev
+  public-url:
+    description: >
+      Optional URL where server-dir is served, for example https://ghislain.dev/playwright.
+      If set, the action checks that the new .deploy-manifest is live there.
+    default: ""
+
+runs:
+  using: composite
+  steps:
+    # SFTP rather than FTPS: FTPS opens a new connection for every file, and the
+    # host's firewall blocks the runner after a few hundred of those. SFTP sends
+    # everything over one connection.
+    - name: Upload changed files
+      shell: bash
+      working-directory: ${{ inputs.local-dir }}
+      env:
+        SFTP_HOST: ${{ inputs.host }}
+        SFTP_USER: ${{ inputs.username }}
+        SFTP_PASSWORD: ${{ inputs.password }}
+        HOST_KEY_FINGERPRINT: ${{ inputs.host-key-fingerprint }}
+        SERVER_DIR: ${{ inputs.server-dir }}
+        PUBLIC_URL: ${{ inputs.public-url }}
+      run: |
+        set -euo pipefail
+        tmp="$RUNNER_TEMP/sftp-upload"
+        mkdir -p "$tmp"
+        # ssh asks this script for the password; the password itself stays in the environment.
+        printf '#!/bin/sh\nprintf "%%s\\n" "$SFTP_PASSWORD"\n' > "$tmp/askpass"
+        chmod 700 "$tmp/askpass"
+
+        ssh-keyscan -T 15 -t rsa,ecdsa,ed25519 "$SFTP_HOST" 2>/dev/null > "$tmp/known_hosts"
+        if ! ssh-keygen -lf "$tmp/known_hosts" | grep -qF " $HOST_KEY_FINGERPRINT "; then
+          echo "::error::The host key of $SFTP_HOST does not match $HOST_KEY_FINGERPRINT:"
+          ssh-keygen -lf "$tmp/known_hosts"
+          exit 1
+        fi
+
+        # -b implies BatchMode, which disables password logins; -oBatchMode=no re-enables them.
+        # One password attempt only: repeated failures get the runner banned.
+        sftp_run() {
+          SSH_ASKPASS="$tmp/askpass" SSH_ASKPASS_REQUIRE=force sftp -q -oBatchMode=no \
+            -oPreferredAuthentications=password -oNumberOfPasswordPrompts=1 \
+            -oUserKnownHostsFile="$tmp/known_hosts" -oStrictHostKeyChecking=yes -oConnectTimeout=30 \
+            -b "$1" "$SFTP_USER@$SFTP_HOST" < /dev/null
+        }
+        dir="${SERVER_DIR%/}"
+
+        printf -- '-get "%s/.deploy-manifest" "%s/old"\n' "$dir" "$tmp" > "$tmp/get.batch"
+        : > "$tmp/old"
+        sftp_run "$tmp/get.batch" >/dev/null 2>&1 || true
+
+        find . -type f ! -name .deploy-manifest -print0 | sort -z | xargs -0 sha256sum | sed 's|  \./|  |' > "$tmp/new"
+        comm -13 <(sort "$tmp/old") <(sort "$tmp/new") | cut -c67- | sort > "$tmp/changed.all"
+        # Pages last, so they never point at assets that are not uploaded yet.
+        { grep -vE '(^|/)(index\.html|\.htaccess)$' "$tmp/changed.all" || true
+          grep -E '(^|/)(index\.html|\.htaccess)$' "$tmp/changed.all" || true; } > "$tmp/changed"
+        echo "$(wc -l < "$tmp/changed" | tr -d ' ') of $(wc -l < "$tmp/new" | tr -d ' ') files changed"
+        sed 's/^/upload: /' "$tmp/changed"
+
+        {
+          # "-" ignores the error when a folder already exists.
+          path=""
+          IFS=/ read -ra parts <<< "$dir"
+          for part in "${parts[@]}"; do path="${path:+$path/}$part"; printf -- '-mkdir "%s"\n' "$path"; done
+          printf 'cd "%s"\n' "$dir"
+          { grep '/' "$tmp/changed" || true; } | sed 's|/[^/]*$||' | sort -u | while IFS= read -r sub; do
+            path=""
+            IFS=/ read -ra parts <<< "$sub"
+            for part in "${parts[@]}"; do path="${path:+$path/}$part"; printf -- '-mkdir "%s"\n' "$path"; done
+          done | awk '!seen[$0]++'
+          while IFS= read -r file; do printf 'put "%s" "%s"\n' "$file" "$file"; done < "$tmp/changed"
+          printf 'put "%s/new" .deploy-manifest\n' "$tmp"
+        } > "$tmp/put.batch"
+        sftp_run "$tmp/put.batch"
+
+        if [ -n "$PUBLIC_URL" ]; then
+          curl --fail --silent --show-error "${PUBLIC_URL%/}/.deploy-manifest?v=$GITHUB_SHA" -o "$tmp/live"
+          cmp -s "$tmp/new" "$tmp/live" || { echo "::error::Uploaded, but ${PUBLIC_URL%/}/.deploy-manifest is not the new one. Is server-dir right?"; exit 1; }
+          echo "verified: ${PUBLIC_URL%/}/.deploy-manifest"
+        fi

@@ -6,7 +6,7 @@ on:
     paths:
       - "playwright/**"
       - ".github/workflows/deploy.yml"
-      - ".github/actions/ftps-upload/**"
+      - ".github/actions/sftp-upload/**"
   workflow_dispatch:
 
 permissions:
@@ -35,10 +35,11 @@ jobs:
           fi
 
       - name: Upload to mijn.host
-        uses: ./.github/actions/ftps-upload
+        uses: ./.github/actions/sftp-upload
         with:
           local-dir: playwright
           server-dir: public_html/playwright
+          public-url: https://ghislain.dev/playwright
           password: ${{ secrets.FTP_PASSWORD }}
 
       - name: Check the live pages

@@ -9,9 +9,9 @@ Static pages for [ghislain.dev](https://ghislain.dev), hosted on mijn.host.
 
 ## Deployment
 
-Every push to `main` that changes `playwright/` uploads the changed files in that folder over FTPS to `public_html/playwright/` (see `.github/workflows/deploy.yml`). You can also start it by hand under **Actions → Deploy → Run workflow**.
+Every push to `main` that changes `playwright/` uploads the changed files in that folder over SFTP to `public_html/playwright/` (see `.github/workflows/deploy.yml`). You can also start it by hand under **Actions → Deploy → Run workflow**.
 
-The upload itself is a reusable action, [`.github/actions/ftps-upload`](.github/actions/ftps-upload/action.yml), also used by playwright-training-slides. It only uploads files that changed since the last deploy (it keeps a `.deploy-manifest` with checksums on the server) and works around two quirks of the mijn.host FTP server: it requires TLS session reuse (so it uses curl instead of a Node FTP library) and it doesn't send its intermediate certificates (so the action downloads them).
+The upload itself is a reusable action, [`.github/actions/sftp-upload`](.github/actions/sftp-upload/action.yml), also used by playwright-training-slides. It only uploads files that changed since the last deploy (it keeps a `.deploy-manifest` with checksums on the server) and checks the server's SSH host key against a pinned fingerprint. It uses SFTP with the FTP account because FTPS opens a connection per file, and mijn.host's firewall blocks the runner after a few hundred of those. If mijn.host ever changes its host key, update `host-key-fingerprint` in the action (`ssh-keyscan h64.mijn.host | ssh-keygen -lf -`).
 
 One-time setup: store the FTP password as a repository secret (in every repository that deploys).
 
