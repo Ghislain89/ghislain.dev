@@ -1,0 +1,84 @@
+name: Upload to mijn.host
+description: >
+  Uploads a folder over FTPS with curl. Only files that changed since the last
+  upload are sent (tracked in .deploy-manifest on the server). Never deletes files.
+
+inputs:
+  local-dir:
+    description: Folder to upload
+    required: true
+  server-dir:
+    description: Target folder on the server, for example public_html/playwright
+    required: true
+  password:
+    description: FTP password
+    required: true
+  host:
+    description: FTP host (must match the TLS certificate)
+    default: h64.mijn.host
+  username:
+    description: FTP user
+    default: ghislain@ghislain.dev
+
+runs:
+  using: composite
+  steps:
+    # The server sends only its own certificate, without the Let's Encrypt
+    # intermediates. Follow the "CA Issuers" links (AIA) to download them, so curl
+    # can still verify the server.
+    - name: Complete the server's certificate chain
+      shell: bash
+      working-directory: ${{ runner.temp }}
+      env:
+        FTP_HOST: ${{ inputs.host }}
+        CA_FILE: /etc/ssl/certs/ca-certificates.crt
+      run: |
+        echo QUIT | openssl s_client -starttls ftp -connect "$FTP_HOST:21" -servername "$FTP_HOST" 2>/dev/null | openssl x509 > leaf.pem
+        cp leaf.pem current.pem
+        : > chain.pem
+        for _ in 1 2 3; do
+          if [ -s chain.pem ] && openssl verify -CAfile "$CA_FILE" -untrusted chain.pem leaf.pem >/dev/null 2>&1; then break; fi
+          url=$(openssl x509 -in current.pem -noout -ext authorityInfoAccess | sed -n 's/.*CA Issuers - URI:\(http[^ ]*\).*/\1/p' | head -1)
+          [ -n "$url" ] || break
+          echo "downloading issuer: $url"
+          curl --fail --silent --show-error "$url" -o issuer.crt
+          openssl x509 -inform DER -in issuer.crt -out current.pem 2>/dev/null || openssl x509 -in issuer.crt -out current.pem
+          cat current.pem >> chain.pem
+        done
+        openssl verify -CAfile "$CA_FILE" -untrusted chain.pem leaf.pem
+        cat "$CA_FILE" chain.pem > ftps-ca.pem
+
+    # curl rather than a Node FTP library: ProFTPD requires TLS session reuse on
+    # the data connection, which those libraries fail on (ECONNRESET).
+    - name: Upload changed files
+      shell: bash
+      working-directory: ${{ inputs.local-dir }}
+      env:
+        FTP_HOST: ${{ inputs.host }}
+        FTP_USER: ${{ inputs.username }}
+        FTP_PASSWORD: ${{ inputs.password }}
+        SERVER_DIR: ${{ inputs.server-dir }}
+      run: |
+        set -euo pipefail
+        tmp="$RUNNER_TEMP/ftps-upload"
+        mkdir -p "$tmp"
+        trap 'rm -f "$tmp/netrc"' EXIT
+        (umask 077 && printf 'machine %s\nlogin %s\npassword %s\n' "$FTP_HOST" "$FTP_USER" "$FTP_PASSWORD" > "$tmp/netrc")
+        base="ftp://$FTP_HOST/${SERVER_DIR%/}"
+        opts=(--silent --show-error --ssl-reqd --netrc-file "$tmp/netrc" --cacert "$RUNNER_TEMP/ftps-ca.pem")
+
+        curl "${opts[@]}" "$base/.deploy-manifest" -o "$tmp/old" 2>/dev/null || : > "$tmp/old"
+        find . -type f ! -name .deploy-manifest -print0 | sort -z | xargs -0 sha256sum | sed 's|  \./|  |' > "$tmp/new"
+        comm -13 <(sort "$tmp/old") <(sort "$tmp/new") | cut -c67- > "$tmp/changed"
+
+        : > "$tmp/curl.cfg"
+        while IFS= read -r file; do
+          printf 'upload-file = "%s"\nurl = "%s/%s"\n' "$file" "$base" "$file" >> "$tmp/curl.cfg"
+        done < "$tmp/changed"
+        echo "$(wc -l < "$tmp/changed" | tr -d ' ') of $(wc -l < "$tmp/new" | tr -d ' ') files changed"
+        if [ -s "$tmp/changed" ]; then
+          sed 's/^/upload: /' "$tmp/changed"
+          # One curl run reuses the connection for all files.
+          curl "${opts[@]}" --fail-early --retry 3 --ftp-create-dirs --config "$tmp/curl.cfg"
+        fi
+        curl "${opts[@]}" --ftp-create-dirs --upload-file "$tmp/new" "$base/.deploy-manifest"

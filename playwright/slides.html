@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="description" content="Slides and test object for the Playwright Workshop." />
+  <title>Slides · Playwright Workshop</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <main class="shell">
+    <div class="top-bar">
+      <nav class="page-menu" aria-label="Workshop pages">
+        <a href="preparation.html">Preparation</a>
+        <a href="assignments.html">Assignments</a>
+        <a href="slides.html" aria-current="page">Slides</a>
+      </nav>
+    </div>
+
+    <header class="intro">
+      <p class="kicker">Workshop materials</p>
+      <h1>Slides and test object.</h1>
+      <p class="intro-copy">Look back at the slides at your own pace, and keep practising with booker-platform after the workshop.</p>
+    </header>
+
+    <section class="guide" aria-labelledby="slides-title">
+      <header class="section-header">
+        <p class="kicker">Materials · 01</p>
+        <h2 id="slides-title">The slides.</h2>
+        <p class="section-intro">Navigate with the arrow keys, press <kbd class="inline-code">O</kbd> for an overview of all slides and <kbd class="inline-code">G</kbd> to jump to a slide number.</p>
+      </header>
+
+      <ol aria-label="Slide decks">
+        <li>
+          <div class="step-meta" data-label="UI" aria-hidden="true"></div>
+          <div class="step-content">
+            <h3>Playwright UI workshop</h3>
+            <p class="step-note">From your first test to a stable suite in CI: locators, debugging, page objects and fixtures, authentication, network mocking, time and contexts, visual and accessibility testing, CI and AI-assisted testing.</p>
+            <div class="link-options">
+              <a class="link-option" href="slides/ui/">Open the UI slides</a>
+              <a class="link-option" href="assignments.html#ui-title">UI assignments</a>
+            </div>
+          </div>
+        </li>
+        <li>
+          <div class="step-meta" data-label="API" aria-hidden="true"></div>
+          <div class="step-content">
+            <h3>API testing with Playwright</h3>
+            <p class="step-note">Testing a REST API with Playwright's <code class="inline-code">request</code> fixture: authentication, resources and roles, schema validation, fixtures and helpers.</p>
+            <div class="link-options">
+              <a class="link-option" href="slides/api/">Open the API slides</a>
+              <a class="link-option" href="assignments.html#api-title">API assignments</a>
+            </div>
+          </div>
+        </li>
+      </ol>
+    </section>
+
+    <section class="guide" aria-labelledby="booker-title">
+      <header class="section-header">
+        <p class="kicker">Materials · 02</p>
+        <h2 id="booker-title">booker-platform.</h2>
+        <p class="section-intro">The test object for both workshops: a small hotel booking app, built to practise testing with Playwright. It runs entirely on your own machine; there is no hosted copy, so you can't break anything for anyone else.</p>
+      </header>
+
+      <ol aria-label="About booker-platform">
+        <li>
+          <div class="step-meta" data-label="App" aria-hidden="true"></div>
+          <div class="step-content">
+            <h3>What's inside</h3>
+            <ul class="tasks">
+              <li>A web app (React) with a booking wizard, My bookings, messages, an admin area, a Dutch translation and dark mode</li>
+              <li>A REST API (Express, SQLite, JWT) with Swagger docs</li>
+              <li>Features that need the trickier Playwright APIs: downloads, live updates, a payment form in a shadow DOM, drag &amp; drop and file uploads</li>
+              <li>Test hooks: reset and seed endpoints, plus feature flags that switch on bugs and chaos for the flaky-test clinic</li>
+            </ul>
+            <a class="repo-link" href="https://github.com/Ghislain89/booker-platform" target="_blank" rel="noreferrer">
+              <span>github.com/Ghislain89/booker-platform</span>
+              <span class="arrow" aria-hidden="true">↗</span>
+            </a>
+            <p class="step-note">Not set up yet? Follow the <a href="preparation.html">preparation steps</a>.</p>
+          </div>
+        </li>
+        <li>
+          <div class="step-meta" data-label="Solutions" aria-hidden="true"></div>
+          <div class="step-content">
+            <h3>Reference solutions</h3>
+            <p class="step-note">The <code class="inline-code">solutions</code> branch has a worked solution for every assignment, with page objects, fixtures and a CI workflow. Try it yourself first: there's more than one good answer.</p>
+            <div class="command">
+              <span class="prompt" aria-hidden="true">$</span>
+              <pre><code>git fetch origin &amp;&amp; git switch solutions</code></pre>
+              <button class="copy" type="button" data-copy="git fetch origin && git switch solutions">Copy</button>
+            </div>
+            <div class="link-options" style="margin-top: 14px;">
+              <a class="link-option" href="https://github.com/Ghislain89/booker-platform/tree/solutions" target="_blank" rel="noreferrer">Solutions on GitHub</a>
+            </div>
+          </div>
+        </li>
+      </ol>
+
+      <div class="callout">
+        <strong>Re-use</strong>
+        <p>The slides (<a href="https://github.com/Ghislain89/playwright-training-slides" target="_blank" rel="noreferrer">source on GitHub</a>) are licensed under <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank" rel="noreferrer">CC BY-NC-SA 4.0</a>; booker-platform is MIT licensed.</p>
+      </div>
+    </section>
+
+    <footer class="site-footer">
+      <a href="https://github.com/Ghislain89" target="_blank" rel="noreferrer">By Ghislain</a>
+    </footer>
+  </main>
+
+  <script>
+    document.querySelectorAll(".copy").forEach((button) => {
+      button.addEventListener("click", async () => {
+        try {
+          await navigator.clipboard.writeText(button.dataset.copy);
+          button.textContent = "Copied";
+          window.setTimeout(() => { button.textContent = "Copy"; }, 1600);
+        } catch {
+          button.textContent = "Select";
+        }
+      });
+    });
+  </script>
+</body>
+</html>

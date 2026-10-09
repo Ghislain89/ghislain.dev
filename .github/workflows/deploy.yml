@@ -6,6 +6,7 @@ on:
     paths:
       - "playwright/**"
       - ".github/workflows/deploy.yml"
+      - ".github/actions/ftps-upload/**"
   workflow_dispatch:
 
 permissions:
@@ -20,7 +21,7 @@ jobs:
     runs-on: ubuntu-latest
     environment:
       name: production
-      url: https://ghislain.dev/playwright/preparation.html
+      url: https://ghislain.dev/playwright/
     steps:
       - uses: actions/checkout@v7
 
@@ -33,54 +34,16 @@ jobs:
             exit 1
           fi
 
-      # The FTP server sends only its own certificate, without the Let's Encrypt
-      # intermediates. Follow the "CA Issuers" links (AIA) to download them, so curl
-      # can still verify the server.
-      - name: Complete the server's certificate chain
-        env:
-          FTP_HOST: h64.mijn.host
-          CA_FILE: /etc/ssl/certs/ca-certificates.crt
-        working-directory: ${{ runner.temp }}
-        run: |
-          echo QUIT | openssl s_client -starttls ftp -connect "$FTP_HOST:21" -servername "$FTP_HOST" 2>/dev/null | openssl x509 > leaf.pem
-          cp leaf.pem current.pem
-          : > chain.pem
-          for _ in 1 2 3; do
-            if [ -s chain.pem ] && openssl verify -CAfile "$CA_FILE" -untrusted chain.pem leaf.pem >/dev/null 2>&1; then break; fi
-            url=$(openssl x509 -in current.pem -noout -ext authorityInfoAccess | sed -n 's/.*CA Issuers - URI:\(http[^ ]*\).*/\1/p' | head -1)
-            [ -n "$url" ] || break
-            echo "downloading issuer: $url"
-            curl --fail --silent --show-error "$url" -o issuer.crt
-            openssl x509 -inform DER -in issuer.crt -out current.pem 2>/dev/null || openssl x509 -in issuer.crt -out current.pem
-            cat current.pem >> chain.pem
-          done
-          openssl verify -CAfile "$CA_FILE" -untrusted chain.pem leaf.pem
-          cat "$CA_FILE" chain.pem > ca-bundle.pem
-
-      # curl instead of an FTP action: ProFTPD on mijn.host requires TLS session reuse
-      # on the data connection, which the Node-based FTP actions fail on (ECONNRESET).
       - name: Upload to mijn.host
-        env:
-          FTP_HOST: h64.mijn.host
-          FTP_USER: ghislain@ghislain.dev
-          FTP_PASSWORD: ${{ secrets.FTP_PASSWORD }}
-        working-directory: playwright
-        run: |
-          netrc="$RUNNER_TEMP/netrc"
-          trap 'rm -f "$netrc"' EXIT
-          (umask 077 && printf 'machine %s\nlogin %s\npassword %s\n' "$FTP_HOST" "$FTP_USER" "$FTP_PASSWORD" > "$netrc")
-          find . -type f | sort | while read -r file; do
-            file="${file#./}"
-            curl --fail --silent --show-error --retry 3 \
-              --ssl-reqd --ftp-create-dirs --netrc-file "$netrc" \
-              --cacert "$RUNNER_TEMP/ca-bundle.pem" \
-              --upload-file "$file" "ftp://$FTP_HOST/public_html/playwright/$file"
-            echo "uploaded: $file"
-          done
+        uses: ./.github/actions/ftps-upload
+        with:
+          local-dir: playwright
+          server-dir: public_html/playwright
+          password: ${{ secrets.FTP_PASSWORD }}
 
       - name: Check the live pages
         run: |
-          for page in preparation.html assignments.html style.css; do
+          for page in "" assignments.html slides.html style.css; do
             curl --fail --silent --show-error --output /dev/null "https://ghislain.dev/playwright/$page?v=$GITHUB_SHA"
-            echo "ok: $page"
+            echo "ok: /playwright/$page"
           done

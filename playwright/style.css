@@ -464,6 +464,8 @@ button:focus-visible {
 .code-block pre { padding-left: 18px; }
 .code-block pre code { white-space: pre; }
 
+.section-intro a,
+.step-note a,
 .callout a { color: var(--accent-dark); }
 
 .hints {
