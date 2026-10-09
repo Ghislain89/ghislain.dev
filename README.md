@@ -8,7 +8,7 @@ Static pages for [ghislain.dev](https://ghislain.dev), hosted on mijn.host.
 
 ## Deployment
 
-Every push to `main` that changes `playwright/` uploads the changed files over FTPS to `public_html/playwright/` (see `.github/workflows/deploy.yml`). You can also start it by hand under **Actions → Deploy → Run workflow**.
+Every push to `main` that changes `playwright/` uploads all files in that folder over FTPS (with curl) to `public_html/playwright/` (see `.github/workflows/deploy.yml`). You can also start it by hand under **Actions → Deploy → Run workflow**.
 
 One-time setup: store the FTP password as a repository secret.
 
@@ -16,4 +16,4 @@ One-time setup: store the FTP password as a repository secret.
 gh secret set FTP_PASSWORD --repo Ghislain89/ghislain.dev
 ```
 
-The deploy only touches `public_html/playwright/`; the rest of the site is left alone.
+The deploy only writes to `public_html/playwright/`; the rest of the site is left alone. It never deletes files: remove renamed or deleted pages from the server by hand.

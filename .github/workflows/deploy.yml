@@ -33,16 +33,25 @@ jobs:
             exit 1
           fi
 
-      # Uploads only changed files; the state file on the server tracks what was deployed.
+      # curl instead of an FTP action: ProFTPD on mijn.host requires TLS session reuse
+      # on the data connection, which the Node-based FTP actions fail on (ECONNRESET).
       - name: Upload to mijn.host
-        uses: SamKirkland/FTP-Deploy-Action@110f9186c050f71550953127052e77650219c287 # v4.4.0
-        with:
-          server: h64.mijn.host
-          username: ghislain@ghislain.dev
-          password: ${{ secrets.FTP_PASSWORD }}
-          protocol: ftps
-          local-dir: ./playwright/
-          server-dir: public_html/playwright/
+        env:
+          FTP_HOST: h64.mijn.host
+          FTP_USER: ghislain@ghislain.dev
+          FTP_PASSWORD: ${{ secrets.FTP_PASSWORD }}
+        working-directory: playwright
+        run: |
+          netrc="$RUNNER_TEMP/netrc"
+          trap 'rm -f "$netrc"' EXIT
+          (umask 077 && printf 'machine %s\nlogin %s\npassword %s\n' "$FTP_HOST" "$FTP_USER" "$FTP_PASSWORD" > "$netrc")
+          find . -type f | sort | while read -r file; do
+            file="${file#./}"
+            curl --fail --silent --show-error --retry 3 \
+              --ssl-reqd --ftp-create-dirs --netrc-file "$netrc" \
+              --upload-file "$file" "ftp://$FTP_HOST/public_html/playwright/$file"
+            echo "uploaded: $file"
+          done
 
       - name: Check the live pages
         run: |
