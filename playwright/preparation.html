@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="description" content="Preparation and setup instructions for the Playwright Workshop." />
+  <title>Preparation · Playwright Workshop</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <main class="shell">
+    <div class="top-bar">
+      <nav class="page-menu" aria-label="Workshop pages">
+        <a href="preparation.html" aria-current="page">Preparation</a>
+        <a href="assignments.html">Assignments</a>
+      </nav>
+    </div>
+
+    <header class="intro">
+      <p class="kicker">Before the workshop</p>
+      <h1>Playwright workshop preparation.</h1>
+      <p class="intro-copy">Install the tools and get booker-platform running, so we can start writing tests right away.</p>
+    </header>
+
+    <section class="guide tools-guide" aria-labelledby="tools-title">
+      <header class="section-header">
+        <p class="kicker">Preparation · 01</p>
+        <h2 id="tools-title">Install the tools.</h2>
+        <p class="section-intro">Complete these steps before joining the workshop.</p>
+      </header>
+
+      <ol aria-label="Tool installation instructions">
+        <li>
+          <div class="step-meta" aria-hidden="true"></div>
+          <div class="step-content">
+            <h3>Install Node.js (LTS)</h3>
+            <div class="link-options">
+              <a class="link-option" href="https://nodejs.org/en/download" target="_blank" rel="noreferrer">Download Node.js</a>
+            </div>
+            <p class="step-note">Pick the LTS version. Node.js includes npm, which you'll need to install the project. Check your installation with:</p>
+            <div class="command">
+              <span class="prompt" aria-hidden="true">$</span>
+              <pre><code>node -v &amp;&amp; npm -v</code></pre>
+              <button class="copy" type="button" data-copy="node -v && npm -v">Copy</button>
+            </div>
+          </div>
+        </li>
+        <li>
+          <div class="step-meta" aria-hidden="true"></div>
+          <div class="step-content">
+            <h3>Install Git</h3>
+            <div class="link-options">
+              <a class="link-option" href="https://git-scm.com/downloads" target="_blank" rel="noreferrer">Download Git</a>
+            </div>
+            <p class="step-note">You'll use Git to clone the workshop repository.</p>
+          </div>
+        </li>
+        <li>
+          <div class="step-meta" aria-hidden="true"></div>
+          <div class="step-content">
+            <h3>Install VS Code and the Playwright extension</h3>
+            <div class="link-options">
+              <a class="link-option" href="https://code.visualstudio.com/download" target="_blank" rel="noreferrer">Download VS Code</a>
+              <a class="link-option" href="https://marketplace.visualstudio.com/items?itemName=ms-playwright.playwright" target="_blank" rel="noreferrer">Playwright Test for VS Code</a>
+            </div>
+            <p class="step-note">The extension lets you run, debug and record tests from the editor. Prefer another editor? That's fine, but the workshop demos use VS Code.</p>
+          </div>
+        </li>
+      </ol>
+    </section>
+
+    <section class="guide project-guide" aria-labelledby="project-title">
+      <header class="section-header">
+        <p class="kicker">Preparation · 02</p>
+        <h2 id="project-title">Set up booker-platform.</h2>
+        <p class="section-intro">booker-platform is a small hotel booking app (a web app plus a REST API with Swagger docs) with a Playwright setup we'll build on during the assignments. Everything runs on your own machine.</p>
+      </header>
+
+      <ol aria-label="Project setup instructions">
+        <li>
+          <div class="step-meta" aria-hidden="true"></div>
+          <div class="step-content">
+            <h3>Clone the workshop repository</h3>
+            <a class="repo-link" href="https://github.com/Ghislain89/booker-platform" target="_blank" rel="noreferrer">
+              <span>github.com/Ghislain89/booker-platform</span>
+              <span class="arrow" aria-hidden="true">↗</span>
+            </a>
+            <div class="command">
+              <span class="prompt" aria-hidden="true">$</span>
+              <pre><code>git clone https://github.com/Ghislain89/booker-platform.git &amp;&amp; cd booker-platform</code></pre>
+              <button class="copy" type="button" data-copy="git clone https://github.com/Ghislain89/booker-platform.git && cd booker-platform">Copy</button>
+            </div>
+          </div>
+        </li>
+        <li>
+          <div class="step-meta" aria-hidden="true"></div>
+          <div class="step-content">
+            <h3>Install dependencies</h3>
+            <div class="command">
+              <span class="prompt" aria-hidden="true">$</span>
+              <pre><code>npm install</code></pre>
+              <button class="copy" type="button" data-copy="npm install">Copy</button>
+            </div>
+            <div class="command">
+              <span class="prompt" aria-hidden="true">$</span>
+              <pre><code>npx playwright install</code></pre>
+              <button class="copy" type="button" data-copy="npx playwright install">Copy</button>
+            </div>
+            <p class="step-note">The first command installs the project, the second downloads the browsers Playwright uses (Chromium, Firefox and WebKit). This may take a few minutes. Check that <code class="inline-code">npx playwright --version</code> prints 1.64 or newer.</p>
+          </div>
+        </li>
+        <li>
+          <div class="step-meta" aria-hidden="true"></div>
+          <div class="step-content">
+            <h3>Create the database and start the app</h3>
+            <div class="command">
+              <span class="prompt" aria-hidden="true">$</span>
+              <pre><code>npm run setup</code></pre>
+              <button class="copy" type="button" data-copy="npm run setup">Copy</button>
+            </div>
+            <div class="command">
+              <span class="prompt" aria-hidden="true">$</span>
+              <pre><code>npm run dev</code></pre>
+              <button class="copy" type="button" data-copy="npm run dev">Copy</button>
+            </div>
+            <p class="step-note"><code class="inline-code">npm run setup</code> creates and seeds a local database; run it again whenever you want a clean slate. Then open <a href="http://localhost:3000" target="_blank" rel="noreferrer"><code class="inline-code">http://localhost:3000</code></a>. You should see the Booker Hotel home page; the API docs are at <a href="http://localhost:3000/api-docs" target="_blank" rel="noreferrer"><code class="inline-code">/api-docs</code></a>. You can log in with <code class="inline-code">user</code> / <code class="inline-code">password123</code>.</p>
+          </div>
+        </li>
+        <li>
+          <div class="step-meta" aria-hidden="true"></div>
+          <div class="step-content">
+            <h3>Verify Playwright works</h3>
+            <p class="step-note">In a separate terminal, open Playwright's UI mode and run the tests:</p>
+            <div class="command">
+              <span class="prompt" aria-hidden="true">$</span>
+              <pre><code>npx playwright test --ui</code></pre>
+              <button class="copy" type="button" data-copy="npx playwright test --ui">Copy</button>
+            </div>
+            <div class="callout">
+              <strong>All set?</strong>
+              <p>If the tests run green, you're ready for the workshop. Running into problems? Bring them along; we'll sort them out at the start.</p>
+            </div>
+          </div>
+        </li>
+      </ol>
+    </section>
+
+    <footer class="site-footer">
+      <a href="https://github.com/Ghislain89" target="_blank" rel="noreferrer">By Ghislain</a>
+    </footer>
+  </main>
+
+  <script>
+    document.querySelectorAll(".copy").forEach((button) => {
+      button.addEventListener("click", async () => {
+        try {
+          await navigator.clipboard.writeText(button.dataset.copy);
+          button.textContent = "Copied";
+          window.setTimeout(() => { button.textContent = "Copy"; }, 1600);
+        } catch {
+          button.textContent = "Select";
+        }
+      });
+    });
+  </script>
+</body>
+</html>

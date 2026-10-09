@@ -1,0 +1,375 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="description" content="Assignments for the Playwright Workshop." />
+  <title>Assignments · Playwright Workshop</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <main class="shell">
+    <div class="top-bar">
+      <nav class="page-menu" aria-label="Workshop pages">
+        <a href="preparation.html">Preparation</a>
+        <a href="assignments.html" aria-current="page">Assignments</a>
+      </nav>
+    </div>
+
+    <header class="intro">
+      <p class="kicker">During the workshop</p>
+      <h1>Playwright workshop assignments.</h1>
+      <p class="intro-copy">Every assignment from the slides, in the same order. Work at your own pace and open the hints when you get stuck.</p>
+      <div class="link-options" style="margin-top: 30px;">
+        <a class="link-option" href="#ui-title">UI workshop</a>
+        <a class="link-option" href="#api-title">API workshop</a>
+      </div>
+      <div class="callout">
+        <strong>Before you start</strong>
+        <p>Complete the <a href="preparation.html">preparation</a> and keep booker-platform running with <code class="inline-code">npm run dev</code>. The app runs on <a href="http://localhost:3000" target="_blank" rel="noreferrer"><code class="inline-code">http://localhost:3000</code></a>; log in with <code class="inline-code">user</code> or <code class="inline-code">admin</code>, password <code class="inline-code">password123</code>.</p>
+      </div>
+    </header>
+
+    <section class="guide" aria-labelledby="ui-title">
+      <header class="section-header">
+        <p class="kicker">Assignments · UI</p>
+        <h2 id="ui-title">UI testing with Playwright.</h2>
+        <p class="section-intro">You build your own test suite for the booker-platform web app, from a first recorded test to a stable suite that runs in CI.</p>
+      </header>
+
+      <ol aria-label="UI assignments">
+        <li>
+          <div class="step-meta" data-label="1A" aria-hidden="true"></div>
+          <div class="step-content">
+            <h3>Assignment 1A · Your first test</h3>
+            <p class="step-note">Create <code class="inline-code">playwright/tests/ui/register.spec.ts</code>:</p>
+            <ul class="tasks">
+              <li>Register a new user</li>
+              <li>Log in with that user</li>
+              <li>Assert that "No bookings yet" is shown</li>
+            </ul>
+            <p class="step-note">Record it with codegen or write it yourself. Prefer <code class="inline-code">getByRole</code> and <code class="inline-code">getByLabel</code>, and add a web-first assertion to every step.</p>
+            <details class="hints">
+              <summary>Hints</summary>
+              <ul>
+                <li>Start the recorder with <code class="inline-code">npx playwright codegen localhost:3000</code>, or use "Record new" in the VS Code extension.</li>
+                <li>Web-first assertions wait for you: <code class="inline-code">await expect(locator).toBeVisible()</code>.</li>
+              </ul>
+            </details>
+          </div>
+        </li>
+        <li>
+          <div class="step-meta" data-label="1B" aria-hidden="true"></div>
+          <div class="step-content">
+            <h3>Assignment 1B · Debug &amp; report</h3>
+            <ul class="tasks">
+              <li>Configure the HTML reporter and set <code class="inline-code">trace: 'on'</code></li>
+              <li>Duplicate your test from 1A a few times and enable <code class="inline-code">fullyParallel</code></li>
+              <li>Run with <code class="inline-code">--repeat-each 5</code>. What breaks, and why?</li>
+              <li>Fix it with unique test data per test (for example <code class="inline-code">faker</code> or <code class="inline-code">Date.now()</code>)</li>
+              <li>Open the report and a trace: which step is the slowest?</li>
+            </ul>
+            <details class="hints">
+              <summary>Hints</summary>
+              <ul>
+                <li>Open the report with <code class="inline-code">npx playwright show-report</code>; click a test to open its trace.</li>
+                <li>Every test registers the same user, and usernames must be unique.</li>
+              </ul>
+            </details>
+          </div>
+        </li>
+        <li>
+          <div class="step-meta" data-label="02" aria-hidden="true"></div>
+          <div class="step-content">
+            <h3>Assignment 2 · Page objects &amp; fixtures</h3>
+            <ul class="tasks">
+              <li>Create <code class="inline-code">LoginPage</code> and <code class="inline-code">RegisterPage</code> page objects</li>
+              <li>Refactor your test from 1A to use them</li>
+              <li>Expose the page objects as fixtures with <code class="inline-code">test.extend</code></li>
+              <li class="bonus">Bonus: add a <code class="inline-code">BookingWizard</code> page object, book a room and verify it in <em>My bookings</em></li>
+            </ul>
+            <details class="hints">
+              <summary>Hints</summary>
+              <ul>
+                <li>Put locators in the constructor and user actions (<code class="inline-code">login(username, password)</code>) in methods. Keep assertions in the test.</li>
+                <li>Export your extended <code class="inline-code">test</code> and <code class="inline-code">expect</code> from one file and import them in every spec.</li>
+              </ul>
+            </details>
+          </div>
+        </li>
+        <li>
+          <div class="step-meta" data-label="03" aria-hidden="true"></div>
+          <div class="step-content">
+            <h3>Assignment 3 · Authentication</h3>
+            <ul class="tasks">
+              <li>Write <code class="inline-code">auth.setup.ts</code> that saves the state for <code class="inline-code">user</code> <strong>and</strong> <code class="inline-code">admin</code></li>
+              <li>Add <code class="inline-code">ui-user</code> and <code class="inline-code">ui-admin</code> projects that depend on <code class="inline-code">setup</code></li>
+              <li>Make your tests start logged in. Compare the duration in the report: faster?</li>
+              <li class="bonus">Bonus: log in with <code class="inline-code">POST /api/auth/login</code> and set <code class="inline-code">booker.token</code> instead of using the login form</li>
+            </ul>
+            <details class="hints">
+              <summary>Hints</summary>
+              <ul>
+                <li>Save the state with <code class="inline-code">page.context().storageState({ path })</code> and load it with <code class="inline-code">use: { storageState }</code> in the project.</li>
+                <li>Add <code class="inline-code">playwright/.auth</code> to <code class="inline-code">.gitignore</code>.</li>
+                <li>Start logged out in one file: <code class="inline-code">test.use({ storageState: { cookies: [], origins: [] } })</code>.</li>
+              </ul>
+            </details>
+          </div>
+        </li>
+        <li>
+          <div class="step-meta" data-label="04" aria-hidden="true"></div>
+          <div class="step-content">
+            <h3>Assignment 4 · Network &amp; API</h3>
+            <p class="tasks-label">Network</p>
+            <ul class="tasks">
+              <li>Mock <code class="inline-code">POST /api/bookings</code> to return <code class="inline-code">409</code> and assert the "Room not available" alert</li>
+              <li class="bonus">Bonus: patch the rooms response so a fake room shows up</li>
+            </ul>
+            <p class="tasks-label">Hybrid</p>
+            <ul class="tasks">
+              <li>Seed a room (as admin) and a booking (as user) via the API, then verify them in the UI</li>
+              <li>Or book in the UI and verify via <code class="inline-code">GET /api/bookings/my-bookings</code></li>
+              <li class="bonus">Bonus: move the seeding into a fixture</li>
+            </ul>
+            <details class="hints">
+              <summary>Hints</summary>
+              <ul>
+                <li>Mock with <code class="inline-code">page.route()</code> and <code class="inline-code">route.fulfill({ status, json })</code>. Register the route before the request happens.</li>
+                <li>Patch a real response: <code class="inline-code">const response = await route.fetch()</code>, then <code class="inline-code">route.fulfill({ response, json })</code>.</li>
+                <li>Use the <code class="inline-code">request</code> fixture for API calls. The API docs are at <a href="http://localhost:3000/api-docs" target="_blank" rel="noreferrer"><code class="inline-code">/api-docs</code></a>.</li>
+              </ul>
+            </details>
+          </div>
+        </li>
+        <li>
+          <div class="step-meta" data-label="05" aria-hidden="true"></div>
+          <div class="step-content">
+            <h3>Assignment 5 · Time, contexts &amp; environment</h3>
+            <p class="step-note">Pick one (or more):</p>
+            <ul class="tasks">
+              <li>Cancel a booking (confirm dialog) and download its invoice; check the file name and content</li>
+              <li>Two contexts: a guest books, the admin approves, the guest sees the status change</li>
+              <li><code class="inline-code">page.clock</code>: the check-in countdown on My bookings reaches "is open" at 15:00</li>
+              <li>Add a <code class="inline-code">mobile</code> project and run your tests with the <code class="inline-code">nl-NL</code> locale and dark mode</li>
+              <li>Admin: upload a room image and reorder the rooms with drag &amp; drop</li>
+              <li>Open the terms in a new tab, then pay in the payment widget (shadow DOM)</li>
+            </ul>
+            <details class="hints">
+              <summary>Hints</summary>
+              <ul>
+                <li>Downloads: start <code class="inline-code">page.waitForEvent('download')</code> before you click.</li>
+                <li>Contexts: <code class="inline-code">browser.newContext({ storageState: 'playwright/.auth/admin.json' })</code> gives you a second user in the same test.</li>
+                <li>Clock: use <code class="inline-code">page.clock.setFixedTime()</code>. With <code class="inline-code">install()</code> plus <code class="inline-code">pauseAt()</code> the app's timers stop too, and the page keeps loading.</li>
+                <li>Mobile: combine <code class="inline-code">devices['Pixel 7']</code> with <code class="inline-code">locale</code> and <code class="inline-code">colorScheme</code>.</li>
+                <li>Upload with <code class="inline-code">setInputFiles()</code> (a buffer works too); drag with <code class="inline-code">locator.dragTo()</code>.</li>
+                <li>New tab: <code class="inline-code">context.waitForEvent('page')</code>. The payment form is in an open shadow root, so ordinary locators reach it.</li>
+                <li>Test card <code class="inline-code">4242 4242 4242 4242</code> (any future date and CVC) is accepted; <code class="inline-code">4000 0000 0000 0002</code> is declined.</li>
+              </ul>
+            </details>
+          </div>
+        </li>
+        <li>
+          <div class="step-meta" data-label="06" aria-hidden="true"></div>
+          <div class="step-content">
+            <h3>Assignment 6 · Visual regression</h3>
+            <ul class="tasks">
+              <li>Take a screenshot of the home page; run the test twice. Does it pass?</li>
+              <li>Mask the "deal of the day" banner and update the baseline</li>
+              <li>Then hide the banner with <code class="inline-code">stylePath</code> instead. Which do you prefer?</li>
+              <li class="bonus">Bonus: switch the snapshot to WebP and compare the file size</li>
+            </ul>
+            <details class="hints">
+              <summary>Hints</summary>
+              <ul>
+                <li><code class="inline-code">await expect(page).toHaveScreenshot('home.png', { mask: [locator] })</code></li>
+                <li>Update the baselines with <code class="inline-code">npx playwright test --update-snapshots</code>.</li>
+                <li>Baselines are per operating system, so a baseline from your laptop won't match in CI.</li>
+              </ul>
+            </details>
+          </div>
+        </li>
+        <li>
+          <div class="step-meta" data-label="07" aria-hidden="true"></div>
+          <div class="step-content">
+            <h3>Assignment 7 · Accessibility</h3>
+            <ul class="tasks">
+              <li>Run an axe scan on each step of the booking wizard. How many violations?</li>
+              <li>Attach the results to the report with <code class="inline-code">testInfo.attach()</code></li>
+              <li class="bonus">Bonus: add an aria snapshot of the main navigation and the booking summary</li>
+            </ul>
+            <details class="hints">
+              <summary>Hints</summary>
+              <ul>
+                <li><code class="inline-code">new AxeBuilder({ page }).analyze()</code> from <code class="inline-code">@axe-core/playwright</code>.</li>
+                <li>Aria snapshots: <code class="inline-code">await expect(locator).toMatchAriaSnapshot()</code>; let Playwright write the first version with <code class="inline-code">--update-snapshots</code>.</li>
+              </ul>
+            </details>
+          </div>
+        </li>
+        <li>
+          <div class="step-meta" data-label="08" aria-hidden="true"></div>
+          <div class="step-content">
+            <h3>Assignment 8 · Continuous integration</h3>
+            <ul class="tasks">
+              <li>Fork booker-platform and add a GitHub Actions workflow that runs your UI tests</li>
+              <li>Upload the HTML report as an artifact; download it and open a trace</li>
+              <li class="bonus">Bonus: shard over two jobs and merge the reports</li>
+            </ul>
+            <details class="hints">
+              <summary>Hints</summary>
+              <ul>
+                <li>In CI, run <code class="inline-code">npx playwright install --with-deps</code> and <code class="inline-code">npm run setup</code> before the tests.</li>
+                <li>Upload the report with <code class="inline-code">actions/upload-artifact</code> and <code class="inline-code">if: ${{ !cancelled() }}</code>, so you also get it when tests fail.</li>
+                <li>Sharding: <code class="inline-code">--shard 1/2</code> with the <code class="inline-code">blob</code> reporter, then <code class="inline-code">npx playwright merge-reports</code>.</li>
+              </ul>
+            </details>
+          </div>
+        </li>
+        <li>
+          <div class="step-meta" data-label="09" aria-hidden="true"></div>
+          <div class="step-content">
+            <h3>Assignment 9 · AI-assisted testing (optional)</h3>
+            <ul class="tasks">
+              <li>Run <code class="inline-code">npx playwright init-agents</code> in booker-platform</li>
+              <li>Let the planner write a plan for "cancel a booking", then generate the test</li>
+              <li>Review the result like a colleague's pull request. Would you merge it?</li>
+            </ul>
+            <details class="hints">
+              <summary>Review checklist</summary>
+              <ul>
+                <li>Are the assertions meaningful?</li>
+                <li>Does it use role-based locators?</li>
+                <li>Is the test data isolated?</li>
+                <li>No <code class="inline-code">waitForTimeout</code>?</li>
+              </ul>
+            </details>
+          </div>
+        </li>
+        <li>
+          <div class="step-meta" data-label="10" aria-hidden="true"></div>
+          <div class="step-content">
+            <h3>Assignment 10 · Flaky-test clinic</h3>
+            <p class="step-note">The trainer switches on chaos mode: slow rooms, flaky bookings, random order and a cookie pop-up.</p>
+            <ul class="tasks">
+              <li>Make the suite green again</li>
+              <li>Without <code class="inline-code">waitForTimeout</code> and without adding retries</li>
+              <li>Use what you learned today: traces, web-first assertions, mocking, <code class="inline-code">addLocatorHandler</code></li>
+            </ul>
+            <p class="step-note">Practising on your own? Add a <code class="inline-code">chaos</code> project to <code class="inline-code">playwright.config.ts</code>:</p>
+            <div class="command code-block">
+              <pre><code>{
+  name: 'chaos',
+  use: {
+    extraHTTPHeaders: {
+      'x-booker-flags': 'slow-rooms,flaky-booking,random-order,popup-cookie',
+    },
+  },
+}</code></pre>
+              <button class="copy" type="button" data-copy="{&#10;  name: 'chaos',&#10;  use: {&#10;    extraHTTPHeaders: {&#10;      'x-booker-flags': 'slow-rooms,flaky-booking,random-order,popup-cookie',&#10;    },&#10;  },&#10;}">Copy</button>
+            </div>
+            <details class="hints">
+              <summary>Hints</summary>
+              <ul>
+                <li>Open a trace of a failing test first. What did the page look like?</li>
+                <li><code class="inline-code">page.addLocatorHandler()</code> clicks the cookie pop-up away whenever it shows up.</li>
+                <li>Random order: find rooms by name, not by position.</li>
+                <li>Flaky bookings fail before the booking is saved, so it's safe to retry just that step with <code class="inline-code">expect(...).toPass()</code>.</li>
+              </ul>
+            </details>
+          </div>
+        </li>
+      </ol>
+    </section>
+
+    <section class="guide" aria-labelledby="api-title">
+      <header class="section-header">
+        <p class="kicker">Assignments · API</p>
+        <h2 id="api-title">API testing with Playwright.</h2>
+        <p class="section-intro">You test the booker-platform REST API directly. The starter files are in <code class="inline-code">playwright/tests/api</code>; the Swagger docs are at <a href="http://localhost:3000/api-docs" target="_blank" rel="noreferrer"><code class="inline-code">http://localhost:3000/api-docs</code></a>.</p>
+      </header>
+
+      <ol aria-label="API assignments">
+        <li>
+          <div class="step-meta" data-label="01" aria-hidden="true"></div>
+          <div class="step-content">
+            <h3>Assignment 1 · Authentication</h3>
+            <ul class="tasks">
+              <li>Open <code class="inline-code">playwright/tests/api/assignment1.spec.ts</code></li>
+              <li>Register a new (random) user</li>
+              <li>Log in with that user and store the token</li>
+              <li>Log out with that token</li>
+              <li>Assert status codes, headers and the response body</li>
+            </ul>
+            <p class="step-note">Read the Swagger docs and the README. When in doubt: ask 😉</p>
+          </div>
+        </li>
+        <li>
+          <div class="step-meta" data-label="02" aria-hidden="true"></div>
+          <div class="step-content">
+            <h3>Assignment 2 · Rooms &amp; bookings</h3>
+            <ul class="tasks">
+              <li>Continue with <code class="inline-code">playwright/tests/api/assignment2.spec.ts</code></li>
+              <li>Find a room and conclude none is to your liking</li>
+              <li>Add a new room as admin. Construction will surely be done before you go 🙂</li>
+              <li>Book your new room as a regular user</li>
+              <li>The kids bring the flu home from daycare: cancel the booking and verify it's cancelled</li>
+            </ul>
+            <p class="step-note">Tip: the API rejects bookings in the past and bookings that overlap. Check the status codes in Swagger.</p>
+          </div>
+        </li>
+        <li>
+          <div class="step-meta" data-label="Bonus" aria-hidden="true"></div>
+          <div class="step-content">
+            <h3>Bonus · Improve the setup</h3>
+            <p class="step-note">Start from <code class="inline-code">playwright/tests/api/bonus.spec.ts</code> (a copy of assignment 2):</p>
+            <ul class="tasks">
+              <li>How could we improve our setup?</li>
+              <li>Can we make our tests more readable? (fixtures, helpers)</li>
+              <li>Can we reuse the same authenticated state for all tests?</li>
+              <li>Can we check that every response is structured correctly, without validating it in every test?</li>
+            </ul>
+          </div>
+        </li>
+      </ol>
+    </section>
+
+    <section class="guide" aria-labelledby="after-title">
+      <header class="section-header">
+        <p class="kicker">After the workshop</p>
+        <h2 id="after-title">Compare with the solutions.</h2>
+        <p class="section-intro">Reference solutions for every assignment are on the <code class="inline-code">solutions</code> branch of booker-platform. Try it yourself first: there's more than one good answer.</p>
+      </header>
+      <div class="step-content">
+        <div class="command">
+          <span class="prompt" aria-hidden="true">$</span>
+          <pre><code>git fetch origin &amp;&amp; git switch solutions</code></pre>
+          <button class="copy" type="button" data-copy="git fetch origin && git switch solutions">Copy</button>
+        </div>
+        <div class="link-options" style="margin-top: 14px;">
+          <a class="link-option" href="https://github.com/Ghislain89/booker-platform/tree/solutions" target="_blank" rel="noreferrer">Solutions on GitHub</a>
+          <a class="link-option" href="https://github.com/Ghislain89/playwright-training-slides" target="_blank" rel="noreferrer">Slides on GitHub</a>
+        </div>
+      </div>
+    </section>
+
+    <footer class="site-footer">
+      <a href="https://github.com/Ghislain89" target="_blank" rel="noreferrer">By Ghislain</a>
+    </footer>
+  </main>
+
+  <script>
+    document.querySelectorAll(".copy").forEach((button) => {
+      button.addEventListener("click", async () => {
+        try {
+          await navigator.clipboard.writeText(button.dataset.copy);
+          button.textContent = "Copied";
+          window.setTimeout(() => { button.textContent = "Copy"; }, 1600);
+        } catch {
+          button.textContent = "Select";
+        }
+      });
+    });
+  </script>
+</body>
+</html>
