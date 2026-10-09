@@ -694,6 +694,7 @@ layout: new-section
 
 - Test object and assignments: https://github.com/Ghislain89/booker-platform
 - Solutions: the [`solutions`](https://github.com/Ghislain89/booker-platform/tree/solutions) branch
+- All assignments: https://ghislain.dev/playwright/assignments.html
 - Playwright API testing docs: https://playwright.dev/docs/api-testing
 - These slides: https://github.com/Ghislain89/playwright-training-slides
 

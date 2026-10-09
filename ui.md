@@ -58,6 +58,8 @@ hideInToc: true
 
 > Something not working? Tell us now, not after the first assignment.
 
+All assignments, with hints, are also on [ghislain.dev/playwright/assignments.html](https://ghislain.dev/playwright/assignments.html).
+
 ---
 layout: new-section
 ---
@@ -1303,7 +1305,8 @@ Reference solution: assignment10.chaos.spec.ts on the solutions branch.
 3. Stack Overflow: https://stackoverflow.com/tags/playwright
 4. Playwright Solutions: https://playwrightsolutions.com
 5. Test object and solutions: https://github.com/Ghislain89/booker-platform
-6. These slides: https://github.com/Ghislain89/playwright-training-slides
+6. All assignments with hints: https://ghislain.dev/playwright/assignments.html
+7. These slides: https://github.com/Ghislain89/playwright-training-slides
 
 ---
 
