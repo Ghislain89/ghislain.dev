@@ -24,13 +24,12 @@ hideInToc: true
 Test Automation Consultant <a  href="https://detesters.nl/">DeTesters</a>
 
 - Woerden, Netherlands 🇳🇱
-- 36 years
 - Father of 2 minions
 - Butler to a cat
 - ~12 years of experience
-- Builds Tools that simplify complex tasks
+- Builds tools that simplify complex tasks
 
-<!-- This is a **note** -->
+<!-- Ghislain -->
 
 ---
 layout: presenter
@@ -56,266 +55,617 @@ layoutClass: gap-16
 # Agenda
 <Toc text-sm minDepth="1" maxDepth="1" />
 
-<!-- Lars-->
+<!-- Lars -->
+
+---
+layout: new-section
+---
+
+# What & why
 
 ---
 layout: center
 ---
 
+## What is API testing?
+
 "API testing is a process that confirms an API is working as expected. There are several types of API tests, and each one plays a distinct role in ensuring that the API's functionality, security, and performance remain reliable."
 
 <!-- Lars -->
+
 ---
 layout: full
 ---
-# Why Playwright for API Testing?
 
-- 🔗 **Unified Framework**: Playwright allows you to perform both UI and API testing within a single framework, reducing the need for multiple tools and simplifying the testing process.
-- 🛠️ **Extensible**: Playwright is highly extensible, allowing you to integrate with other tools and libraries to enhance your testing capabilities.
-
-Note; As with many tool choices, it heavily depends on the context of your organisation. 
-
-<!-- Ghislain-->
-
----
-layout: default
----
-# Flow overview
-
-```mermaid
-sequenceDiagram
-    participant beforeAll
-    participant beforeEach
-    participant Test
-    participant afterEach
-    participant afterAll
-    beforeAll->>beforeAll: Setup environment
-    beforeEach->>Test: Prepare each test
-    afterEach->>Test: Clean up after test
-    afterAll->>afterAll: Final cleanup
-```
-<!-- Ghislain -->
----
-layout: full
----
-# API Testing
+## API testing
 
 <div style="display: flex; justify-content: center; gap: 20px; align-items: center;">
-  <img src="/2bfef1de-1c9e-4168-8cb0-9613cf109c1a.jpg" alt="Api Image" width="575">
+  <img src="/2bfef1de-1c9e-4168-8cb0-9613cf109c1a.jpg" alt="API" width="460">
 </div>
 
 - Define the method + the endpoint
-- Perform Assertions on HTTP Response Codes
-- Perform Assertions on Response Headers
-- Perform Assertions on Response Body
+- Assert on the HTTP status code
+- Assert on the response headers
+- Assert on the response body
 
-<!-- Lars-->
+<!-- Lars -->
 
 ---
-layout: full
----
-## GET Requests
-- A GET request is used to retrieve data from a server.
-- It is read-only and does not modify data.
 
-📤 Client sends a GET request → 🌐 Server processes → 📥 Server returns data (JSON/XML)
+## Why Playwright for API testing?
 
-```ts twoslash
-import { test, expect } from '@playwright/test';
+- 🔗 **One framework** for UI and API tests: same runner, fixtures, reports and traces
+- 🔀 **Hybrid tests**: seed data through the API, verify it in the UI (or the other way round)
+- 🧰 **Batteries included**: parallelism, retries, tags, sharding, HTML report
+- 🛠️ **Extensible**: fixtures, custom matchers, your favourite libraries (zod, faker, ...)
 
-test('GET /products - validate product response', async ({ request }) => {
-  const response = await request.get('/products');
-  expect(response.status()).toBe(200);
-  const jsonResponse = await response.json();
-  expect(jsonResponse.products.length).toBeGreaterThan(0);
-});
-```
+> As with any tool choice: it depends on the context of your organisation.
 
 <!-- Ghislain -->
 
 ---
-layout: full
+layout: new-section
 ---
-## POST Requests
-- A POST request is used to send data to a server to create a resource.
-- Unlike GET, it modifies data on the server.
 
-📤 Client sends a POST request with data → 🌐 Server processes → 📥 Server responds with confirmation or new resource
+# Setup
 
-```ts twoslash
-import { test, expect } from '@playwright/test';
-
-test('POST /products/add - validate product creation', async ({ request }) => {
-    const response = await request.post('/products/add', { 
-      data: { 
-        title: 'BMW'
-      }
-    });
-
-    expect(response.status()).toBe(201);
-
-    const jsonResponse = await response.json();
-    expect(jsonResponse).toHaveProperty('id');
-    expect(jsonResponse.title).toBe('BMW');
-});
-```
-<!-- Lars -->
 ---
-layout: default
----
-## DELETE Requests
-- A DELETE request is used to remove a resource from the server.
 
-📤 Client sends a DELETE request → 🌐 Server removes the resource → 📥 Server responds with confirmation (e.g., 204 No Content)
+## Today's test object: booker-platform
 
-```ts twoslash
-import { test, expect } from '@playwright/test';
+A hotel booking platform with a REST API (Express, Prisma, JWT) and Swagger docs.
 
-test('DELETE /products/1 - delete a product', async ({ request }) => {
-  const response = await request.delete('/products/1');
-  expect(response.status()).toBe(200);
-
-  const jsonResponse = await response.json();
-  expect(jsonResponse).toHaveProperty('isDeleted', true);
-});
-```
-<!-- Lars -->
----
-layout: default
----
-# Request Headers & Authorization
-- Headers provide metadata about the request or response.
-- Authorization headers help verify user identity and secure API access.
-
-📤 Client sends a request with headers → 🌐 Server validates & processes → 📥 Server responds with data or an error
-
-```ts twoslash
-import { test, expect } from '@playwright/test';
-
-const token: string = 'Bearer_Token';
-
-test('GET /user - with Authorization header', async ({ request }) => {
-  const response = await request.get('/user', {
-    headers: {
-      'Authorization': `Bearer ${token}`,
-      'Content-Type': 'application/json',
-      'Accept': 'application/json'
-    }
-  });
-  expect(response.status()).toBe(200);
-});
+```bash
+git clone https://github.com/Ghislain89/booker-platform
+cd booker-platform
+npm install
+npm run setup    # reset the database + seed data
+npm run dev      # API on http://localhost:3000/api, docs on /api-docs
 ```
 
-<!-- Lars -->
----
-layout: default
----
-## Assignment time!
-
-- Go to https://github.com/Ghislain89/booker-platform
-- Clone the project, run `npm install` and `npm run setup` to get started.
-- Start with assignment1.spec.ts in the playwright/tests/api folder.
-- Carefully read the docs and README to understand the logic of the specific endpoints. When in doubt: Ask 😉
-
-<div style="display: flex; justify-content: center; gap: 20px; align-items: center; margin-top: 50px;">
-  <img src="/programming.png" alt="Programming Image" width="200">
-  <img src="/exam-time.png" alt="Exam Image" width="200">
-</div>
-
+- Seed users: `user` / `password123` and `admin` / `password123`
+- Playwright starts the server for you (`webServer`) if it isn't running yet
+- Messed up the data? `npm run setup` gives you a clean database
 
 <!-- Ghislain -->
+
 ---
-layout: default
+layout: two-cols
 ---
-# Query & Path Parameters
-- Query parameters are used to filter, sort, or modify data in API requests.
-- They are appended to the URL after a ? and separated by &.
-- Path Params are usually used to fetch specific resourcesd (e.g. by Id.)
 
-📤 Client sends a GET request with query parameters → 🌐 Server processes filters → 📥 Server returns filtered data
+## Configuration
 
-```ts twoslash
-import { test, expect } from '@playwright/test';
-
-const id = 1;
-
-test('GET /products - retrieve sorted products using params', async ({ request }) => {
-  const response = await request.get(`/products/${id}`, {
-    params: {
-      order: 'asc',
-      category: 'electronics',
+```ts
+// playwright.config.ts
+export default defineConfig({
+  webServer: {
+    command: 'npm run dev',
+    url: 'http://localhost:3000/api-docs',
+    reuseExistingServer: !process.env.CI,
+  },
+  projects: [{
+    name: 'API',
+    testDir: './playwright/tests/api',
+    use: {
+      baseURL: 'http://localhost:3000/api/',
+      extraHTTPHeaders: {
+        Accept: 'application/json',
+      },
     },
-  });
-  const jsonResponse = await response.json();
-
-  // Assertions to check the ordering and category etc.
+  }],
 });
 ```
+
+::right::
+
+### ⚠️ The baseURL gotcha
+
+URLs are resolved like links in a browser:
+
+| Call | Resolves to |
+|---|---|
+| `get('rooms')` | `…:3000/api/rooms` ✅ |
+| `get('/rooms')` | `…:3000/rooms` ❌ |
+
+End the `baseURL` with a `/` and **don't** start paths with a `/`.
+
 <!-- Ghislain -->
 
 ---
-layout: default
+
+## The `request` fixture & your own contexts
+
+```ts
+// built-in fixture: uses baseURL and extraHTTPHeaders from the config, new per test
+test('list rooms', async ({ request }) => {
+  const response = await request.get('rooms', { headers });
+});
+
+// your own context, for example per role
+test('admin can list all bookings', async ({ playwright }) => {
+  const admin = await playwright.request.newContext({
+    baseURL: 'http://localhost:3000/api/',
+    extraHTTPHeaders: { Authorization: `Bearer ${adminToken}` },
+  });
+  await expect(await admin.get('bookings')).toBeOK();
+  await admin.dispose();
+});
+```
+
+<!-- Ghislain -->
+
 ---
-## Assignment time!
 
-- Continue with assignment2.spec.ts in the playwright/tests/api folder.
-- Carefully read the docs and README to understand the logic of the specific endpoints. When in doubt: Ask 😉
+## Readable tests with `test.step`
 
-<div style="display: flex; justify-content: center; gap: 20px; align-items: center; margin-top: 50px;">
-  <img src="/programming.png" alt="Programming Image" width="200">
-  <img src="/exam-time.png" alt="Exam Image" width="200">
+```ts
+test('Assignment 1: Authentication', async ({ request }) => {
+  const user = createRandomUser();
+  let token: string;
+
+  await test.step('Register a new user with valid credentials', async () => {
+    // ...
+  });
+
+  await test.step('Successfully login with the newly created user', async () => {
+    // ... token = body.data.token;
+  });
+});
+```
+
+- Steps show up in the HTML report and the trace viewer
+- Options: `{ box: true }` points errors at the step call, `{ timeout }` limits a step (1.50)
+
+<!-- Ghislain -->
+
+---
+layout: new-section
+---
+
+# First requests
+
+---
+
+## GET: read data
+
+```ts
+import { test, expect } from '@playwright/test';
+
+test('GET rooms returns a list of rooms', async ({ request }) => {
+  const response = await request.get('rooms', {
+    headers: { Authorization: `Bearer ${token}` },
+  });
+
+  await expect(response).toBeOK();                       // status 200-299
+  expect(response.headers()['content-type']).toContain('application/json');
+
+  const body = await response.json();
+  expect(body.success).toBe(true);
+  expect(body.data.length).toBeGreaterThan(0);
+});
+```
+
+<!-- Ghislain -->
+
+---
+
+## POST: create data
+
+```ts
+test('POST auth/register creates a user', async ({ request }) => {
+  const user = createRandomUser();
+
+  const response = await request.post('auth/register', { data: user });
+
+  expect(response.status()).toBe(201);
+  const body = await response.json();
+  expect(body.data.user.username).toBe(user.username);
+  expect(body.data).toHaveProperty('token');
+});
+```
+
+- `data` as an object is sent as JSON, with the `Content-Type` set for you
+- Use `form` for URL-encoded forms and `multipart` (or `FormData`) for file uploads
+
+<!-- Lars -->
+
+---
+
+## Headers & authorization
+
+```ts
+const login = await request.post('auth/login', {
+  data: { username: 'user', password: 'password123' },
+});
+await expect(login).toBeOK();
+const token: string = (await login.json()).data.token;
+
+const response = await request.get('bookings/my-bookings', {
+  headers: { Authorization: `Bearer ${token}` },
+});
+await expect(response).toBeOK();
+```
+
+- Headers carry metadata: content type, language, caching, ...
+- `Authorization: Bearer <token>` proves who you are
+- Headers you need on every request belong in `extraHTTPHeaders`
+
+<!-- Lars -->
+
+---
+
+## Assertions on responses
+
+```ts
+// status
+await expect(response).toBeOK();
+expect(response.status()).toBe(201);
+
+// headers
+expect(response.headers()['content-type']).toContain('application/json');
+
+// body: check the shape, not just single fields
+expect(await response.json()).toMatchObject({
+  success: true,
+  data: { user: { username: user.username, role: 'ROLE_USER' }, token: expect.any(String) },
+});
+```
+
+<!-- Lars -->
+
+---
+
+## Assignment 1: authentication
+
+- Open `playwright/tests/api/assignment1.spec.ts`
+- Register a new (random) user
+- Log in with that user and store the token
+- Log out with that token
+- Assert status codes, headers and the response body
+
+Read the Swagger docs on http://localhost:3000/api-docs and the README. When in doubt: ask 😉
+
+<div style="display: flex; justify-content: center; gap: 20px; align-items: center; margin-top: 20px;">
+  <img src="/programming.png" alt="Programming" width="150">
+  <img src="/exam-time.png" alt="Exam time" width="150">
 </div>
+
+<!-- Ghislain -->
+
+---
+layout: new-section
+---
+
+# Resources & roles
+
+---
+
+## Path & query parameters
+
+- **Path parameters** identify one resource: `rooms/{id}`
+- **Query parameters** filter, sort or paginate: `?type=SUITE&sort=-price`
+
+```ts
+// path parameter
+const room = await request.get(`rooms/${roomId}`, { headers });
+
+// query parameters: Playwright encodes them for you
+const suites = await request.get('public/rooms', {
+  params: { type: 'SUITE', sort: '-price', page: 1 },
+});
+// → GET http://localhost:3000/api/public/rooms?type=SUITE&sort=-price&page=1
+```
+
+`params` also accepts a `URLSearchParams` or a query string (1.47).
+
+<!--
+The public rooms endpoint with filters is part of the booker-platform frontend spec (A7/A8). Until it exists, use it as a syntax example only.
+-->
+
+---
+
+## PUT & DELETE
+
+```ts
+// PUT replaces a resource (admin only for rooms)
+const update = await request.put(`rooms/${roomId}`, {
+  headers: adminHeaders,
+  data: { ...room, price: 150 },
+});
+expect(update.status()).toBe(200);
+
+// DELETE on a booking cancels it
+const cancel = await request.delete(`bookings/${bookingId}`, { headers: userHeaders });
+await expect(cancel).toBeOK();
+
+// verify the result with a new request
+const check = await request.get(`bookings/${bookingId}`, { headers: userHeaders });
+expect((await check.json()).data.status).toBe('CANCELLED');
+```
+
+<!-- Lars -->
+
+---
+
+## Roles: 401 vs 403
+
+- **401 Unauthorized**: we don't know who you are (no token)
+- **403 Forbidden**: we know who you are, but you're not allowed (user token on an admin endpoint)
+
+```ts
+const anonymous = await request.post('rooms', { data: room });
+expect(anonymous.status()).toBe(401);
+
+const asUser = await request.post('rooms', { data: room, headers: userHeaders });
+expect(asUser.status()).toBe(403);
+
+const asAdmin = await request.post('rooms', { data: room, headers: adminHeaders });
+expect(asAdmin.status()).toBe(201);
+```
+
+🤔 booker-platform returns `403` for an *invalid* token. Is that what you would expect?
+
+<!-- Lars -->
+
+---
+
+## Assignment 2: rooms & bookings
+
+- Continue with `playwright/tests/api/assignment2.spec.ts`
+- Find a room and conclude none is to your liking
+- Add a new room as admin. Construction will surely be done before you go 🙂
+- Book your new room as a regular user
+- The kids bring the flu home from daycare: cancel the booking and verify it's cancelled
+
+<div style="display: flex; justify-content: center; gap: 20px; align-items: center; margin-top: 20px;">
+  <img src="/programming.png" alt="Programming" width="150">
+  <img src="/exam-time.png" alt="Exam time" width="150">
+</div>
+
 <!-- Ghislain -->
 
 ---
-layout: default
+layout: new-section
 ---
-# Scaling - Schema Validation
 
-```mermaid
-flowchart LR
-    A[Swagger Docs]
-    A -->|Manual Review| E[Human Validation]
-    E -->|Feedback| A
-```
-- You could manually validate if the response matches the docs, but this is cumbersome.
-- Let's look at a better way!
-
+# Scaling up
 
 ---
-layout: default
----
-# Scaling - Schema Validation
 
-```mermaid
-flowchart LR
-    A[Swagger Docs] -->|Generate| B[Validation Schema]
-    B -->|Use in| C[API Tests]
-    C -->|Automated Validation| D[Ensure API Compliance]
-    A -->|Manual Review| E[Human Validation]
-    E -->|Feedback| A
+## Data factories & helpers
+
+```ts
+// playwright/support/datafactories/user.factory.ts
+export function createRandomUser() {
+  const username = `test_${Date.now()}_${faker.string.alphanumeric(8)}`;
+  return {
+    username,
+    password: faker.internet.password(),
+    email: `${username}@example.com`,
+  };
+}
 ```
 
-- Implement schema validation for requests and responses
-- Based on the OpenAPI spec, generate Zod Schema's to use as validation in tests.
-- Add an expectation in the test that the responseBody equals the generated schema.
-- Contract testing 'lite'
-
----
-Layout: default
----
-- Create helpers and fixtures for commonly used actions
-- Create Data Factories to create request bodies & manage test data.
-
-Try and find a balance between DRY and KISS. These concepts _can, and probably will_ bite one another.
-
+- Factories build request bodies with unique data, so tests can run in parallel
+- Helpers wrap repeated actions, such as logging in
+- Balance DRY and KISS: these principles *can, and probably will,* bite each other
 
 <!-- Ghislain -->
----
-layout: default
----
-# Thank you!
 
-- Questions/feedback?
-- Playwright API documentation: https://playwright.dev/docs/api-testing
+---
+
+## Hooks
+
+```mermaid
+flowchart LR
+    A[beforeAll] --> B[beforeEach] --> C[test] --> D[afterEach]
+    D -->|next test| B
+    D -->|last test| E[afterAll]
+```
+
+- `beforeEach` / `afterEach` run around **every** test
+- `beforeAll` / `afterAll` run once per **worker**, not once per run: with 4 workers they run 4 times
+- Hooks don't travel between files. For reusable setup, use **fixtures**
+
+<!-- Ghislain -->
+
+---
+
+## Fixtures: an API client
+
+```ts
+// playwright/support/fixtures/test.fixture.ts
+export const test = baseTest.extend<{ api: ApiFixture }>({
+  api: async ({ request }, use) => {
+    await use(new ApiFixture(request));   // wraps APIRequestContext
+  },
+});
+```
+
+```ts
+// in a test: no more repeated headers and json() parsing
+test('list rooms', async ({ api }) => {
+  const { statusCode, responseBody } = await api.get('rooms', token);
+  expect(statusCode).toBe(200);
+});
+```
+
+<!-- Ghislain -->
+
+---
+
+## Shared authentication: a worker fixture
+
+```ts
+export const test = base.extend<{}, { adminToken: string }>({
+  adminToken: [async ({ playwright }, use) => {
+    const ctx = await playwright.request.newContext({ baseURL: 'http://localhost:3000/api/' });
+    const login = await ctx.post('auth/login', {
+      data: { username: 'admin', password: 'password123' },
+    });
+    await use((await login.json()).data.token);   // log in once per worker
+    await ctx.dispose();
+  }, { scope: 'worker' }],
+});
+```
+
+Alternative: build a context with `extraHTTPHeaders: { Authorization: ... }` and expose it as an `adminApi` fixture.
+
+<!-- Ghislain -->
+
+---
+
+## Schema validation
+
+```mermaid
+flowchart LR
+    A[OpenAPI spec] -->|npm run codegen| B[Zod schemas]
+    B -->|used in| C[API tests]
+    C -->|automated validation| D[API matches its contract]
+```
+
+- Checking every field by hand against the Swagger docs is cumbersome
+- booker-platform generates Zod schemas from its OpenAPI spec with orval
+- Validate every response against its schema: contract testing *lite*
+
+<!-- Lars -->
+
+---
+
+## Custom matcher: `toMatchSchema`
+
+```ts
+// playwright/support/fixtures/expect.fixture.ts
+export const expect = baseExpect.extend({
+  async toMatchSchema(received: unknown, schema: ZodTypeAny) {
+    const result = await schema.safeParseAsync(received);
+    return {
+      pass: result.success,
+      name: 'toMatchSchema',
+      message: () => result.success ? 'schema matched' : `Schema mismatch: ${result.error.message}`,
+    };
+  },
+});
+
+expect(responseBody).toMatchSchema(getApiRoomsResponse);
+```
+
+<!-- Lars -->
+
+---
+
+## Typed responses
+
+Since 1.63 the request methods take a type parameter, so `json()` is typed:
+
+```ts
+type Room = { id: string; number: string; type: string; price: number; capacity: number };
+type ApiResponse<T> = { success: boolean; data: T };
+
+const response = await request.get<ApiResponse<Room[]>>('rooms', { headers });
+const body = await response.json();        // ApiResponse<Room[]>
+expect(body.data[0].price).toBeGreaterThan(0);
+```
+
+- Autocomplete and compile errors instead of typos in property names
+- Types are not validation: combine them with schema checks
+
+<!-- Ghislain -->
+
+---
+
+## Bonus assignment
+
+Start from `playwright/tests/api/bonus.spec.ts` (a copy of assignment 2):
+
+- How could we improve our setup?
+- Can we make our tests more readable? (fixtures, helpers)
+- Can we reuse the same authenticated state for all tests?
+- Can we check that every response is structured correctly, without validating it in every test?
+
+<div style="display: flex; justify-content: center; gap: 20px; align-items: center; margin-top: 20px;">
+  <img src="/programming.png" alt="Programming" width="150">
+  <img src="/exam-time.png" alt="Exam time" width="150">
+</div>
+
+<!-- Ghislain -->
+
+---
+layout: new-section
+---
+
+# Extras
+
+---
+
+## Useful request options
+
+```ts
+const api = await playwright.request.newContext({
+  baseURL: 'http://localhost:3000/api/',
+  failOnStatusCode: true,   // throw on non-2xx/3xx responses (1.51)
+  timeout: 10_000,
+});
+
+await api.post(`rooms/${roomId}/image`, { multipart: formData });   // FormData (1.44)
+await api.post('contact', { form: new URLSearchParams({ name, email }) }); // URL-encoded (1.47)
+
+const response = await api.get('rooms');
+console.log(response.timing());     // DNS, connect, request and response timings (1.62)
+```
+
+`failOnStatusCode` is handy for setup code, but not for negative tests.
+
+<!-- Lars -->
+
+---
+
+## Reports & traces for API tests
+
+- `trace: 'on'` records every API call: method, URL, headers, body and timing
+- The HTML report shows steps and errors, with **Copy prompt** for your AI assistant (1.51)
+- Attach responses yourself: `await testInfo.attach('response', { body, contentType: 'application/json' })`
+- Tags and filters: `test('...', { tag: '@smoke' }, ...)` and `--grep @smoke`
+- Catch flaky tests in CI: `retries` + `--fail-on-flaky-tests` (1.45)
+
+<!-- Lars -->
+
+---
+
+## From API to UI: hybrid tests
+
+```ts
+// UI project: baseURL is http://localhost:3000, so the path includes /api
+test('a booking made via the API shows up in the UI', async ({ page, request }) => {
+  const booking = await request.post('/api/bookings', { headers, data: newBooking });
+  await expect(booking).toBeOK();
+
+  await page.goto('/my/bookings');
+  await expect(page.getByRole('row', { name: /June 1, 2030/ })).toBeVisible();
+});
+```
+
+- API calls are fast: use them to set up data for UI tests
+- Or act in the UI and verify the result through the API
+- Covered in depth in the Playwright UI workshop
+
+<!-- Ghislain -->
+
+---
+layout: new-section
+---
+
+# Wrap-up
+
+---
+
+## Thank you!
+
+- Test object and assignments: https://github.com/Ghislain89/booker-platform
+- Solutions: the [`solutions`](https://github.com/Ghislain89/booker-platform/tree/solutions) branch
+- Playwright API testing docs: https://playwright.dev/docs/api-testing
+- These slides: https://github.com/Ghislain89/playwright-training-slides
+
+Questions or feedback? Let us know!
+
 <!-- Ghislain -->

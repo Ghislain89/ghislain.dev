@@ -4,10 +4,44 @@ Slides for the Playwright trainings by Ghislain Gabriëlse ([DeTesters](https://
 
 | Deck | File | Test object |
 | --- | --- | --- |
-| Playwright UI workshop | [`ui.md`](ui.md) | [PlaywrightWorkshop](https://github.com/Ghislain89/PlaywrightWorkshop) (archived; the UI assignments move to [booker-platform](https://github.com/Ghislain89/booker-platform) once its UI is ready) |
+| Playwright UI workshop | [`ui.md`](ui.md) | [booker-platform](https://github.com/Ghislain89/booker-platform) web UI (in development, see its [frontend spec](https://github.com/Ghislain89/booker-platform/blob/main/docs/frontend-spec.md)) |
 | API testing with Playwright | [`api.md`](api.md) | [booker-platform](https://github.com/Ghislain89/booker-platform) |
 
 > This repository replaces [PlaywrightWorkshopPresentation](https://github.com/Ghislain89/PlaywrightWorkshopPresentation) (reveal.js) and [playwright-api-testing](https://github.com/Ghislain89/playwright-api-testing).
+
+Both decks are up to date with **Playwright 1.64**. New features are marked with the version that introduced them, for example `(1.63)`.
+
+## Deck outline
+
+**UI workshop (`ui.md`)**
+
+| # | Module | Assignment |
+| --- | --- | --- |
+| 1 | Why Playwright | — |
+| 2 | Your first test (anatomy, config, running, codegen, linting) | — |
+| 3 | Locators, actions & assertions | 1A |
+| 4 | Debug & report (UI mode, traces, HTML report, parallelism, flaky tests) | 1B |
+| 5 | Page objects & fixtures | 2 |
+| 6 | Authentication (setup projects, storage state) | 3 |
+| 7 | Network & API (wait, mock, modify, seed via API) | 4 |
+| 8 | Time, contexts & environment (clock, contexts, emulation, dialogs, frames) | 5 |
+| 9 | Visual & accessibility | 6, 7 |
+| 10 | Continuous integration | 8 |
+| 11 | AI-assisted testing (copy prompt, MCP, test agents) | 9 (optional) |
+| 12 | Wrap-up: flaky-test clinic | 10 |
+
+The UI assignment numbers match §8 of the booker-platform frontend spec.
+
+**API testing (`api.md`)**
+
+| # | Module | Assignment |
+| --- | --- | --- |
+| 1 | What & why | — |
+| 2 | Setup (booker-platform, config, `request` fixture, `test.step`) | — |
+| 3 | First requests (GET, POST, headers, assertions) | 1 |
+| 4 | Resources & roles (params, PUT/DELETE, 401 vs 403) | 2 |
+| 5 | Scaling up (factories, hooks, fixtures, shared auth, schema validation, typed responses) | Bonus |
+| 6 | Extras (request options, traces, hybrid tests) | — |
 
 ## Usage
 
