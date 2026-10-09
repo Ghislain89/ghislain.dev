@@ -1,0 +1,56 @@
+name: Deploy
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: deploy
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    environment:
+      name: production
+      url: https://ghislain.dev/playwright/slides.html
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Check that the FTP password is set
+        env:
+          FTP_PASSWORD: ${{ secrets.FTP_PASSWORD }}
+        run: |
+          if [ -z "$FTP_PASSWORD" ]; then
+            echo "::error::Add the FTP password first: gh secret set FTP_PASSWORD --repo ${{ github.repository }}"
+            exit 1
+          fi
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - run: npm ci
+
+      - name: Build both decks
+        run: npm run build
+
+      # Same upload action as the ghislain.dev site: only changed files are sent.
+      - name: Upload to mijn.host
+        uses: Ghislain89/ghislain.dev/.github/actions/ftps-upload@main
+        with:
+          local-dir: dist
+          server-dir: public_html/playwright/slides
+          password: ${{ secrets.FTP_PASSWORD }}
+
+      - name: Check the live decks
+        run: |
+          for path in ui/ ui/5 api/ api/5; do
+            curl --fail --silent --show-error --output /dev/null "https://ghislain.dev/playwright/slides/$path?v=$GITHUB_SHA"
+            echo "ok: /playwright/slides/$path"
+          done

@@ -2,10 +2,12 @@
 
 Slides for the Playwright trainings by Ghislain Gabriëlse ([DeTesters](https://detesters.nl/)), built with [Slidev](https://sli.dev).
 
-| Deck | File | Test object |
-| --- | --- | --- |
-| Playwright UI workshop | [`ui.md`](ui.md) | [booker-platform](https://github.com/Ghislain89/booker-platform) web UI (in development, see its [frontend spec](https://github.com/Ghislain89/booker-platform/blob/main/docs/frontend-spec.md)) |
-| API testing with Playwright | [`api.md`](api.md) | [booker-platform](https://github.com/Ghislain89/booker-platform) |
+| Deck | File | Live | Test object |
+| --- | --- | --- | --- |
+| Playwright UI workshop | [`ui.md`](ui.md) | [ghislain.dev/playwright/slides/ui/](https://ghislain.dev/playwright/slides/ui/) | [booker-platform](https://github.com/Ghislain89/booker-platform) web UI |
+| API testing with Playwright | [`api.md`](api.md) | [ghislain.dev/playwright/slides/api/](https://ghislain.dev/playwright/slides/api/) | [booker-platform](https://github.com/Ghislain89/booker-platform) API |
+
+Preparation, assignments and an overview of the decks: [ghislain.dev/playwright/](https://ghislain.dev/playwright/).
 
 > This repository replaces [PlaywrightWorkshopPresentation](https://github.com/Ghislain89/PlaywrightWorkshopPresentation) (reveal.js) and [playwright-api-testing](https://github.com/Ghislain89/playwright-api-testing).
 
@@ -53,7 +55,7 @@ npm run dev:ui      # or: npm run dev:api
 | Script | What it does |
 | --- | --- |
 | `npm run dev:ui` / `dev:api` | Start a deck with hot reload |
-| `npm run build` | Build both decks to `dist/ui` and `dist/api` |
+| `npm run build` | Build both decks to `dist/ui` and `dist/api`, for hosting at `/playwright/slides/` |
 | `npm run export:ui` / `export:api` | Export a deck to PDF in `exports/` |
 
 ## Structure
@@ -63,10 +65,21 @@ npm run dev:ui      # or: npm run dev:api
 ├── api.md         # API testing deck
 ├── style.css      # Deck-wide style tweaks
 ├── public/        # Shared images, logos and speaker photos
-└── theme/         # Shared Slidev theme (layouts, components, styles)
+├── theme/         # Shared Slidev theme (layouts, components, styles)
+└── scripts/       # Build helpers (.htaccess for the web server)
 ```
 
 Both decks use `theme: ./theme`. Logos on the title slide are set via `themeConfig.logoOne` / `logoTwo` in a deck's headmatter.
+
+## Deployment
+
+Every push to `main` builds both decks and uploads `dist/` to `ghislain.dev/playwright/slides/` on mijn.host ([workflow](.github/workflows/deploy.yml)). The upload uses the FTPS action from [ghislain.dev](https://github.com/Ghislain89/ghislain.dev) and only sends files that changed. It needs the FTP password as a repository secret:
+
+```bash
+gh secret set FTP_PASSWORD --repo Ghislain89/playwright-training-slides
+```
+
+The decks use history routing, so the build adds an `.htaccess` that sends deep links such as `/ui/5` to the deck's `index.html`. The build also uses the `/playwright/slides/…` base path; to preview it locally, run `npm run dev:ui` instead of opening `dist/`.
 
 ## Licence
 
