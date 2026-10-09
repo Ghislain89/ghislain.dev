@@ -2,7 +2,9 @@
 // Slidev uses history routing, so deep links such as /ui/5 must fall back to index.html.
 import { rmSync, writeFileSync } from 'node:fs'
 
-const spaFallback = `RewriteEngine On
+// DirectoryIndex: /playwright/.htaccess sets preparation.html, which subfolders inherit.
+const spaFallback = `DirectoryIndex index.html
+RewriteEngine On
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteCond %{REQUEST_FILENAME} !-d
 RewriteRule ^ index.html [L]
