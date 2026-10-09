@@ -4,7 +4,7 @@ Static pages for [ghislain.dev](https://ghislain.dev), hosted on mijn.host.
 
 | Folder | Live URL |
 |---|---|
-| `playwright/` | https://ghislain.dev/playwright/preparation.html and https://ghislain.dev/playwright/assignments.html |
+| `playwright/` | https://ghislain.dev/playwright/ (the preparation page, via `.htaccess`) and https://ghislain.dev/playwright/assignments.html |
 
 ## Deployment
 
