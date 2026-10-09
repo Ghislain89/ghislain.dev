@@ -10,7 +10,8 @@
   <meta property="og:image" content="https://ghislain.dev/og-image.png" />
   <meta property="og:url" content="https://ghislain.dev/" />
   <meta name="theme-color" content="#f4f3ef" />
-  <link rel="icon" href="favicon.svg" type="image/svg+xml" />
+  <link rel="icon" href="favicon.png" type="image/png" />
+  <link rel="apple-touch-icon" href="favicon.png" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Patrick+Hand&family=Space+Grotesk:wght@600;700&display=swap" />
@@ -110,8 +111,9 @@
       display: block;
       width: 100%;
       height: auto;
-      -webkit-mask-image: linear-gradient(#000 82%, transparent);
-      mask-image: linear-gradient(#000 82%, transparent);
+      border: 3px solid #1f2328;
+      border-radius: 24px;
+      box-shadow: 8px 8px 0 rgba(31, 35, 40, 0.12);
     }
 
     .bubble {
@@ -191,7 +193,7 @@
         padding-top: 32px;
         text-align: center;
       }
-      .figure { order: -1; width: min(300px, 82%); margin: 0 auto; padding-top: 48px; }
+      .figure { order: -1; width: min(300px, 82%); margin: 0 auto 16px; padding-top: 48px; }
       .bubble { left: -24px; font-size: 1.45rem; }
       .bio { margin-inline: auto; }
     }
@@ -220,7 +222,7 @@
 
     <figure class="figure">
       <p class="bubble" aria-hidden="true">Hi, I'm Ghislain!</p>
-      <img src="ghislain.svg" width="560" height="570" alt="Illustrated portrait of Ghislain: short dark hair, a red-brown beard and a navy sweater over a white collar." />
+      <img src="ghislain.webp" width="800" height="800" alt="Illustrated portrait of Ghislain, smiling, in a navy sweater over a white collar, standing in an industrial hall." />
     </figure>
   </main>
 

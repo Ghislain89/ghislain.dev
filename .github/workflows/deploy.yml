@@ -53,7 +53,7 @@ jobs:
 
       - name: Check the live pages
         run: |
-          for page in "" ghislain.svg favicon.svg og-image.png playwright/ playwright/assignments.html playwright/slides.html playwright/style.css; do
+          for page in "" ghislain.webp favicon.png og-image.png playwright/ playwright/assignments.html playwright/slides.html playwright/style.css; do
             curl --fail --silent --show-error --output /dev/null "https://ghislain.dev/$page?v=$GITHUB_SHA"
             echo "ok: /$page"
           done
