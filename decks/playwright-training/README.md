@@ -9,7 +9,7 @@ Slides for the Playwright trainings by Ghislain Gabriëlse ([DeTesters](https://
 
 Preparation, assignments and an overview of the decks: [ghislain.dev/playwright/](https://ghislain.dev/playwright/).
 
-> Part of the [presentations](../../README.md) monorepo. These decks replace [PlaywrightWorkshopPresentation](https://github.com/Ghislain89/PlaywrightWorkshopPresentation) (reveal.js) and [playwright-api-testing](https://github.com/Ghislain89/playwright-api-testing).
+> Part of the [presentations](../../README.md) monorepo. These decks replace the archived (private) repos `PlaywrightWorkshopPresentation` (reveal.js) and `playwright-api-testing`.
 
 Both decks are up to date with **Playwright 1.64**. New features are marked with the version that introduced them, for example `(1.63)`.
 

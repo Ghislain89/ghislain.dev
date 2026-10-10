@@ -47,9 +47,9 @@ To bring in an existing repo with its history: `git subtree add --prefix=decks/<
 
 ## History
 
-This repository was `playwright-training-slides`; GitHub redirects the old URL. It replaces these archived repos:
-[Agents-skills-101-presentation](https://github.com/Ghislain89/Agents-skills-101-presentation),
-[testcontainers-presentation](https://github.com/Ghislain89/testcontainers-presentation),
-[PlaywrightWorkshopPresentation](https://github.com/Ghislain89/PlaywrightWorkshopPresentation) and
-[playwright-api-testing](https://github.com/Ghislain89/playwright-api-testing).
+This repository was `playwright-training-slides`; GitHub redirects the old URL. It replaces these archived (private) repos:
+`Agents-skills-101-presentation`,
+`testcontainers-presentation`,
+`PlaywrightWorkshopPresentation` and
+`playwright-api-testing`.
 The agents and testcontainers decks were imported with `git subtree`, so their history is kept. `keep-your-minions-in-line` came from the private `testing-ai-skills-presentation` repo as a snapshot, without its history.
