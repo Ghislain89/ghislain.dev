@@ -58,3 +58,5 @@ jobs:
             echo "ok: /$page"
           done
           curl --fail --silent "https://ghislain.dev/?v=$GITHUB_SHA" | grep -q "Hi, I'm Ghislain" || { echo "::error::/ does not serve home/index.html"; exit 1; }
+          location=$(curl --silent --output /dev/null --write-out '%{redirect_url}' "https://ghislain.dev/slides/")
+          [ "$location" = "https://ghislain.dev/#talks" ] || { echo "::error::/slides/ redirects to '$location' instead of /#talks"; exit 1; }

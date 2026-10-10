@@ -7,6 +7,8 @@ Static pages for [ghislain.dev](https://ghislain.dev), hosted on mijn.host.
 | `home/` | https://ghislain.dev/, the homepage (uploaded to `public_html/`; other files there are left alone) |
 | `playwright/` | https://ghislain.dev/playwright/ (the preparation page, via `.htaccess`), `assignments.html` and `slides.html` |
 | `playwright/slides/` | The Slidev decks, deployed from `decks/playwright-training` in [presentations](https://github.com/Ghislain89/presentations) (not in this repo) |
+| `home/slides/` | https://ghislain.dev/slides/ redirects to the talks on the homepage |
+| `slides/<deck>/` | The talk decks (e.g. `/slides/testcontainers/`), deployed from [presentations](https://github.com/Ghislain89/presentations) (not in this repo) |
 
 ## Deployment
 
