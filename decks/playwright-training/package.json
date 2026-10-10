@@ -1,0 +1,26 @@
+{
+  "name": "playwright-training-slides",
+  "private": true,
+  "type": "module",
+  "description": "Slides for the Playwright UI and API trainings by Ghislain Gabriëlse (DeTesters)",
+  "author": "Ghislain Gabriëlse",
+  "scripts": {
+    "dev:ui": "slidev ui.md --open",
+    "dev:api": "slidev api.md --open",
+    "build": "npm run build:ui && npm run build:api && node scripts/write-htaccess.mjs",
+    "build:ui": "slidev build ui.md --out dist/ui --base /playwright/slides/ui/",
+    "build:api": "slidev build api.md --out dist/api --base /playwright/slides/api/",
+    "export:ui": "slidev export ui.md --output exports/playwright-ui-workshop.pdf",
+    "export:api": "slidev export api.md --output exports/playwright-api-testing.pdf"
+  },
+  "dependencies": {
+    "@slidev/cli": "51.1.0"
+  },
+  "devDependencies": {
+    "@iconify-json/la": "^1.2.0",
+    "@iconify-json/logos": "^1.2.3",
+    "@iconify-json/simple-icons": "^1.2.11",
+    "playwright-chromium": "^1.48.2"
+  },
+  "license": "CC-BY-NC-SA-4.0"
+}

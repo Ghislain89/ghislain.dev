@@ -1,0 +1,15 @@
+{
+  "name": "presentations",
+  "private": true,
+  "type": "module",
+  "description": "All Slidev decks by Ghislain Gabriëlse: trainings and talks",
+  "author": "Ghislain Gabriëlse",
+  "scripts": {
+    "decks": "node scripts/decks.mjs",
+    "setup": "node scripts/decks.mjs ci",
+    "build": "node scripts/decks.mjs run build"
+  },
+  "engines": {
+    "node": ">=20.19.0"
+  }
+}

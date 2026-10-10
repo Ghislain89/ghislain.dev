@@ -1,0 +1,34 @@
+name: Build
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    name: ${{ matrix.deck }}
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        deck: [playwright-training, agents-skills-101, testcontainers, keep-your-minions-in-line]
+    defaults:
+      run:
+        working-directory: decks/${{ matrix.deck }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: decks/${{ matrix.deck }}/package-lock.json
+
+      - run: npm ci
+
+      - run: npm run build

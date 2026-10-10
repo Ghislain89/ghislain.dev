@@ -1,0 +1,24 @@
+{
+  "name": "slidev-theme-tokyo-night",
+  "private": true,
+  "description": "Shared Tokyo Night Slidev theme for all decks in this repository: Tokyo Night colours and a night-street scene",
+  "author": "Ghislain Gabriëlse",
+  "keywords": ["slidev-theme", "slidev"],
+  "license": "MIT",
+  "engines": {
+    "slidev": ">=51.0.0"
+  },
+  "slidev": {
+    "colorSchema": "dark",
+    "highlighter": "shiki",
+    "defaults": {
+      "aspectRatio": "16/9",
+      "transition": "fade",
+      "fonts": {
+        "sans": "Inter",
+        "mono": "Kode Mono",
+        "weights": "400,500,600,700,800"
+      }
+    }
+  }
+}

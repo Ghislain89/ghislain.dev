@@ -1,0 +1,18 @@
+/* Keep markdown screenshots within the slide */
+.slidev-layout p > img {
+  max-height: 340px;
+  width: auto;
+  margin: 0 auto;
+}
+
+/* Fit ~80 characters per line in full-width code blocks */
+.slidev-layout pre,
+.slidev-layout pre code {
+  font-size: 0.75rem !important;
+  line-height: 1.45 !important;
+}
+
+/* fuse.js 7.5 returns all slides for an empty query, so Slidev's closed goto dialog shows its list */
+#slidev-goto-dialog.-top-20 .autocomplete-list {
+  display: none;
+}
