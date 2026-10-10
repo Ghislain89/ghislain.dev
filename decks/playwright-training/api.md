@@ -1,5 +1,5 @@
 ---
-theme: ./theme
+theme: ../../theme
 title: API Testing with Playwright
 layout: intro
 hideInToc: true

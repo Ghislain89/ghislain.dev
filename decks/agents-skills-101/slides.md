@@ -1,5 +1,5 @@
 ---
-theme: ./theme
+theme: ../../theme
 title: "Agents, Skills & MCP Servers — A Practical 101"
 layout: intro
 hideInToc: true

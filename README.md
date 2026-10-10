@@ -1,6 +1,6 @@
 # Presentations
 
-All decks by Ghislain Gabriëlse ([deTesters](https://detesters.nl/)), built with [Slidev](https://sli.dev). One folder per deck under [`decks/`](decks/); every deck has its own `package.json`, theme and assets, so they can stay on different Slidev versions.
+All decks by Ghislain Gabriëlse ([deTesters](https://detesters.nl/)), built with [Slidev](https://sli.dev). One folder per deck under [`decks/`](decks/); every deck has its own `package.json` and assets, so they can stay on different Slidev versions. All decks share one theme: [`theme/`](theme/), Tokyo Night.
 
 | Deck | Type | Folder | Live |
 | --- | --- | --- | --- |
@@ -24,7 +24,7 @@ Or work inside a deck folder as usual: `cd decks/testcontainers && npm install &
 
 ## Adding a deck
 
-1. Create `decks/<name>/` with its own `package.json` (scripts `dev`, `build`, `export`), `slides.md`, `theme/` and `public/`.
+1. Create `decks/<name>/` with its own `package.json` (scripts `dev`, `build`, `export`), `slides.md` (headmatter `theme: ../../theme`) and `public/`.
 2. Add it to the table above and to the matrix in [`.github/workflows/build.yml`](.github/workflows/build.yml).
 
 To bring in an existing repo with its history: `git subtree add --prefix=decks/<name> <repo-url> <branch>`.
@@ -34,8 +34,13 @@ To bring in an existing repo with its history: `git subtree add --prefix=decks/<
 - **Build** ([`build.yml`](.github/workflows/build.yml)): builds every deck on pull requests and pushes to `main`.
 - **Deploy** ([`deploy.yml`](.github/workflows/deploy.yml)): publishes `decks/playwright-training` to `ghislain.dev/playwright/slides/` over SFTP when that folder changes. Needs the `FTP_PASSWORD` secret.
 
+## Theme
+
+[`theme/`](theme/) is a Slidev theme with the Tokyo Night colours and an original night-street scene: starry sky, power lines, street lamps, a konbini and a crosswalk. See its [README](theme/README.md) for layouts and how to regenerate the artwork.
+
 ## Licences
 
+- `theme/`: MIT.
 - `decks/playwright-training`: CC BY-NC-SA 4.0 for the material, see its [LICENSE](decks/playwright-training/LICENSE).
 - Other decks: all rights reserved unless the deck says otherwise.
 

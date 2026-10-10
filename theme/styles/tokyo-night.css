@@ -1,0 +1,435 @@
+/*
+ * Tokyo Night: the Tokyo Night editor palette on a night street.
+ * Indigo sky and stars, warm street lamps (--tn-lamp), the konbini's orange
+ * and pink signage (--tn-orange, --tn-pink) and blue wet asphalt.
+ */
+
+:root {
+  --tn-bg: #1a1b26;
+  --tn-bg-dark: #13141f;
+  --tn-surface: #24283b;
+  --tn-border: #3b4261;
+  --tn-fg: #c0caf5;
+  --tn-fg-bright: #e6eaff;
+  --tn-fg-dim: #a9b1d6;
+  --tn-muted: #8a92bd;
+
+  --tn-blue: #7aa2f7;
+  --tn-cyan: #7dcfff;
+  --tn-teal: #73daca;
+  --tn-magenta: #bb9af7;
+  --tn-pink: #f4a6c8;
+  --tn-red: #f7768e;
+  --tn-orange: #ff9e64;
+  --tn-yellow: #e0af68;
+  --tn-lamp: #ffd89a;
+  --tn-green: #9ece6a;
+
+  --tn-neon: linear-gradient(90deg, var(--tn-orange), var(--tn-pink) 50%, var(--tn-blue));
+
+  --slidev-theme-primary: var(--tn-blue);
+  --slidev-code-background: var(--tn-bg-dark);
+  --slidev-code-font-size: 0.8rem;
+  --slidev-code-line-height: 1.5;
+  --slidev-code-radius: 8px;
+  --slidev-code-padding: 1rem 1.25rem;
+}
+
+html,
+#slide-content {
+  color-scheme: dark;
+}
+
+#slide-content {
+  background: url('../assets/backdrop.svg') center / cover no-repeat, var(--tn-bg);
+  color: var(--tn-fg);
+}
+
+.slidev-layout {
+  position: relative;
+  height: 100%;
+  color: var(--tn-fg);
+  line-height: 1.5;
+}
+
+/* Headings */
+.slidev-layout h1,
+.slidev-layout h2,
+.slidev-layout h3,
+.slidev-layout h4 {
+  font-weight: 700;
+  letter-spacing: -0.01em;
+}
+
+.slidev-layout h1 {
+  color: var(--tn-blue);
+  font-size: 2.25rem;
+  line-height: 1.2;
+  margin-bottom: 0.6rem;
+}
+
+.slidev-layout h2 {
+  color: var(--tn-blue);
+  font-size: 1.75rem;
+  line-height: 1.25;
+  margin-bottom: 1rem;
+}
+
+.slidev-layout h3 {
+  color: var(--tn-magenta);
+  font-size: 1.2rem;
+  margin: 0.4rem 0;
+}
+
+.slidev-layout h4,
+.slidev-layout h5,
+.slidev-layout h6 {
+  color: var(--tn-cyan);
+}
+
+/* The neon bar under a slide title, like the konbini sign band */
+.slidev-layout > h1::after,
+.slidev-layout > h2:first-child::after,
+.tn-cols > div > h1::after,
+.tn-cols > div > h2:first-child::after,
+.tn-presenter > div > h1::after,
+.tn-presenter > div > h2:first-child::after {
+  content: '';
+  display: block;
+  width: 3.5rem;
+  height: 3px;
+  margin-top: 0.3rem;
+  border-radius: 2px;
+  background: var(--tn-neon);
+  box-shadow: 0 0 10px rgba(255, 158, 100, 0.45);
+}
+
+/* Text */
+.slidev-layout p,
+.slidev-layout li {
+  color: var(--tn-fg);
+}
+
+.slidev-layout strong {
+  color: var(--tn-lamp);
+  font-weight: 600;
+}
+
+.slidev-layout em {
+  color: var(--tn-magenta);
+}
+
+.slidev-layout a {
+  color: var(--tn-cyan);
+  text-decoration: underline;
+  text-decoration-color: rgba(125, 207, 255, 0.35);
+  text-underline-offset: 3px;
+  border: 0;
+  transition: text-decoration-color 0.2s;
+}
+
+.slidev-layout a:hover {
+  text-decoration-color: var(--tn-cyan);
+}
+
+.slidev-layout ul {
+  list-style: disc;
+}
+
+.slidev-layout li::marker {
+  color: var(--tn-orange);
+}
+
+.slidev-layout ol li::marker {
+  color: var(--tn-yellow);
+  font-weight: 600;
+}
+
+.slidev-layout blockquote {
+  border-left: 3px solid var(--tn-magenta);
+  background: rgba(187, 154, 247, 0.08);
+  border-radius: 0 8px 8px 0;
+  padding: 0.6rem 1rem;
+  color: var(--tn-fg-dim);
+}
+
+.slidev-layout blockquote p {
+  color: inherit;
+}
+
+.slidev-layout hr {
+  border-color: var(--tn-border);
+}
+
+.slidev-layout kbd {
+  color: var(--tn-fg-bright);
+  background: var(--tn-surface);
+  border: 1px solid var(--tn-border);
+  border-bottom-width: 3px;
+  border-radius: 5px;
+  padding: 0.05em 0.4em;
+  font-family: var(--slidev-code-font-family, monospace);
+  font-size: 0.85em;
+}
+
+.slidev-layout img {
+  border-radius: 6px;
+}
+
+/* Inline code */
+.slidev-layout :not(pre) > code {
+  color: var(--tn-teal);
+  background: rgba(115, 218, 202, 0.09);
+  border-radius: 4px;
+  padding: 0.1em 0.35em;
+  font-size: 0.88em;
+}
+
+/* Code blocks */
+.slidev-layout .slidev-code-wrapper {
+  margin: 0.75rem 0;
+}
+
+.slidev-layout pre.slidev-code,
+.slidev-layout .slidev-code.shiki {
+  background: var(--tn-bg-dark) !important;
+  border: 1px solid #292e42;
+  border-radius: 8px;
+  box-shadow: 0 10px 30px rgba(5, 6, 20, 0.35);
+}
+
+/* Tokyo Night comments (#51597d) are too faint on a projector */
+.slidev-layout .slidev-code span[style*='51597d' i] {
+  color: #7f88b5 !important;
+}
+
+/* Tables */
+.slidev-layout table {
+  border-collapse: collapse;
+}
+
+.slidev-layout th {
+  color: var(--tn-blue);
+  background: rgba(122, 162, 247, 0.1);
+  border-bottom: 2px solid rgba(122, 162, 247, 0.4);
+  text-align: left;
+}
+
+.slidev-layout td {
+  border-bottom: 1px solid #292e42;
+}
+
+.slidev-layout th,
+.slidev-layout td {
+  padding: 0.45rem 0.8rem;
+}
+
+/* Night street layouts: intro, cover, section, new-section, fact, statement */
+.tn-street {
+  background:
+    linear-gradient(180deg, rgba(10, 12, 32, var(--tn-shade-top, 0.15)), rgba(10, 12, 32, var(--tn-shade-bottom, 0.45))),
+    url('../assets/street.svg') center / cover no-repeat,
+    var(--tn-bg);
+}
+
+.tn-sign {
+  margin: auto;
+  max-width: 78%;
+  padding: 2.2rem 3rem 2rem;
+  border-radius: 14px;
+  background:
+    var(--tn-neon) top / 100% 4px no-repeat,
+    rgba(17, 18, 32, 0.84);
+  border: 1px solid rgba(122, 162, 247, 0.28);
+  box-shadow: 0 0 40px rgba(122, 162, 247, 0.12), 0 24px 60px rgba(4, 5, 16, 0.55);
+  text-align: center;
+}
+
+.tn-sign h1 {
+  color: var(--tn-fg-bright);
+  font-size: 2.9rem;
+  font-weight: 800;
+  line-height: 1.15;
+  margin-bottom: 1rem;
+  text-shadow: 0 0 22px rgba(122, 162, 247, 0.45);
+}
+
+.tn-sign h1::after,
+.tn-heading h1::after {
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.tn-sign h1 + p {
+  color: var(--tn-fg-dim);
+  font-size: 1.3rem;
+}
+
+.tn-sign p {
+  margin: 0.4rem 0;
+}
+
+.slidev-layout.intro,
+.slidev-layout.cover {
+  display: flex;
+  --tn-shade-top: 0.1;
+  --tn-shade-bottom: 0.3;
+}
+
+.slidev-layout.section,
+.slidev-layout.new-section,
+.slidev-layout.fact,
+.slidev-layout.statement {
+  display: flex;
+  --tn-shade-top: 0.45;
+  --tn-shade-bottom: 0.7;
+}
+
+.tn-heading {
+  margin: auto;
+  max-width: 80%;
+  text-align: center;
+}
+
+.tn-heading h1 {
+  color: var(--tn-fg-bright);
+  font-size: 3.2rem;
+  font-weight: 800;
+  line-height: 1.15;
+  margin-bottom: 0.8rem;
+  text-shadow: 0 0 6px rgba(10, 12, 32, 0.9), 0 0 28px rgba(122, 162, 247, 0.6);
+}
+
+.tn-heading h1::after {
+  width: 5rem;
+  height: 4px;
+}
+
+.tn-heading p {
+  color: var(--tn-fg);
+  font-size: 1.25rem;
+  text-shadow: 0 1px 8px rgba(10, 12, 32, 0.95);
+}
+
+.tn-heading p > img {
+  width: 66%;
+  margin: 1rem auto 0;
+}
+
+.slidev-layout.fact .tn-heading h1 {
+  font-size: 5rem;
+  color: var(--tn-lamp);
+  text-shadow: 0 0 30px rgba(255, 199, 119, 0.55);
+}
+
+.slidev-layout.quote {
+  display: grid;
+}
+
+.slidev-layout.quote blockquote,
+.slidev-layout.quote p {
+  font-size: 1.6rem;
+  line-height: 1.5;
+}
+
+/* Two columns and two thirds */
+.tn-cols {
+  display: grid;
+  gap: 3rem;
+  align-items: start;
+}
+
+.tn-cols.halves {
+  grid-template-columns: 1fr 1fr;
+}
+
+.tn-cols.thirds {
+  grid-template-columns: 2fr 1fr;
+}
+
+/* Presenter */
+.tn-presenter {
+  display: flex;
+  align-items: center;
+  gap: 3rem;
+  height: 100%;
+}
+
+.tn-presenter > div {
+  flex: 1;
+}
+
+.tn-avatar {
+  position: relative;
+  width: 18rem;
+  height: 18rem;
+  flex: none;
+  margin-right: 2rem;
+}
+
+.tn-avatar::before {
+  content: '';
+  position: absolute;
+  inset: -10px;
+  border-radius: 9999px;
+  background: conic-gradient(from 200deg, var(--tn-orange), var(--tn-pink), var(--tn-blue), var(--tn-cyan), var(--tn-orange));
+  filter: blur(1px);
+  box-shadow: 0 0 40px rgba(122, 162, 247, 0.45);
+}
+
+.tn-avatar img {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 9999px !important;
+  border: 6px solid var(--tn-bg);
+}
+
+/* Console window */
+.tn-console {
+  background: var(--tn-bg-dark);
+  border: 1px solid #292e42;
+  border-radius: 10px;
+  overflow: auto;
+  max-height: 400px;
+  box-shadow: 0 16px 40px rgba(4, 5, 16, 0.5);
+}
+
+.tn-console-bar {
+  display: flex;
+  gap: 0.4rem;
+  padding: 0.6rem 0.8rem;
+  background: var(--tn-surface);
+}
+
+.tn-console-bar span {
+  width: 0.6rem;
+  height: 0.6rem;
+  border-radius: 9999px;
+}
+
+/* Slide transitions and chrome */
+.slidev-nav-btn,
+.slidev-icon-btn {
+  color: var(--tn-fg-dim);
+}
+
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--tn-border);
+  border-radius: 3px;
+}
+
+/* Slidev 51.8 lists every slide in the closed Goto dialog; keep it hidden until opened */
+#slidev-goto-dialog.-top-20 .autocomplete-list {
+  display: none;
+}

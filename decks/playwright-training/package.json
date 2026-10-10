@@ -14,19 +14,13 @@
     "export:api": "slidev export api.md --output exports/playwright-api-testing.pdf"
   },
   "dependencies": {
-    "@alvarosabu/ui": "3.0.0",
-    "@slidev/cli": "51.1.0",
-    "@slidev/theme-default": "^0.25.0",
-    "@slidev/types": "51.1.0",
-    "prism-theme-vars": "^0.2.5",
-    "vite-svg-loader": "^5.1.0"
+    "@slidev/cli": "51.1.0"
   },
   "devDependencies": {
     "@iconify-json/la": "^1.2.0",
     "@iconify-json/logos": "^1.2.3",
     "@iconify-json/simple-icons": "^1.2.11",
-    "playwright-chromium": "^1.48.2",
-    "sass": "^1.80.6"
+    "playwright-chromium": "^1.48.2"
   },
   "license": "CC-BY-NC-SA-4.0"
 }

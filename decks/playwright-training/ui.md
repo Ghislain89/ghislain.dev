@@ -1,5 +1,5 @@
 ---
-theme: ./theme
+theme: ../../theme
 title: Playwright Workshop
 layout: intro
 hideInToc: true

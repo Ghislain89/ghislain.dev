@@ -1,5 +1,5 @@
 ---
-theme: ./theme
+theme: ../../theme
 title: Introduction to Testcontainers
 layout: intro
 hideInToc: true

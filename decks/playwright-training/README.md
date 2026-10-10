@@ -67,15 +67,14 @@ npm run dev:ui      # or: npm run dev:api
 ├── api.md         # API testing deck
 ├── style.css      # Deck-wide style tweaks
 ├── public/        # Shared images, logos and speaker photos
-├── theme/         # Shared Slidev theme (layouts, components, styles)
 └── scripts/       # Build helpers (.htaccess for the web server)
 ```
 
-Both decks use `theme: ./theme`. Logos on the title slide are set via `themeConfig.logoOne` / `logoTwo` in a deck's headmatter.
+Both decks use the repository's shared Tokyo Night theme (`theme: ../../theme`). Logos on the title slide are set via `themeConfig.logoOne` / `logoTwo` in a deck's headmatter.
 
 ## Deployment
 
-Every push to `main` that changes this folder builds both decks and uploads `dist/` to `ghislain.dev/playwright/slides/` on mijn.host ([workflow](../../.github/workflows/deploy.yml)). The upload uses the SFTP action from [ghislain.dev](https://github.com/Ghislain89/ghislain.dev) and only sends files that changed. It needs the FTP password as a repository secret:
+Every push to `main` that changes this folder or the shared theme builds both decks and uploads `dist/` to `ghislain.dev/playwright/slides/` on mijn.host ([workflow](../../.github/workflows/deploy.yml)). The upload uses the SFTP action from [ghislain.dev](https://github.com/Ghislain89/ghislain.dev) and only sends files that changed. It needs the FTP password as a repository secret:
 
 ```bash
 gh secret set FTP_PASSWORD --repo Ghislain89/presentations

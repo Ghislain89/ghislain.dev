@@ -5,6 +5,7 @@ on:
     branches: [main]
     paths:
       - decks/playwright-training/**
+      - theme/**
       - .github/workflows/deploy.yml
   workflow_dispatch:
 

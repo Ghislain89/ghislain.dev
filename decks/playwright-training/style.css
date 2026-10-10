@@ -12,11 +12,6 @@
   line-height: 1.45 !important;
 }
 
-/* The theme caps code blocks at 600px; use the full slide width */
-.slidev-layout .slidev-code-wrapper {
-  max-width: 100%;
-}
-
 /* fuse.js 7.5 returns all slides for an empty query, so Slidev's closed goto dialog shows its list */
 #slidev-goto-dialog.-top-20 .autocomplete-list {
   display: none;
