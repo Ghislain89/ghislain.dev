@@ -31,7 +31,7 @@
 
   --tn-neon: linear-gradient(90deg, var(--tn-orange), var(--tn-pink) 50%, var(--tn-blue));
 
-  /* Inter and Kode Mono (kodemono.com), both from Google Fonts. */
+  /* Inter and JetBrains Mono, both from Google Fonts. */
   --tn-font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
-  --tn-font-mono: "Kode Mono", ui-monospace, monospace;
+  --tn-font-mono: "JetBrains Mono", ui-monospace, monospace;
 }

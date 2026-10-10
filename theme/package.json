@@ -16,7 +16,7 @@
       "transition": "fade",
       "fonts": {
         "sans": "Inter",
-        "mono": "Kode Mono",
+        "mono": "JetBrains Mono",
         "weights": "400,500,600,700,800"
       }
     }
