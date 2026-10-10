@@ -98,7 +98,12 @@ runs:
         sftp_run "$tmp/put.batch"
 
         if [ -n "$PUBLIC_URL" ]; then
-          curl --fail --silent --show-error "${PUBLIC_URL%/}/.deploy-manifest?v=$GITHUB_SHA" -o "$tmp/live"
-          cmp -s "$tmp/new" "$tmp/live" || { echo "::error::Uploaded, but ${PUBLIC_URL%/}/.deploy-manifest is not the new one. Is server-dir right?"; exit 1; }
+          # The host can serve the previous file for a moment after the upload, so retry briefly.
+          for attempt in 1 2 3 4 5; do
+            curl --fail --silent --show-error "${PUBLIC_URL%/}/.deploy-manifest?v=$GITHUB_SHA-$attempt" -o "$tmp/live" \
+              && cmp -s "$tmp/new" "$tmp/live" && break
+            [ "$attempt" = 5 ] && { echo "::error::Uploaded, but ${PUBLIC_URL%/}/.deploy-manifest is not the new one. Is server-dir right?"; exit 1; }
+            sleep 3
+          done
           echo "verified: ${PUBLIC_URL%/}/.deploy-manifest"
         fi
