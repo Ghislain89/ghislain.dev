@@ -297,24 +297,6 @@
     /* Talks */
     .talks { display: grid; gap: 16px; margin: 0; padding: 0; list-style: none; }
 
-    .talk {
-      display: grid;
-      grid-template-columns: 96px minmax(0, 1fr);
-      gap: 22px;
-      align-items: start;
-    }
-
-    .year {
-      padding: 5px 0;
-      border: 1px solid rgba(255, 216, 154, 0.4);
-      border-radius: 8px;
-      background: rgba(255, 216, 154, 0.08);
-      color: var(--tn-lamp);
-      font-family: var(--tn-font-mono);
-      font-weight: 500;
-      text-align: center;
-    }
-
     .talk .type {
       margin: 0 0 4px;
       color: var(--tn-teal);
@@ -418,8 +400,6 @@
       .bubble { left: 10%; font-size: 1.45rem; }
       .bio { margin-inline: auto; }
       section { padding-top: 56px; }
-      .talk { grid-template-columns: 1fr; gap: 10px; }
-      .year { justify-self: start; padding-inline: 14px; }
       .card { padding: 22px; }
       footer { padding-bottom: 150px; background-size: auto 220px; }
     }
@@ -526,7 +506,6 @@
       <p class="lead">Mostly at the bi-monthly test automation meetups of deTesters, TestCoders and TechChamps in the Werkspoorkathedraal in Utrecht.</p>
       <ol class="talks">
         <li class="card talk">
-          <span class="year">2026</span>
           <div>
             <p class="type">Talk</p>
             <h3>Keep your minions in line: behavioural testing for AI skills</h3>
@@ -537,7 +516,6 @@
           </div>
         </li>
         <li class="card talk">
-          <span class="year">2026</span>
           <div>
             <p class="type">Talk · Meetup, Utrecht</p>
             <h3>Agents, Skills &amp; MCP Servers: a practical 101</h3>
@@ -549,7 +527,6 @@
           </div>
         </li>
         <li class="card talk">
-          <span class="year">2026</span>
           <div>
             <p class="type">Talk</p>
             <h3>Introduction to Testcontainers</h3>
@@ -561,7 +538,6 @@
           </div>
         </li>
         <li class="card talk">
-          <span class="year">Now</span>
           <div>
             <p class="type">Training</p>
             <h3>Playwright UI &amp; API training</h3>
