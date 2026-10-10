@@ -1,0 +1,37 @@
+/*
+ * Tokyo Night design tokens: the single source of truth for every colour and
+ * font on ghislain.dev, in the Slidev decks (via theme/styles/index.ts) and on
+ * the site pages (served as /theme/tokens.css by scripts/build-site.mjs).
+ *
+ * The Tokyo Night editor palette on a night street: indigo sky and stars, warm
+ * street lamps (--tn-lamp), the konbini's orange and pink signage (--tn-orange,
+ * --tn-pink) and blue wet asphalt.
+ */
+
+:root {
+  --tn-bg: #1a1b26;
+  --tn-bg-dark: #13141f;
+  --tn-surface: #24283b;
+  --tn-border: #3b4261;
+  --tn-fg: #c0caf5;
+  --tn-fg-bright: #e6eaff;
+  --tn-fg-dim: #a9b1d6;
+  --tn-muted: #8a92bd;
+
+  --tn-blue: #7aa2f7;
+  --tn-cyan: #7dcfff;
+  --tn-teal: #73daca;
+  --tn-magenta: #bb9af7;
+  --tn-pink: #f4a6c8;
+  --tn-red: #f7768e;
+  --tn-orange: #ff9e64;
+  --tn-yellow: #e0af68;
+  --tn-lamp: #ffd89a;
+  --tn-green: #9ece6a;
+
+  --tn-neon: linear-gradient(90deg, var(--tn-orange), var(--tn-pink) 50%, var(--tn-blue));
+
+  /* Inter and Kode Mono (kodemono.com), both from Google Fonts. */
+  --tn-font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
+  --tn-font-mono: "Kode Mono", ui-monospace, monospace;
+}

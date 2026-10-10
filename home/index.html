@@ -29,28 +29,10 @@
     "sameAs": ["https://www.linkedin.com/in/ggabrielse/", "https://github.com/Ghislain89"]
   }
   </script>
+  <link rel="stylesheet" href="/theme/tokens.css" />
   <style>
-    /* Tokyo Night, the same palette and type as the slide decks (github.com/Ghislain89/presentations/tree/main/theme) */
-    :root {
-      --tn-bg: #1a1b26;
-      --tn-bg-dark: #13141f;
-      --tn-surface: #24283b;
-      --tn-border: #3b4261;
-      --tn-fg: #c0caf5;
-      --tn-fg-bright: #e6eaff;
-      --tn-fg-dim: #a9b1d6;
-      --tn-muted: #8a92bd;
-      --tn-blue: #7aa2f7;
-      --tn-cyan: #7dcfff;
-      --tn-teal: #73daca;
-      --tn-magenta: #bb9af7;
-      --tn-pink: #f4a6c8;
-      --tn-orange: #ff9e64;
-      --tn-lamp: #ffd89a;
-      --tn-neon: linear-gradient(90deg, var(--tn-orange), var(--tn-pink) 50%, var(--tn-blue));
-      --mono: "Kode Mono", ui-monospace, monospace;
-      color-scheme: dark;
-    }
+    /* Tokyo Night: colours and fonts come from /theme/tokens.css (theme/styles/tokens.css), shared with the slide decks. */
+    :root { color-scheme: dark; }
 
     * { box-sizing: border-box; }
 
@@ -63,7 +45,7 @@
         radial-gradient(ellipse 50% 35% at 10% 65%, rgba(122, 162, 247, 0.06), transparent),
         linear-gradient(180deg, var(--tn-bg), var(--tn-bg-dark));
       color: var(--tn-fg);
-      font-family: "Inter", sans-serif;
+      font-family: var(--tn-font-sans);
       line-height: 1.6;
       -webkit-font-smoothing: antialiased;
     }
@@ -95,7 +77,7 @@
 
     .brand {
       color: var(--tn-fg-bright);
-      font-family: var(--mono);
+      font-family: var(--tn-font-mono);
       font-size: 0.95rem;
       font-weight: 600;
       text-decoration: none;
@@ -118,7 +100,7 @@
       padding: 6px 12px;
       border-radius: 8px;
       color: var(--tn-fg-dim);
-      font-family: var(--mono);
+      font-family: var(--tn-font-mono);
       font-size: 0.82rem;
       letter-spacing: 0.04em;
       text-decoration: none;
@@ -241,7 +223,7 @@
     .kicker {
       margin: 0 0 8px;
       color: var(--tn-orange);
-      font-family: var(--mono);
+      font-family: var(--tn-font-mono);
       font-size: 0.85rem;
       font-weight: 500;
       letter-spacing: 0.08em;
@@ -328,7 +310,7 @@
       border-radius: 8px;
       background: rgba(255, 216, 154, 0.08);
       color: var(--tn-lamp);
-      font-family: var(--mono);
+      font-family: var(--tn-font-mono);
       font-weight: 500;
       text-align: center;
     }
@@ -336,7 +318,7 @@
     .talk .type {
       margin: 0 0 4px;
       color: var(--tn-teal);
-      font-family: var(--mono);
+      font-family: var(--tn-font-mono);
       font-size: 0.78rem;
       letter-spacing: 0.06em;
       text-transform: uppercase;
@@ -356,7 +338,7 @@
       border-radius: 6px;
       background: rgba(115, 218, 202, 0.1);
       color: var(--tn-teal);
-      font-family: var(--mono);
+      font-family: var(--tn-font-mono);
       font-size: 0.74rem;
       letter-spacing: 0.04em;
       text-transform: uppercase;
@@ -551,7 +533,7 @@
             <p>How do you prove your AI skills and agents actually follow orders? Three trust tiers, from deterministic tool-call checks to an LLM judge and baseline comparison, plus variance analysis across runs.</p>
             <div class="talk-links">
               <a href="/slides/keep-your-minions-in-line/">Slides</a>
-              <a href="https://github.com/Ghislain89/presentations/tree/main/decks/keep-your-minions-in-line">Source</a>
+              <a href="https://github.com/Ghislain89/ghislain.dev/tree/main/decks/keep-your-minions-in-line">Source</a>
             </div>
           </div>
         </li>
@@ -563,7 +545,7 @@
             <p>How a team of AI agents, skills and MCP servers takes an issue from ticket to tested feature, and what that means for the way we work.</p>
             <div class="talk-links">
               <a href="/slides/agents-skills-101/">Slides</a>
-              <a href="https://github.com/Ghislain89/presentations/tree/main/decks/agents-skills-101">Source</a>
+              <a href="https://github.com/Ghislain89/ghislain.dev/tree/main/decks/agents-skills-101">Source</a>
             </div>
           </div>
         </li>
@@ -575,7 +557,7 @@
             <p>Real Docker containers in your tests, and how Quarkus Dev Services makes integration testing almost effortless.</p>
             <div class="talk-links">
               <a href="/slides/testcontainers/">Slides</a>
-              <a href="https://github.com/Ghislain89/presentations/tree/main/decks/testcontainers">Source</a>
+              <a href="https://github.com/Ghislain89/ghislain.dev/tree/main/decks/testcontainers">Source</a>
             </div>
           </div>
         </li>

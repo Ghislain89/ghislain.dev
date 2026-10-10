@@ -1,4 +1,4 @@
 # https://ghislain.dev/slides/ has no page of its own: send visitors to the talks list.
-# The decks in the subfolders are uploaded by Ghislain89/presentations and have their own .htaccess.
+# The decks in the subfolders are uploaded by .github/workflows/decks-deploy.yml and have their own .htaccess.
 RewriteEngine On
 RewriteRule ^$ /#talks [R=302,L,NE]

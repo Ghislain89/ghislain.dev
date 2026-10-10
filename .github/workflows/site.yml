@@ -1,4 +1,4 @@
-name: Deploy
+name: Site
 
 on:
   push:
@@ -6,7 +6,9 @@ on:
     paths:
       - "home/**"
       - "playwright/**"
-      - ".github/workflows/deploy.yml"
+      - "theme/styles/tokens.css"
+      - "scripts/build-site.mjs"
+      - ".github/workflows/site.yml"
       - ".github/actions/sftp-upload/**"
   workflow_dispatch:
 
@@ -35,25 +37,24 @@ jobs:
             exit 1
           fi
 
-      - name: Upload the homepage
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      # home/ at the root, playwright/ and the shared theme/tokens.css next to it.
+      - run: node scripts/build-site.mjs
+
+      - name: Upload the site
         uses: ./.github/actions/sftp-upload
         with:
-          local-dir: home
+          local-dir: dist/site
           server-dir: public_html
           public-url: https://ghislain.dev
           password: ${{ secrets.FTP_PASSWORD }}
 
-      - name: Upload the training pages
-        uses: ./.github/actions/sftp-upload
-        with:
-          local-dir: playwright
-          server-dir: public_html/playwright
-          public-url: https://ghislain.dev/playwright
-          password: ${{ secrets.FTP_PASSWORD }}
-
       - name: Check the live pages
         run: |
-          for page in "" ghislain.webp street.webp skyline.webp favicon.png og-image.png playwright/ playwright/assignments.html playwright/slides.html playwright/style.css; do
+          for page in "" theme/tokens.css ghislain.webp street.webp skyline.webp favicon.png og-image.png playwright/ playwright/assignments.html playwright/slides.html playwright/style.css; do
             curl --fail --silent --show-error --output /dev/null "https://ghislain.dev/$page?v=$GITHUB_SHA"
             echo "ok: /$page"
           done

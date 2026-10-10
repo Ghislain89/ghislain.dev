@@ -1,9 +1,19 @@
-name: Build
+name: Decks build
 
 on:
   pull_request:
+    paths:
+      - decks/**
+      - theme/**
+      - scripts/write-htaccess.mjs
+      - .github/workflows/decks-build.yml
   push:
     branches: [main]
+    paths:
+      - decks/**
+      - theme/**
+      - scripts/write-htaccess.mjs
+      - .github/workflows/decks-build.yml
   workflow_dispatch:
 
 permissions:

@@ -732,7 +732,7 @@ Questions? 🙋
 📚 [testcontainers.com](https://testcontainers.com) — Official documentation  
 💻 [github.com/testcontainers](https://github.com/testcontainers) — Source code & examples  
 🐘 [testcontainers.com/modules](https://testcontainers.com/modules/) — Browse all available modules  
-🎤 [github.com/Ghislain89/presentations](https://github.com/Ghislain89/presentations/tree/main/decks/testcontainers) — This presentation and demo app
+🎤 [github.com/Ghislain89/ghislain.dev](https://github.com/Ghislain89/ghislain.dev/tree/main/decks/testcontainers) — This presentation and demo app
 
 </div>
 

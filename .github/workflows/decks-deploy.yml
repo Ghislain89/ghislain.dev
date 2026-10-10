@@ -1,4 +1,4 @@
-name: Deploy
+name: Decks
 
 on:
   push:
@@ -7,7 +7,8 @@ on:
       - decks/**
       - theme/**
       - scripts/write-htaccess.mjs
-      - .github/workflows/deploy.yml
+      - .github/workflows/decks-deploy.yml
+      - .github/actions/sftp-upload/**
   workflow_dispatch:
 
 permissions:
@@ -71,9 +72,9 @@ jobs:
 
       - run: npm run build
 
-      # Same upload action as the ghislain.dev site: only changed files are sent.
+      # Same upload action as the site: only changed files are sent.
       - name: Upload to mijn.host
-        uses: Ghislain89/ghislain.dev/.github/actions/sftp-upload@main
+        uses: ./.github/actions/sftp-upload
         with:
           local-dir: decks/${{ matrix.deck }}/dist
           server-dir: ${{ matrix.server-dir }}

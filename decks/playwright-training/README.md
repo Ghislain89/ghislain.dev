@@ -9,7 +9,7 @@ Slides for the Playwright trainings by Ghislain Gabriëlse ([DeTesters](https://
 
 Preparation, assignments and an overview of the decks: [ghislain.dev/playwright/](https://ghislain.dev/playwright/).
 
-> Part of the [presentations](../../README.md) monorepo. These decks replace the archived (private) repos `PlaywrightWorkshopPresentation` (reveal.js) and `playwright-api-testing`.
+> Part of the [ghislain.dev](../../README.md) repository. These decks replace the archived (private) repos `PlaywrightWorkshopPresentation` (reveal.js) and `playwright-api-testing`.
 
 Both decks are up to date with **Playwright 1.64**. New features are marked with the version that introduced them, for example `(1.63)`.
 
@@ -74,10 +74,10 @@ Both decks use the repository's shared Tokyo Night theme (`theme: ../../theme`).
 
 ## Deployment
 
-Every push to `main` that changes this folder or the shared theme builds both decks and uploads `dist/` to `ghislain.dev/playwright/slides/` on mijn.host ([workflow](../../.github/workflows/deploy.yml)). The upload uses the SFTP action from [ghislain.dev](https://github.com/Ghislain89/ghislain.dev) and only sends files that changed. It needs the FTP password as a repository secret:
+Every push to `main` that changes this folder or the shared theme builds both decks and uploads `dist/` to `ghislain.dev/playwright/slides/` on mijn.host ([workflow](../../.github/workflows/decks-deploy.yml)). The upload uses the repository's SFTP action and only sends files that changed. It needs the FTP password as a repository secret:
 
 ```bash
-gh secret set FTP_PASSWORD --repo Ghislain89/presentations
+gh secret set FTP_PASSWORD --repo Ghislain89/ghislain.dev
 ```
 
 The decks use history routing, so the build adds an `.htaccess` that sends deep links such as `/ui/5` to the deck's `index.html`. The build also uses the `/playwright/slides/…` base path; to preview it locally, run `npm run dev:ui` instead of opening `dist/`.

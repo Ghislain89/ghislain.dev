@@ -696,7 +696,7 @@ layout: new-section
 - Solutions: the [`solutions`](https://github.com/Ghislain89/booker-platform/tree/solutions) branch
 - All assignments: https://ghislain.dev/playwright/assignments.html
 - Playwright API testing docs: https://playwright.dev/docs/api-testing
-- These slides: https://github.com/Ghislain89/presentations/tree/main/decks/playwright-training
+- These slides: https://github.com/Ghislain89/ghislain.dev/tree/main/decks/playwright-training
 
 Questions or feedback? Let us know!
 

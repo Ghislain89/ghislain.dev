@@ -1306,7 +1306,7 @@ Reference solution: assignment10.chaos.spec.ts on the solutions branch.
 4. Playwright Solutions: https://playwrightsolutions.com
 5. Test object and solutions: https://github.com/Ghislain89/booker-platform
 6. All assignments with hints: https://ghislain.dev/playwright/assignments.html
-7. These slides: https://github.com/Ghislain89/presentations/tree/main/decks/playwright-training
+7. These slides: https://github.com/Ghislain89/ghislain.dev/tree/main/decks/playwright-training
 
 ---
 

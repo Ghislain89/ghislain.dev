@@ -1,26 +1,6 @@
-/* Tokyo Night, the same palette and type as ghislain.dev and the slide decks */
+/* Tokyo Night: colours and fonts come from ../theme/tokens.css (theme/styles/tokens.css), shared with the homepage and the slide decks. */
+@import url("../theme/tokens.css");
 @import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Kode+Mono:wght@400..700&display=swap");
-
-:root {
-  --tn-bg: #1a1b26;
-  --tn-bg-dark: #13141f;
-  --tn-surface: #24283b;
-  --tn-border: #3b4261;
-  --tn-fg: #c0caf5;
-  --tn-fg-bright: #e6eaff;
-  --tn-fg-dim: #a9b1d6;
-  --tn-muted: #8a92bd;
-  --tn-blue: #7aa2f7;
-  --tn-cyan: #7dcfff;
-  --tn-teal: #73daca;
-  --tn-magenta: #bb9af7;
-  --tn-pink: #f4a6c8;
-  --tn-orange: #ff9e64;
-  --tn-green: #9ece6a;
-  --tn-lamp: #ffd89a;
-  --tn-neon: linear-gradient(90deg, var(--tn-orange), var(--tn-pink) 50%, var(--tn-blue));
-  --mono: "Kode Mono", ui-monospace, monospace;
-}
 
 * { box-sizing: border-box; }
 
@@ -35,7 +15,7 @@ body {
     radial-gradient(ellipse 50% 35% at 10% 75%, rgba(122, 162, 247, 0.05), transparent),
     linear-gradient(180deg, var(--tn-bg), var(--tn-bg-dark));
   color: var(--tn-fg);
-  font-family: "Inter", sans-serif;
+  font-family: var(--tn-font-sans);
   line-height: 1.6;
   -webkit-font-smoothing: antialiased;
 }
@@ -66,7 +46,7 @@ a:hover { color: var(--tn-fg-bright); text-decoration-color: currentColor; }
 .brand {
   margin-right: auto;
   color: var(--tn-fg-bright);
-  font-family: var(--mono);
+  font-family: var(--tn-font-mono);
   font-size: 0.95rem;
   font-weight: 600;
   text-decoration: none;
@@ -80,7 +60,7 @@ a:hover { color: var(--tn-fg-bright); text-decoration-color: currentColor; }
   padding: 6px 12px;
   border-radius: 8px;
   color: var(--tn-fg-dim);
-  font-family: var(--mono);
+  font-family: var(--tn-font-mono);
   font-size: 0.82rem;
   letter-spacing: 0.04em;
   text-decoration: none;
@@ -121,7 +101,7 @@ a:hover { color: var(--tn-fg-bright); text-decoration-color: currentColor; }
 .kicker {
   margin: 0 0 12px;
   color: var(--tn-orange);
-  font-family: var(--mono);
+  font-family: var(--tn-font-mono);
   font-size: 0.85rem;
   font-weight: 500;
   letter-spacing: 0.08em;
@@ -220,7 +200,7 @@ ol {
   z-index: 1;
   padding: 34px 28px 34px 0;
   color: var(--tn-lamp);
-  font-family: var(--mono);
+  font-family: var(--tn-font-mono);
   font-size: 0.74rem;
   font-weight: 500;
   letter-spacing: 0.04em;
@@ -276,7 +256,7 @@ ol {
   flex: 0 0 auto;
   padding-left: 17px;
   color: var(--tn-green);
-  font-family: var(--mono);
+  font-family: var(--tn-font-mono);
   font-size: 0.88rem;
   user-select: none;
 }
@@ -291,7 +271,7 @@ pre {
 
 code,
 .repo-link {
-  font-family: var(--mono);
+  font-family: var(--tn-font-mono);
   font-size: 0.86rem;
 }
 
@@ -303,7 +283,7 @@ pre code { color: var(--tn-fg-bright); white-space: nowrap; }
   border-radius: 5px;
   background: var(--tn-surface);
   color: var(--tn-teal);
-  font-family: var(--mono);
+  font-family: var(--tn-font-mono);
   font-size: 0.86em;
 }
 
@@ -316,7 +296,7 @@ pre code { color: var(--tn-fg-bright); white-space: nowrap; }
   background: rgba(125, 207, 255, 0.08);
   color: var(--tn-cyan);
   cursor: pointer;
-  font-family: var(--mono);
+  font-family: var(--tn-font-mono);
   font-size: 0.7rem;
   letter-spacing: 0.06em;
   text-transform: uppercase;
@@ -376,7 +356,7 @@ pre code { color: var(--tn-fg-bright); white-space: nowrap; }
   border-radius: 10px;
   background: rgba(122, 162, 247, 0.08);
   color: var(--tn-blue);
-  font-family: var(--mono);
+  font-family: var(--tn-font-mono);
   font-size: 0.8rem;
   font-weight: 500;
   text-decoration: none;
@@ -426,7 +406,7 @@ pre code { color: var(--tn-fg-bright); white-space: nowrap; }
   display: block;
   margin-bottom: 6px;
   color: var(--tn-magenta);
-  font-family: var(--mono);
+  font-family: var(--tn-font-mono);
   font-size: 0.76rem;
   font-weight: 500;
   letter-spacing: 0.1em;
@@ -443,7 +423,7 @@ pre code { color: var(--tn-fg-bright); white-space: nowrap; }
     linear-gradient(180deg, var(--tn-bg-dark) 10%, rgba(19, 20, 31, 0) 55%),
     url("../skyline.webp") center bottom / auto 280px repeat-x,
     var(--tn-bg-dark);
-  font-family: var(--mono);
+  font-family: var(--tn-font-mono);
   font-size: 0.82rem;
   letter-spacing: 0.06em;
   text-align: center;
@@ -501,7 +481,7 @@ button:focus-visible,
 .tasks-label {
   margin: 18px 0 8px;
   color: var(--tn-teal);
-  font-family: var(--mono);
+  font-family: var(--tn-font-mono);
   font-size: 0.76rem;
   font-weight: 500;
   letter-spacing: 0.1em;
@@ -529,7 +509,7 @@ button:focus-visible,
   padding: 11px 16px;
   color: var(--tn-cyan);
   cursor: pointer;
-  font-family: var(--mono);
+  font-family: var(--tn-font-mono);
   font-size: 0.78rem;
   font-weight: 500;
   letter-spacing: 0.08em;

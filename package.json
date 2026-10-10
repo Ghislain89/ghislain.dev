@@ -1,13 +1,15 @@
 {
-  "name": "presentations",
+  "name": "ghislain.dev",
   "private": true,
   "type": "module",
-  "description": "All Slidev decks by Ghislain Gabriëlse: trainings and talks",
+  "description": "ghislain.dev: the site, the Slidev decks (trainings and talks) and their shared Tokyo Night theme",
   "author": "Ghislain Gabriëlse",
   "scripts": {
+    "site": "node scripts/build-site.mjs --serve",
+    "build:site": "node scripts/build-site.mjs",
     "decks": "node scripts/decks.mjs",
     "setup": "node scripts/decks.mjs ci",
-    "build": "node scripts/decks.mjs run build"
+    "build": "node scripts/decks.mjs run build && node scripts/build-site.mjs"
   },
   "engines": {
     "node": ">=20.19.0"
