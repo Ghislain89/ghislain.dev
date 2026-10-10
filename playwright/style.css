@@ -43,18 +43,29 @@ a:hover { color: var(--tn-fg-bright); text-decoration-color: currentColor; }
   margin: 0 auto;
 }
 
-.brand {
-  margin-right: auto;
-  color: var(--tn-fg-bright);
+.crumbs {
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+  margin: 0 auto 0 0;
   font-family: var(--tn-font-mono);
   font-size: 0.95rem;
-  font-weight: 600;
-  text-decoration: none;
   white-space: nowrap;
 }
 
+.brand {
+  color: var(--tn-fg-bright);
+  font-weight: 600;
+  text-decoration: underline 1px transparent;
+  text-underline-offset: 5px;
+  transition: text-decoration-color 150ms ease;
+}
+
 .brand span { color: var(--tn-pink); }
-.brand:hover { color: var(--tn-fg-bright); }
+.brand:hover,
+.brand:focus-visible { color: var(--tn-fg-bright); text-decoration-color: var(--tn-pink); }
+.crumb-sep { color: var(--tn-fg-dim); }
+.crumb-here { color: var(--tn-fg-dim); }
 
 .page-menu a:not(.brand) {
   padding: 6px 12px;
@@ -441,6 +452,8 @@ pre code { color: var(--tn-fg-bright); white-space: nowrap; }
   transition: border-color 150ms ease, color 150ms ease;
 }
 
+.site-footer a + a { margin-left: 8px; }
+
 .site-footer a:hover,
 .site-footer a:focus-visible { border-color: var(--tn-blue); color: var(--tn-fg-bright); }
 
@@ -528,9 +541,9 @@ button:focus-visible,
 
 @media (max-width: 720px) {
   .shell, .page-menu { width: min(100% - 30px, 1080px); }
-  .brand { display: none; }
-  .page-menu { justify-content: space-between; }
-  .intro { padding-top: 112px; padding-bottom: 56px; }
+  .page-menu { height: auto; flex-wrap: wrap; justify-content: space-between; padding: 10px 0 6px; row-gap: 6px; }
+  .crumbs { flex-basis: 100%; font-size: 0.88rem; }
+  .intro { padding-top: 140px; padding-bottom: 56px; }
   .guide > ol::before { display: none; }
   .guide > ol > li { grid-template-columns: minmax(0, 1fr); padding: 26px 0 28px; }
   .step-meta { padding: 0 0 10px; }
