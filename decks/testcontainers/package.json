@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "slidev slides.md --open",
-    "build": "slidev build slides.md",
+    "build": "slidev build slides.md --base /slides/testcontainers/ && node ../../scripts/write-htaccess.mjs dist",
     "export": "slidev export slides.md"
   },
   "devDependencies": {

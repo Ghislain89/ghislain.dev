@@ -1,6 +1,6 @@
 # Tokyo Night theme
 
-The shared Slidev theme for every deck in this repository. It uses the [Tokyo Night](https://github.com/tokyo-night/tokyo-night-vscode-theme) colours, including the `tokyo-night` Shiki theme for code, on an original vector night street: a starry indigo sky, power lines, warm street lamps, a glowing konbini, a railway crossing on the horizon and a crosswalk.
+The shared Slidev theme for every deck in this repository. It uses the [Tokyo Night](https://github.com/tokyo-night/tokyo-night-vscode-theme) colours, including the `tokyo-night` Shiki theme for code, on an original vector night street drawn in one-point perspective: apartment blocks with lit windows and balconies, a glowing konbini, neon signs, utility poles with tangled wires, parked cars, a lit cloud over the vanishing point, a wet road with reflections and a crosswalk.
 
 Use it from a deck's headmatter:
 

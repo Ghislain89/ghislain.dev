@@ -2,6 +2,8 @@
 
 A ~30-minute presentation about [Testcontainers](https://testcontainers.com) — real Docker containers in your tests — with a focus on how [Quarkus](https://quarkus.io) Dev Services makes integration testing effortless.
 
+Live: [ghislain.dev/slides/testcontainers/](https://ghislain.dev/slides/testcontainers/). Every push to `main` that changes this deck or the shared theme redeploys it.
+
 Built with [Slidev](https://sli.dev) using the repository's shared [Tokyo Night theme](../../theme).
 
 ## 🚀 Getting Started

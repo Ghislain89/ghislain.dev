@@ -4,8 +4,9 @@ on:
   push:
     branches: [main]
     paths:
-      - decks/playwright-training/**
+      - decks/**
       - theme/**
+      - scripts/write-htaccess.mjs
       - .github/workflows/deploy.yml
   workflow_dispatch:
 
@@ -18,13 +19,32 @@ concurrency:
 
 jobs:
   deploy:
+    name: ${{ matrix.deck }}
     runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      # One SFTP connection at a time: the host's firewall dislikes bursts.
+      max-parallel: 1
+      matrix:
+        include:
+          - deck: playwright-training
+            server-dir: public_html/playwright/slides
+            url: https://ghislain.dev/playwright/slides
+            check: ui/ ui/5 api/ api/5
+          - deck: testcontainers
+            server-dir: public_html/slides/testcontainers
+            url: https://ghislain.dev/slides/testcontainers
+            check: "/ 5"
+          - deck: agents-skills-101
+            server-dir: public_html/slides/agents-skills-101
+            url: https://ghislain.dev/slides/agents-skills-101
+            check: "/ 5"
     environment:
       name: production
-      url: https://ghislain.dev/playwright/slides.html
+      url: ${{ matrix.url }}/
     defaults:
       run:
-        working-directory: decks/playwright-training
+        working-directory: decks/${{ matrix.deck }}
     steps:
       - uses: actions/checkout@v4
 
@@ -41,25 +61,27 @@ jobs:
         with:
           node-version: 22
           cache: npm
-          cache-dependency-path: decks/playwright-training/package-lock.json
+          cache-dependency-path: decks/${{ matrix.deck }}/package-lock.json
 
       - run: npm ci
 
-      - name: Build both decks
-        run: npm run build
+      - run: npm run build
 
       # Same upload action as the ghislain.dev site: only changed files are sent.
       - name: Upload to mijn.host
         uses: Ghislain89/ghislain.dev/.github/actions/sftp-upload@main
         with:
-          local-dir: decks/playwright-training/dist
-          server-dir: public_html/playwright/slides
-          public-url: https://ghislain.dev/playwright/slides
+          local-dir: decks/${{ matrix.deck }}/dist
+          server-dir: ${{ matrix.server-dir }}
+          public-url: ${{ matrix.url }}
           password: ${{ secrets.FTP_PASSWORD }}
 
-      - name: Check the live decks
+      - name: Check the live deck
+        env:
+          URL: ${{ matrix.url }}
+          CHECK: ${{ matrix.check }}
         run: |
-          for path in ui/ ui/5 api/ api/5; do
-            curl --fail --silent --show-error --output /dev/null "https://ghislain.dev/playwright/slides/$path?v=$GITHUB_SHA"
-            echo "ok: /playwright/slides/$path"
+          for path in $CHECK; do
+            curl --fail --silent --show-error --output /dev/null "$URL/${path#/}?v=$GITHUB_SHA"
+            echo "ok: $URL/${path#/}"
           done
