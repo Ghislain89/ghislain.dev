@@ -9,12 +9,12 @@
   <meta property="og:description" content="Senior test automation consultant at deTesters. Making AI-assisted development predictable, and teaching Playwright." />
   <meta property="og:image" content="https://ghislain.dev/og-image.png" />
   <meta property="og:url" content="https://ghislain.dev/" />
-  <meta name="theme-color" content="#f4f3ef" />
+  <meta name="theme-color" content="#1a1b26" />
   <link rel="icon" href="favicon.png" type="image/png" />
   <link rel="apple-touch-icon" href="favicon.png" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Patrick+Hand&family=Space+Grotesk:wght@600;700&display=swap" />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&family=Patrick+Hand&display=swap" />
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
@@ -30,77 +30,97 @@
   }
   </script>
   <style>
+    /* Tokyo Night, the same palette and type as the slide decks (github.com/Ghislain89/presentations/tree/main/theme) */
     :root {
-      --ink: #1b1f24;
-      --line: #1f2328;
-      --muted: #59616a;
-      --paper: #f4f3ef;
-      --accent: #2d8a34;
-      --accent-dark: #216b27;
-      --accent-soft: #e5f0e3;
-      --coral: #d65348;
-      --coral-dark: #b23b31;
-      --shadow: 6px 6px 0 rgba(31, 35, 40, 0.12);
+      --tn-bg: #1a1b26;
+      --tn-bg-dark: #13141f;
+      --tn-surface: #24283b;
+      --tn-border: #3b4261;
+      --tn-fg: #c0caf5;
+      --tn-fg-bright: #e6eaff;
+      --tn-fg-dim: #a9b1d6;
+      --tn-muted: #8a92bd;
+      --tn-blue: #7aa2f7;
+      --tn-cyan: #7dcfff;
+      --tn-teal: #73daca;
+      --tn-magenta: #bb9af7;
+      --tn-pink: #f4a6c8;
+      --tn-orange: #ff9e64;
+      --tn-lamp: #ffd89a;
+      --tn-neon: linear-gradient(90deg, var(--tn-orange), var(--tn-pink) 50%, var(--tn-blue));
+      --mono: "JetBrains Mono", ui-monospace, monospace;
+      color-scheme: dark;
     }
 
     * { box-sizing: border-box; }
 
-    html { scroll-behavior: smooth; }
+    html { scroll-behavior: smooth; background: var(--tn-bg-dark); }
 
     body {
       margin: 0;
       background:
-        radial-gradient(circle at 78% 12%, rgba(45, 138, 52, 0.09), transparent 32%),
-        radial-gradient(circle at 12% 40%, rgba(214, 83, 72, 0.06), transparent 30%),
-        var(--paper);
-      color: var(--ink);
+        radial-gradient(ellipse 60% 40% at 85% 30%, rgba(187, 154, 247, 0.06), transparent),
+        radial-gradient(ellipse 50% 35% at 10% 65%, rgba(122, 162, 247, 0.06), transparent),
+        linear-gradient(180deg, var(--tn-bg), var(--tn-bg-dark));
+      color: var(--tn-fg);
       font-family: "Inter", sans-serif;
       line-height: 1.6;
       -webkit-font-smoothing: antialiased;
     }
 
-    body::before {
-      content: "";
-      display: block;
-      height: 10px;
-      background: linear-gradient(90deg, var(--accent) 0 70%, var(--coral) 70% 100%);
-    }
-
-    a { color: var(--accent-dark); }
-    a:focus-visible { outline: 3px solid var(--accent); outline-offset: 3px; border-radius: 4px; }
+    a { color: var(--tn-cyan); text-decoration-color: rgba(125, 207, 255, 0.4); text-underline-offset: 3px; }
+    a:hover { color: var(--tn-fg-bright); text-decoration-color: currentColor; }
+    a:focus-visible { outline: 2px solid var(--tn-blue); outline-offset: 3px; border-radius: 4px; }
 
     .wrap { width: min(100% - 48px, 1040px); margin: 0 auto; }
 
-    /* Hero */
+    /* Hero on the night street, like the decks' title slides */
+    .street {
+      border-bottom: 1px solid rgba(122, 162, 247, 0.18);
+      background:
+        linear-gradient(180deg, rgba(10, 12, 32, 0.15), rgba(10, 12, 32, 0.4) 72%, var(--tn-bg)),
+        url("street.webp") center 40% / cover no-repeat,
+        var(--tn-bg);
+    }
+
     .hero {
       display: grid;
-      grid-template-columns: minmax(0, 1fr) minmax(280px, 400px);
-      gap: 56px;
+      grid-template-columns: minmax(0, 1fr) minmax(280px, 380px);
+      gap: 48px;
       align-items: center;
-      padding: 72px 0 40px;
+      padding: 72px 0 64px;
+    }
+
+    .sign {
+      padding: 36px 40px 34px;
+      border: 1px solid rgba(122, 162, 247, 0.28);
+      border-radius: 14px;
+      background: var(--tn-neon) top / 100% 4px no-repeat, rgba(17, 18, 32, 0.84);
+      box-shadow: 0 0 40px rgba(122, 162, 247, 0.12), 0 24px 60px rgba(4, 5, 16, 0.55);
     }
 
     h1 {
-      margin: 0 0 16px;
-      font-family: "Space Grotesk", sans-serif;
-      font-size: clamp(2.6rem, 6vw, 4.2rem);
-      letter-spacing: -0.04em;
-      line-height: 1;
+      margin: 0 0 14px;
+      color: var(--tn-fg-bright);
+      font-size: clamp(2.4rem, 5.4vw, 3.6rem);
+      font-weight: 800;
+      letter-spacing: -0.03em;
+      line-height: 1.05;
+      text-shadow: 0 0 22px rgba(122, 162, 247, 0.45);
     }
 
     .role {
-      margin: 0 0 22px;
-      color: var(--accent-dark);
-      font-family: "Space Grotesk", sans-serif;
-      font-size: 1.2rem;
+      margin: 0 0 18px;
+      color: var(--tn-lamp);
+      font-size: 1.15rem;
       font-weight: 600;
     }
 
     .bio {
       max-width: 34rem;
-      margin: 0 0 32px;
-      color: var(--muted);
-      font-size: 1.1rem;
+      margin: 0 0 28px;
+      color: var(--tn-fg-dim);
+      font-size: 1.08rem;
     }
 
     .actions { display: flex; flex-wrap: wrap; gap: 12px; }
@@ -109,19 +129,19 @@
       display: inline-flex;
       gap: 10px;
       align-items: center;
-      padding: 13px 22px;
-      border: 2px solid var(--ink);
-      border-radius: 999px;
-      background: var(--ink);
-      color: #fff;
+      padding: 12px 22px;
+      border: 1px solid var(--tn-blue);
+      border-radius: 10px;
+      background: var(--tn-blue);
+      color: var(--tn-bg-dark);
       font-weight: 600;
       text-decoration: none;
-      transition: background 0.15s, border-color 0.15s, transform 0.15s;
+      transition: background 0.15s, border-color 0.15s, box-shadow 0.15s, transform 0.15s;
     }
 
-    .button:hover { border-color: var(--accent-dark); background: var(--accent-dark); transform: translateY(-2px); }
-    .button.secondary { background: transparent; color: var(--ink); }
-    .button.secondary:hover { border-color: var(--accent-dark); background: transparent; color: var(--accent-dark); }
+    .button:hover { background: var(--tn-cyan); border-color: var(--tn-cyan); color: var(--tn-bg-dark); box-shadow: 0 0 24px rgba(125, 207, 255, 0.35); transform: translateY(-2px); }
+    .button.secondary { background: rgba(26, 27, 38, 0.6); border-color: var(--tn-border); color: var(--tn-fg); }
+    .button.secondary:hover { border-color: var(--tn-blue); color: var(--tn-fg-bright); box-shadow: none; }
     .button svg { width: 16px; height: 16px; }
 
     .figure {
@@ -134,9 +154,9 @@
       display: block;
       width: 100%;
       height: auto;
-      border: 3px solid var(--line);
-      border-radius: 24px;
-      box-shadow: 8px 8px 0 rgba(31, 35, 40, 0.12);
+      border: 1px solid rgba(122, 162, 247, 0.35);
+      border-radius: 18px;
+      box-shadow: 0 0 40px rgba(122, 162, 247, 0.2), 0 24px 60px rgba(4, 5, 16, 0.6);
     }
 
     .bubble {
@@ -146,12 +166,14 @@
       z-index: 1;
       margin: 0;
       padding: 14px 22px;
-      border: 3px solid var(--line);
+      border: 2px solid var(--tn-bg-dark);
       border-radius: 22px;
-      background: #fff;
+      background: var(--tn-fg-bright);
+      color: var(--tn-bg);
       font-family: "Patrick Hand", cursive;
       font-size: 1.7rem;
       line-height: 1.15;
+      box-shadow: 0 0 28px rgba(244, 166, 200, 0.35);
       transform: rotate(-4deg);
       animation: pop 0.5s 0.3s cubic-bezier(0.3, 1.6, 0.5, 1) both;
     }
@@ -160,12 +182,12 @@
       content: "";
       position: absolute;
       right: 34px;
-      bottom: -21px;
-      width: 26px;
-      height: 26px;
-      border-right: 3px solid var(--line);
-      border-bottom: 3px solid var(--line);
-      background: #fff;
+      bottom: -15px;
+      width: 24px;
+      height: 24px;
+      border-right: 2px solid var(--tn-bg-dark);
+      border-bottom: 2px solid var(--tn-bg-dark);
+      background: var(--tn-fg-bright);
       transform: skewX(-45deg) rotate(20deg);
     }
 
@@ -173,46 +195,63 @@
       from { opacity: 0; transform: rotate(-4deg) scale(0.6); }
     }
 
-    /* Sections */
-    section { padding: 64px 0 0; }
+    /* Sections, styled like the decks' content slides */
+    section { padding: 72px 0 0; }
 
     .kicker {
-      margin: 0 0 6px;
-      color: var(--coral-dark);
-      font-family: "Patrick Hand", cursive;
-      font-size: 1.35rem;
-      line-height: 1.2;
+      margin: 0 0 8px;
+      color: var(--tn-orange);
+      font-family: var(--mono);
+      font-size: 0.85rem;
+      font-weight: 500;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
     }
 
     h2 {
       margin: 0 0 28px;
-      font-family: "Space Grotesk", sans-serif;
+      color: var(--tn-blue);
       font-size: clamp(1.8rem, 3.6vw, 2.4rem);
-      letter-spacing: -0.03em;
-      line-height: 1.1;
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      line-height: 1.15;
+    }
+
+    h2::after {
+      content: "";
+      display: block;
+      width: 3.5rem;
+      height: 4px;
+      margin-top: 12px;
+      border-radius: 2px;
+      background: var(--tn-neon);
+      box-shadow: 0 0 12px rgba(244, 166, 200, 0.45);
     }
 
     h3 {
       margin: 0 0 8px;
-      font-family: "Space Grotesk", sans-serif;
-      font-size: 1.2rem;
-      line-height: 1.25;
+      color: var(--tn-magenta);
+      font-size: 1.15rem;
+      font-weight: 700;
+      line-height: 1.3;
     }
 
     .card {
       padding: 26px;
-      border: 2px solid var(--line);
-      border-radius: 18px;
-      background: #fff;
-      box-shadow: var(--shadow);
+      border: 1px solid var(--tn-border);
+      border-radius: 14px;
+      background: rgba(36, 40, 59, 0.55);
+      box-shadow: 0 16px 40px rgba(4, 5, 16, 0.35);
+      transition: border-color 0.15s;
     }
 
-    .card p { margin: 0; color: var(--muted); }
+    .card:hover { border-color: rgba(122, 162, 247, 0.55); }
+    .card p { margin: 0; color: var(--tn-fg-dim); }
 
     .grid-3 {
       display: grid;
       grid-template-columns: repeat(3, minmax(0, 1fr));
-      gap: 22px;
+      gap: 20px;
     }
 
     .icon {
@@ -220,15 +259,16 @@
       width: 46px;
       height: 46px;
       margin-bottom: 16px;
-      border: 2px solid var(--line);
-      border-radius: 12px;
-      background: var(--accent-soft);
+      border: 1px solid rgba(115, 218, 202, 0.4);
+      border-radius: 10px;
+      background: rgba(115, 218, 202, 0.1);
+      color: var(--tn-teal);
       place-items: center;
     }
 
-    .icon svg { width: 24px; height: 24px; fill: none; stroke: var(--line); stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
-    .grid-3 .card:nth-child(2) .icon { background: #fbe4e1; }
-    .grid-3 .card:nth-child(3) .icon { background: #e3eef8; }
+    .icon svg { width: 24px; height: 24px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+    .grid-3 .card:nth-child(2) .icon { border-color: rgba(244, 166, 200, 0.4); background: rgba(244, 166, 200, 0.1); color: var(--tn-pink); }
+    .grid-3 .card:nth-child(3) .icon { border-color: rgba(122, 162, 247, 0.45); background: rgba(122, 162, 247, 0.12); color: var(--tn-blue); }
 
     .more { display: inline-block; margin-top: 14px; font-weight: 600; }
 
@@ -243,58 +283,67 @@
     }
 
     .year {
-      padding: 6px 0;
-      border: 2px solid var(--line);
-      border-radius: 999px;
-      background: var(--accent-soft);
-      font-family: "Space Grotesk", sans-serif;
-      font-weight: 700;
+      padding: 5px 0;
+      border: 1px solid rgba(255, 216, 154, 0.4);
+      border-radius: 8px;
+      background: rgba(255, 216, 154, 0.08);
+      color: var(--tn-lamp);
+      font-family: var(--mono);
+      font-weight: 500;
       text-align: center;
     }
 
     .talk .type {
       margin: 0 0 4px;
-      color: var(--accent-dark);
-      font-size: 0.82rem;
-      font-weight: 600;
+      color: var(--tn-teal);
+      font-family: var(--mono);
+      font-size: 0.78rem;
       letter-spacing: 0.06em;
       text-transform: uppercase;
     }
 
-    .talk-links { display: flex; flex-wrap: wrap; gap: 6px 18px; margin-top: 10px; font-weight: 600; }
+    .talk-links { display: flex; flex-wrap: wrap; gap: 6px 18px; margin-top: 12px; font-weight: 600; }
 
     /* AI */
-    .lead { max-width: 760px; margin: -12px 0 28px; color: var(--muted); font-size: 1.08rem; }
-    .lead strong { color: var(--ink); font-weight: 600; }
+    .lead { max-width: 760px; margin: -8px 0 28px; color: var(--tn-fg-dim); font-size: 1.08rem; }
+    .lead strong { color: var(--tn-lamp); font-weight: 600; }
 
     .tag {
       display: inline-block;
       margin-bottom: 12px;
       padding: 2px 10px;
-      border: 1px solid var(--line);
-      border-radius: 999px;
-      background: var(--accent-soft);
-      color: var(--accent-dark);
-      font-size: 0.78rem;
-      font-weight: 600;
-      letter-spacing: 0.06em;
+      border: 1px solid rgba(115, 218, 202, 0.4);
+      border-radius: 6px;
+      background: rgba(115, 218, 202, 0.1);
+      color: var(--tn-teal);
+      font-family: var(--mono);
+      font-size: 0.74rem;
+      letter-spacing: 0.04em;
       text-transform: uppercase;
     }
 
-    .grid-3 .card:nth-child(2) .tag { background: #fbe4e1; color: var(--coral-dark); }
-    .grid-3 .card:nth-child(3) .tag { background: #e3eef8; color: #1f5a8a; }
+    .grid-3 .card:nth-child(2) .tag { border-color: rgba(244, 166, 200, 0.4); background: rgba(244, 166, 200, 0.1); color: var(--tn-pink); }
+    .grid-3 .card:nth-child(3) .tag { border-color: rgba(122, 162, 247, 0.45); background: rgba(122, 162, 247, 0.12); color: var(--tn-blue); }
 
-    .ai-foot { display: flex; flex-wrap: wrap; gap: 6px 16px; margin: 22px 0 0; color: var(--muted); }
+    .ai-foot { display: flex; flex-wrap: wrap; gap: 6px 16px; margin: 22px 0 0; color: var(--tn-muted); }
     .ai-foot a { font-weight: 600; }
 
-    /* Footer */
-    footer { padding: 72px 0 36px; text-align: center; }
+    /* Footer on the skyline, like the decks' content slides */
+    footer {
+      margin-top: 72px;
+      padding: 56px 0 180px;
+      background:
+        linear-gradient(180deg, var(--tn-bg-dark) 15%, rgba(19, 20, 31, 0) 55%),
+        url("skyline.webp") center bottom / auto 300px repeat-x,
+        var(--tn-bg-dark);
+      text-align: center;
+    }
 
     .disclaimer {
-      margin: 0 0 18px;
-      font-family: "Patrick Hand", cursive;
-      font-size: 1.35rem;
-      line-height: 1.3;
+      margin: 0 auto 20px;
+      max-width: 40rem;
+      color: var(--tn-fg-dim);
+      font-size: 1.05rem;
     }
 
     .links {
@@ -312,17 +361,17 @@
       gap: 8px;
       align-items: center;
       padding: 9px 16px;
-      border: 1px solid #d0d4cd;
-      border-radius: 999px;
-      background: rgba(255, 255, 255, 0.6);
-      color: var(--ink);
+      border: 1px solid var(--tn-border);
+      border-radius: 10px;
+      background: rgba(19, 20, 31, 0.75);
+      color: var(--tn-fg);
       font-size: 0.95rem;
       font-weight: 500;
       text-decoration: none;
       transition: border-color 0.15s, color 0.15s;
     }
 
-    .links a:hover { border-color: var(--accent); color: var(--accent-dark); }
+    .links a:hover { border-color: var(--tn-blue); color: var(--tn-fg-bright); }
     .links svg { width: 18px; height: 18px; fill: currentColor; }
 
     @media (max-width: 860px) {
@@ -333,30 +382,32 @@
       .hero {
         grid-template-columns: 1fr;
         gap: 8px;
-        padding-top: 32px;
+        padding: 28px 0 40px;
         text-align: center;
       }
+      .sign { padding: 28px 22px; }
       .figure { order: -1; width: min(300px, 82%); margin: 0 auto 16px; padding-top: 48px; }
       .bubble { left: 10%; font-size: 1.45rem; }
       .bio { margin-inline: auto; }
       .actions { justify-content: center; }
-      section { padding-top: 52px; }
+      section { padding-top: 56px; }
       .talk { grid-template-columns: 1fr; gap: 10px; }
-      .year { justify-self: start; padding-inline: 16px; }
+      .year { justify-self: start; padding-inline: 14px; }
       .card { padding: 22px; }
+      footer { padding-bottom: 150px; background-size: auto 220px; }
     }
 
     @media (prefers-reduced-motion: reduce) {
       html { scroll-behavior: auto; }
       .bubble { animation: none; }
-      .button { transition: none; }
+      .button, .card { transition: none; }
     }
   </style>
 </head>
 <body>
-  <main class="wrap">
-    <div class="hero">
-      <div>
+  <header class="street">
+    <div class="wrap hero">
+      <div class="sign">
         <h1>Ghislain Gabriëlse</h1>
         <p class="role">Senior test automation consultant at deTesters</p>
         <p class="bio">
@@ -378,6 +429,9 @@
         <img src="ghislain.webp" width="800" height="800" alt="Illustrated portrait of Ghislain, smiling, in a navy sweater over a white collar, standing in an industrial hall." />
       </figure>
     </div>
+  </header>
+
+  <main class="wrap">
 
     <section aria-labelledby="what">
       <p class="kicker">What I do</p>
@@ -494,7 +548,8 @@
 
   </main>
 
-  <footer class="wrap">
+  <footer>
+    <div class="wrap">
     <p class="disclaimer">Not looking for a new job, not even latently. Always happy to talk testing, though.</p>
     <ul class="links">
       <li>
@@ -516,6 +571,7 @@
         </a>
       </li>
     </ul>
+    </div>
   </footer>
 </body>
 </html>
