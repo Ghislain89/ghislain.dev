@@ -3,6 +3,9 @@ name: Deploy
 on:
   push:
     branches: [main]
+    paths:
+      - decks/playwright-training/**
+      - .github/workflows/deploy.yml
   workflow_dispatch:
 
 permissions:
@@ -18,6 +21,9 @@ jobs:
     environment:
       name: production
       url: https://ghislain.dev/playwright/slides.html
+    defaults:
+      run:
+        working-directory: decks/playwright-training
     steps:
       - uses: actions/checkout@v4
 
@@ -32,8 +38,9 @@ jobs:
 
       - uses: actions/setup-node@v4
         with:
-          node-version: 20
+          node-version: 22
           cache: npm
+          cache-dependency-path: decks/playwright-training/package-lock.json
 
       - run: npm ci
 
@@ -44,7 +51,7 @@ jobs:
       - name: Upload to mijn.host
         uses: Ghislain89/ghislain.dev/.github/actions/sftp-upload@main
         with:
-          local-dir: dist
+          local-dir: decks/playwright-training/dist
           server-dir: public_html/playwright/slides
           public-url: https://ghislain.dev/playwright/slides
           password: ${{ secrets.FTP_PASSWORD }}

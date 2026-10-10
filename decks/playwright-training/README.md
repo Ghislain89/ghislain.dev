@@ -9,7 +9,7 @@ Slides for the Playwright trainings by Ghislain Gabriëlse ([DeTesters](https://
 
 Preparation, assignments and an overview of the decks: [ghislain.dev/playwright/](https://ghislain.dev/playwright/).
 
-> This repository replaces [PlaywrightWorkshopPresentation](https://github.com/Ghislain89/PlaywrightWorkshopPresentation) (reveal.js) and [playwright-api-testing](https://github.com/Ghislain89/playwright-api-testing).
+> Part of the [presentations](../../README.md) monorepo. These decks replace [PlaywrightWorkshopPresentation](https://github.com/Ghislain89/PlaywrightWorkshopPresentation) (reveal.js) and [playwright-api-testing](https://github.com/Ghislain89/playwright-api-testing).
 
 Both decks are up to date with **Playwright 1.64**. New features are marked with the version that introduced them, for example `(1.63)`.
 
@@ -47,6 +47,8 @@ The UI assignment numbers match §8 of the booker-platform frontend spec.
 
 ## Usage
 
+Run these inside `decks/playwright-training`:
+
 ```bash
 npm install
 npm run dev:ui      # or: npm run dev:api
@@ -73,10 +75,10 @@ Both decks use `theme: ./theme`. Logos on the title slide are set via `themeConf
 
 ## Deployment
 
-Every push to `main` builds both decks and uploads `dist/` to `ghislain.dev/playwright/slides/` on mijn.host ([workflow](.github/workflows/deploy.yml)). The upload uses the SFTP action from [ghislain.dev](https://github.com/Ghislain89/ghislain.dev) and only sends files that changed. It needs the FTP password as a repository secret:
+Every push to `main` that changes this folder builds both decks and uploads `dist/` to `ghislain.dev/playwright/slides/` on mijn.host ([workflow](../../.github/workflows/deploy.yml)). The upload uses the SFTP action from [ghislain.dev](https://github.com/Ghislain89/ghislain.dev) and only sends files that changed. It needs the FTP password as a repository secret:
 
 ```bash
-gh secret set FTP_PASSWORD --repo Ghislain89/playwright-training-slides
+gh secret set FTP_PASSWORD --repo Ghislain89/presentations
 ```
 
 The decks use history routing, so the build adds an `.htaccess` that sends deep links such as `/ui/5` to the deck's `index.html`. The build also uses the `/playwright/slides/…` base path; to preview it locally, run `npm run dev:ui` instead of opening `dist/`.
