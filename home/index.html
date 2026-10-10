@@ -74,6 +74,63 @@
 
     .wrap { width: min(100% - 48px, 1040px); margin: 0 auto; }
 
+    /* Top bar */
+    .topbar {
+      position: sticky;
+      top: 0;
+      z-index: 10;
+      border-bottom: 1px solid rgba(122, 162, 247, 0.18);
+      background: rgba(19, 20, 31, 0.78);
+      -webkit-backdrop-filter: blur(12px);
+      backdrop-filter: blur(12px);
+    }
+
+    .topbar .wrap {
+      display: flex;
+      gap: 24px;
+      align-items: center;
+      justify-content: space-between;
+      height: 56px;
+    }
+
+    .brand {
+      color: var(--tn-fg-bright);
+      font-family: var(--mono);
+      font-size: 0.95rem;
+      font-weight: 600;
+      text-decoration: none;
+      white-space: nowrap;
+    }
+
+    .brand span { color: var(--tn-pink); }
+    .brand:hover { color: var(--tn-fg-bright); }
+
+    .topbar ul {
+      display: flex;
+      gap: 4px;
+      margin: 0;
+      padding: 0;
+      list-style: none;
+    }
+
+    .topbar ul a {
+      display: block;
+      padding: 6px 12px;
+      border-radius: 8px;
+      color: var(--tn-fg-dim);
+      font-family: var(--mono);
+      font-size: 0.82rem;
+      letter-spacing: 0.04em;
+      text-decoration: none;
+      text-transform: uppercase;
+      white-space: nowrap;
+    }
+
+    .topbar ul a:hover { background: rgba(122, 162, 247, 0.1); color: var(--tn-fg-bright); }
+    .topbar ul a[aria-current="true"] { color: var(--tn-orange); box-shadow: inset 0 -2px 0 var(--tn-orange); border-radius: 8px 8px 0 0; }
+
+    [id] { scroll-margin-top: 72px; }
+
     /* Hero on the night street, like the decks' title slides */
     .street {
       border-bottom: 1px solid rgba(122, 162, 247, 0.18);
@@ -362,6 +419,10 @@
     }
 
     @media (max-width: 760px) {
+      .topbar .wrap { gap: 12px; height: 52px; }
+      .brand { display: none; }
+      .topbar ul { justify-content: space-between; width: 100%; }
+      .topbar ul a { padding: 6px 8px; font-size: 0.76rem; }
       .hero {
         grid-template-columns: 1fr;
         gap: 8px;
@@ -389,7 +450,19 @@
   </style>
 </head>
 <body>
-  <header class="street">
+  <nav class="topbar" aria-label="Sections">
+    <div class="wrap">
+      <a class="brand" href="#top">ghislain<span>.</span>dev</a>
+      <ul>
+        <li><a href="#work">What I do</a></li>
+        <li><a href="#ai">AI</a></li>
+        <li><a href="#talks">Talks</a></li>
+        <li><a href="#contact">Contact</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <header class="street" id="top">
     <div class="wrap hero">
       <div class="sign">
         <h1>Ghislain Gabriëlse</h1>
@@ -410,7 +483,7 @@
 
   <main class="wrap">
 
-    <section aria-labelledby="what">
+    <section id="work" aria-labelledby="what">
       <p class="kicker">What I do</p>
       <h2 id="what">AI, platform engineering &amp; test automation</h2>
       <div class="grid-3">
@@ -525,7 +598,7 @@
 
   </main>
 
-  <footer>
+  <footer id="contact">
     <div class="wrap">
     <p class="disclaimer">Not looking for a new job, not even latently. Always happy to talk testing, though.</p>
     <ul class="links">
@@ -550,5 +623,17 @@
     </ul>
     </div>
   </footer>
+  <script>
+    const links = [...document.querySelectorAll('.topbar ul a')];
+    const targets = links.map((a) => document.querySelector(a.hash));
+    const markCurrent = () => {
+      const atBottom = innerHeight + scrollY >= document.documentElement.scrollHeight - 4;
+      let current = atBottom ? targets.length - 1 : -1;
+      if (!atBottom) targets.forEach((t, i) => { if (t.getBoundingClientRect().top < innerHeight * 0.4) current = i; });
+      links.forEach((a, i) => i === current ? a.setAttribute('aria-current', 'true') : a.removeAttribute('aria-current'));
+    };
+    addEventListener('scroll', markCurrent, { passive: true });
+    markCurrent();
+  </script>
 </body>
 </html>
