@@ -29,6 +29,8 @@ themeConfig:
 
 Slidev's built-in `center`, `full` and `end` layouts work as usual.
 
+For packed slides, add `class: dense` to the slide's frontmatter: smaller text, tighter lines and smaller code. Wrap a table in `<div class="compact-table">` to shrink only the table.
+
 ## Colours
 
 Defined as CSS variables in [`styles/tokyo-night.css`](styles/tokyo-night.css): `--tn-blue` for titles, `--tn-lamp` for bold text, `--tn-magenta` for emphasis, `--tn-cyan` for links, `--tn-teal` for inline code and `--tn-orange` for bullets. The neon bar under titles (`--tn-neon`) mirrors the konbini sign.

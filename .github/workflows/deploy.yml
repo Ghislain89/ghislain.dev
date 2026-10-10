@@ -39,6 +39,10 @@ jobs:
             server-dir: public_html/slides/agents-skills-101
             url: https://ghislain.dev/slides/agents-skills-101
             check: "/ 5"
+          - deck: keep-your-minions-in-line
+            server-dir: public_html/slides/keep-your-minions-in-line
+            url: https://ghislain.dev/slides/keep-your-minions-in-line
+            check: "/ 5"
     environment:
       name: production
       url: ${{ matrix.url }}/

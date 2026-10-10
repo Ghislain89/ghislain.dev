@@ -7,6 +7,7 @@ All decks by Ghislain Gabriëlse ([deTesters](https://detesters.nl/)), built wit
 | Playwright UI workshop and API testing | Training | [`decks/playwright-training`](decks/playwright-training) | [ui](https://ghislain.dev/playwright/slides/ui/) · [api](https://ghislain.dev/playwright/slides/api/) |
 | Agents, Skills & MCP Servers: a practical 101 | Talk, 2026 | [`decks/agents-skills-101`](decks/agents-skills-101) | [slides](https://ghislain.dev/slides/agents-skills-101/) |
 | Introduction to Testcontainers | Talk, 2026 | [`decks/testcontainers`](decks/testcontainers) | [slides](https://ghislain.dev/slides/testcontainers/) |
+| Keep your minions in line: behavioural testing for AI skills | Talk, 2026 | [`decks/keep-your-minions-in-line`](decks/keep-your-minions-in-line) | [slides](https://ghislain.dev/slides/keep-your-minions-in-line/) |
 
 More about the talks: [ghislain.dev](https://ghislain.dev/#talks).
 
@@ -36,7 +37,7 @@ To bring in an existing repo with its history: `git subtree add --prefix=decks/<
 
 ## Theme
 
-[`theme/`](theme/) is a Slidev theme with the Tokyo Night colours and an original night-street scene: starry sky, power lines, street lamps, a konbini and a crosswalk. See its [README](theme/README.md) for layouts and how to regenerate the artwork.
+[`theme/`](theme/) is a Slidev theme with the Tokyo Night colours and an original night-street scene in perspective: lit apartment blocks, a konbini, neon signs, power lines, parked cars and a wet road. See its [README](theme/README.md) for layouts and how to regenerate the artwork.
 
 ## Licences
 
@@ -51,4 +52,4 @@ This repository was `playwright-training-slides`; GitHub redirects the old URL. 
 [testcontainers-presentation](https://github.com/Ghislain89/testcontainers-presentation),
 [PlaywrightWorkshopPresentation](https://github.com/Ghislain89/PlaywrightWorkshopPresentation) and
 [playwright-api-testing](https://github.com/Ghislain89/playwright-api-testing).
-The talk decks were imported with `git subtree`, so their history is kept.
+The agents and testcontainers decks were imported with `git subtree`, so their history is kept. `keep-your-minions-in-line` came from the private `testing-ai-skills-presentation` repo as a snapshot, without its history.

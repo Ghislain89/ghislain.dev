@@ -16,7 +16,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        deck: [playwright-training, agents-skills-101, testcontainers]
+        deck: [playwright-training, agents-skills-101, testcontainers, keep-your-minions-in-line]
     defaults:
       run:
         working-directory: decks/${{ matrix.deck }}
