@@ -23,9 +23,11 @@
     <header class="intro">
       <p class="kicker">During the workshop</p>
       <h1>Playwright workshop assignments.</h1>
-      <p class="intro-copy">Every assignment from the slides, in the same order. Work at your own pace and open the hints when you get stuck.</p>
+      <p class="intro-copy">Every assignment from the slides, in the same order. The UI workshop takes two evenings; the <em>Going further</em> assignments are for afterwards. Work at your own pace and open the hints when you get stuck.</p>
       <div class="link-options" style="margin-top: 30px;">
-        <a class="link-option" href="#ui-title">UI workshop</a>
+        <a class="link-option" href="#ui-title">UI · Evening 1</a>
+        <a class="link-option" href="#ui-evening-2-title">UI · Evening 2</a>
+        <a class="link-option" href="#ui-further-title">UI · Going further</a>
         <a class="link-option" href="#api-title">API workshop</a>
       </div>
       <div class="callout">
@@ -36,27 +38,30 @@
 
     <section class="guide" aria-labelledby="ui-title">
       <header class="section-header">
-        <p class="kicker">Assignments · UI</p>
-        <h2 id="ui-title">UI testing with Playwright.</h2>
-        <p class="section-intro">You build your own test suite for the booker-platform web app, from a first recorded test to a stable suite that runs in CI. <a href="slides/ui/">Open the UI slides</a>.</p>
+        <p class="kicker">Assignments · UI · Evening 1</p>
+        <h2 id="ui-title">Your first stable tests.</h2>
+        <p class="section-intro">You build your own test suite for the booker-platform web app over two evenings. Tonight: a first test, then make it pass every time. <a href="slides/ui/">Open the UI slides</a>.</p>
       </header>
 
-      <ol aria-label="UI assignments">
+      <ol aria-label="UI assignments, evening 1">
         <li>
           <div class="step-meta" data-label="1A" aria-hidden="true"></div>
           <div class="step-content">
             <h3>Assignment 1A · Your first test</h3>
-            <p class="step-note">Create <code class="inline-code">playwright/tests/ui/register.spec.ts</code>:</p>
+            <p class="step-note">Create <code class="inline-code">playwright/tests/ui/register.spec.ts</code>. Start on the login page (<code class="inline-code">/login</code>):</p>
             <ul class="tasks">
-              <li>Register a new user</li>
+              <li>Follow the link to <em>Register</em> and register a new user</li>
               <li>Log in with that user</li>
               <li>Assert that "No bookings yet" is shown</li>
             </ul>
-            <p class="step-note">Record it with codegen or write it yourself. Prefer <code class="inline-code">getByRole</code> and <code class="inline-code">getByLabel</code>, and add a web-first assertion to every step.</p>
+            <p class="step-note">Write it yourself first, then compare with what codegen records. Prefer <code class="inline-code">getByRole</code> and <code class="inline-code">getByLabel</code>, and add a web-first assertion to every step. Expect a strict mode violation or two: read the error before you fix it.</p>
             <details class="hints">
               <summary>Hints</summary>
               <ul>
-                <li>Start the recorder with <code class="inline-code">npx playwright codegen localhost:3000</code>, or use "Record new" in the VS Code extension.</li>
+                <li>Start the recorder with <code class="inline-code">npx playwright codegen localhost:3000/login</code>, or use "Record new" in the VS Code extension.</li>
+                <li>Registering only works after you check <code class="inline-code">getByLabel('I accept the terms and conditions')</code>.</li>
+                <li>Strict mode violation on <code class="inline-code">getByLabel('Password')</code>? Names match substrings, and "Confirm password" contains "password". Add <code class="inline-code">{ exact: true }</code>.</li>
+                <li>Two "Register" links on the login page? One is in the header. Scope to the page content: <code class="inline-code">page.getByRole('main').getByRole('link', { name: 'Register' })</code>.</li>
                 <li>Web-first assertions wait for you: <code class="inline-code">await expect(locator).toBeVisible()</code>.</li>
               </ul>
             </details>
@@ -70,7 +75,7 @@
               <li>Configure the HTML reporter and set <code class="inline-code">trace: 'on'</code></li>
               <li>Duplicate your test from 1A a few times and enable <code class="inline-code">fullyParallel</code></li>
               <li>Run with <code class="inline-code">--repeat-each 5</code>. What breaks, and why?</li>
-              <li>Fix it with unique test data per test (for example <code class="inline-code">faker</code> or <code class="inline-code">Date.now()</code>)</li>
+              <li>Fix it with unique test data per test</li>
               <li>Open the report and a trace: which step is the slowest?</li>
             </ul>
             <details class="hints">
@@ -78,25 +83,42 @@
               <ul>
                 <li>Open the report with <code class="inline-code">npx playwright show-report</code>; click a test to open its trace.</li>
                 <li>Every test registers the same user, and usernames must be unique.</li>
+                <li><code class="inline-code">createRandomUser()</code> in <code class="inline-code">playwright/support/datafactories/user.factory.ts</code> makes a new user every time.</li>
               </ul>
             </details>
           </div>
         </li>
+      </ol>
+      <div class="callout">
+        <strong>Before evening 2</strong>
+        <p>Finish 1A and 1B, and run <code class="inline-code">git pull</code> in booker-platform: it has starter files for assignment 2.</p>
+      </div>
+    </section>
+
+    <section class="guide" aria-labelledby="ui-evening-2-title">
+      <header class="section-header">
+        <p class="kicker">Assignments · UI · Evening 2</p>
+        <h2 id="ui-evening-2-title">Scale up your suite.</h2>
+        <p class="section-intro">Page objects and fixtures, a shared login, control over the network, and a suite that stays green when the app misbehaves.</p>
+      </header>
+
+      <ol aria-label="UI assignments, evening 2">
         <li>
           <div class="step-meta" data-label="02" aria-hidden="true"></div>
           <div class="step-content">
             <h3>Assignment 2 · Page objects &amp; fixtures</h3>
             <ul class="tasks">
-              <li>Create <code class="inline-code">LoginPage</code> and <code class="inline-code">RegisterPage</code> page objects</li>
+              <li>Finish the starter page objects in <code class="inline-code">playwright/support/pages/</code>: <code class="inline-code">LoginPage</code> and <code class="inline-code">RegisterPage</code></li>
               <li>Refactor your test from 1A to use them</li>
-              <li>Expose the page objects as fixtures with <code class="inline-code">test.extend</code></li>
+              <li>Expose them as fixtures in <code class="inline-code">playwright/support/fixtures/ui.fixture.ts</code></li>
               <li class="bonus">Bonus: add a <code class="inline-code">BookingWizard</code> page object, book a room and verify it in <em>My bookings</em></li>
             </ul>
             <details class="hints">
               <summary>Hints</summary>
               <ul>
                 <li>Put locators in the constructor and user actions (<code class="inline-code">login(username, password)</code>) in methods. Keep assertions in the test.</li>
-                <li>Export your extended <code class="inline-code">test</code> and <code class="inline-code">expect</code> from one file and import them in every spec.</li>
+                <li>Import <code class="inline-code">test</code> and <code class="inline-code">expect</code> from <code class="inline-code">ui.fixture.ts</code> in every spec.</li>
+                <li>The payment form in the wizard accepts card <code class="inline-code">4242 4242 4242 4242</code> with any future expiry date and any CVC.</li>
               </ul>
             </details>
           </div>
@@ -117,6 +139,7 @@
                 <li>Save the state with <code class="inline-code">page.context().storageState({ path })</code> and load it with <code class="inline-code">use: { storageState }</code> in the project.</li>
                 <li>Add <code class="inline-code">playwright/.auth</code> to <code class="inline-code">.gitignore</code>.</li>
                 <li>Start logged out in one file: <code class="inline-code">test.use({ storageState: { cookies: [], origins: [] } })</code>.</li>
+                <li>Bonus: open a page first, then <code class="inline-code">page.localStorage.setItem('booker.token', token)</code>.</li>
               </ul>
             </details>
           </div>
@@ -140,8 +163,9 @@
               <summary>Hints</summary>
               <ul>
                 <li>Mock with <code class="inline-code">page.route()</code> and <code class="inline-code">route.fulfill({ status, json })</code>. Register the route before the request happens.</li>
-                <li>Patch a real response: <code class="inline-code">const response = await route.fetch()</code>, then <code class="inline-code">route.fulfill({ response, json })</code>.</li>
+                <li>Patch a real response: <code class="inline-code">const response = await route.fetch()</code>, then <code class="inline-code">route.fulfill({ response, json })</code>. Copy a real room and change its number, so every field is there.</li>
                 <li>Use the <code class="inline-code">request</code> fixture for API calls. The API docs are at <a href="http://localhost:3000/api-docs" target="_blank" rel="noreferrer"><code class="inline-code">/api-docs</code></a>.</li>
+                <li>Run your hybrid test twice. A 409 the second time? The dates are still booked: clean up, or let a fixture do it.</li>
               </ul>
             </details>
           </div>
@@ -149,7 +173,51 @@
         <li>
           <div class="step-meta" data-label="05" aria-hidden="true"></div>
           <div class="step-content">
-            <h3>Assignment 5 · Time, contexts &amp; environment</h3>
+            <h3>Assignment 5 · Flaky-test clinic</h3>
+            <p class="step-note">The trainer switches on chaos mode: slow rooms, flaky bookings, random order and a cookie pop-up.</p>
+            <ul class="tasks">
+              <li>Make your suite green again</li>
+              <li>Without <code class="inline-code">waitForTimeout</code> and without adding retries</li>
+              <li>Use what you learned: traces, web-first assertions, locators by name, <code class="inline-code">addLocatorHandler</code>, <code class="inline-code">toPass</code></li>
+            </ul>
+            <p class="step-note">Practising on your own? Add a <code class="inline-code">chaos</code> project to <code class="inline-code">playwright.config.ts</code> and run <code class="inline-code">npx playwright test --project chaos</code>:</p>
+            <div class="command code-block">
+              <pre><code>{
+  name: 'chaos',
+  use: {
+    extraHTTPHeaders: {
+      'x-booker-flags': 'slow-rooms,flaky-booking,random-order,popup-cookie',
+    },
+  },
+}</code></pre>
+              <button class="copy" type="button" data-copy="{&#10;  name: 'chaos',&#10;  use: {&#10;    extraHTTPHeaders: {&#10;      'x-booker-flags': 'slow-rooms,flaky-booking,random-order,popup-cookie',&#10;    },&#10;  },&#10;}">Copy</button>
+            </div>
+            <details class="hints">
+              <summary>Hints</summary>
+              <ul>
+                <li>Open a trace of a failing test first. What did the page look like?</li>
+                <li><code class="inline-code">page.addLocatorHandler()</code> clicks the cookie pop-up ("We value your privacy") away whenever it shows up.</li>
+                <li>Random order: find rooms by name, not by position.</li>
+                <li>Flaky bookings fail before the booking is saved, so it's safe to retry just that step with <code class="inline-code">expect(...).toPass()</code>.</li>
+              </ul>
+            </details>
+          </div>
+        </li>
+      </ol>
+    </section>
+
+    <section class="guide" aria-labelledby="ui-further-title">
+      <header class="section-header">
+        <p class="kicker">Assignments · UI · Going further</p>
+        <h2 id="ui-further-title">After the workshop.</h2>
+        <p class="section-intro">Self-study: one assignment per topic in the <em>Going further</em> part of the UI slides.</p>
+      </header>
+
+      <ol aria-label="UI assignments, going further">
+        <li>
+          <div class="step-meta" data-label="06" aria-hidden="true"></div>
+          <div class="step-content">
+            <h3>Assignment 6 · Time, contexts &amp; environment</h3>
             <p class="step-note">Pick one (or more):</p>
             <ul class="tasks">
               <li>Cancel a booking (confirm dialog) and download its invoice; check the file name and content</li>
@@ -166,7 +234,7 @@
                 <li>Contexts: <code class="inline-code">browser.newContext({ storageState: 'playwright/.auth/admin.json' })</code> gives you a second user in the same test.</li>
                 <li>Clock: use <code class="inline-code">page.clock.setFixedTime()</code>. With <code class="inline-code">install()</code> plus <code class="inline-code">pauseAt()</code> the app's timers stop too, and the page keeps loading.</li>
                 <li>Mobile: combine <code class="inline-code">devices['Pixel 7']</code> with <code class="inline-code">locale</code> and <code class="inline-code">colorScheme</code>.</li>
-                <li>Upload with <code class="inline-code">setInputFiles()</code> (a buffer works too); drag with <code class="inline-code">locator.dragTo()</code>.</li>
+                <li>Upload with <code class="inline-code">setInputFiles()</code>; <code class="inline-code">playwright/fixtures/avatar.png</code> is a test image. Drag with <code class="inline-code">locator.dragTo()</code>.</li>
                 <li>New tab: <code class="inline-code">context.waitForEvent('page')</code>. The payment form is in an open shadow root, so ordinary locators reach it.</li>
                 <li>Test card <code class="inline-code">4242 4242 4242 4242</code> (any future date and CVC) is accepted; <code class="inline-code">4000 0000 0000 0002</code> is declined.</li>
               </ul>
@@ -174,13 +242,14 @@
           </div>
         </li>
         <li>
-          <div class="step-meta" data-label="06" aria-hidden="true"></div>
+          <div class="step-meta" data-label="07" aria-hidden="true"></div>
           <div class="step-content">
-            <h3>Assignment 6 · Visual regression</h3>
+            <h3>Assignment 7 · Visual regression</h3>
             <ul class="tasks">
               <li>Take a screenshot of the home page; run the test twice. Does it pass?</li>
               <li>Mask the "deal of the day" banner and update the baseline</li>
               <li>Then hide the banner with <code class="inline-code">stylePath</code> instead. Which do you prefer?</li>
+              <li>Now open the page with <code class="inline-code">?test=1</code> (test mode). Do you still need either?</li>
               <li class="bonus">Bonus: switch the snapshot to WebP and compare the file size</li>
             </ul>
             <details class="hints">
@@ -194,9 +263,9 @@
           </div>
         </li>
         <li>
-          <div class="step-meta" data-label="07" aria-hidden="true"></div>
+          <div class="step-meta" data-label="08" aria-hidden="true"></div>
           <div class="step-content">
-            <h3>Assignment 7 · Accessibility</h3>
+            <h3>Assignment 8 · Accessibility</h3>
             <ul class="tasks">
               <li>Run an axe scan on each step of the booking wizard. How many violations?</li>
               <li>Attach the results to the report with <code class="inline-code">testInfo.attach()</code></li>
@@ -212,9 +281,9 @@
           </div>
         </li>
         <li>
-          <div class="step-meta" data-label="08" aria-hidden="true"></div>
+          <div class="step-meta" data-label="09" aria-hidden="true"></div>
           <div class="step-content">
-            <h3>Assignment 8 · Continuous integration</h3>
+            <h3>Assignment 9 · Continuous integration</h3>
             <ul class="tasks">
               <li>Fork booker-platform and add a GitHub Actions workflow that runs your UI tests</li>
               <li>Upload the HTML report as an artifact; download it and open a trace</li>
@@ -231,9 +300,9 @@
           </div>
         </li>
         <li>
-          <div class="step-meta" data-label="09" aria-hidden="true"></div>
+          <div class="step-meta" data-label="10" aria-hidden="true"></div>
           <div class="step-content">
-            <h3>Assignment 9 · AI-assisted testing (optional)</h3>
+            <h3>Assignment 10 · AI-assisted testing (optional)</h3>
             <ul class="tasks">
               <li>Run <code class="inline-code">npx playwright init-agents</code> in booker-platform</li>
               <li>Let the planner write a plan for "cancel a booking", then generate the test</li>
@@ -246,39 +315,6 @@
                 <li>Does it use role-based locators?</li>
                 <li>Is the test data isolated?</li>
                 <li>No <code class="inline-code">waitForTimeout</code>?</li>
-              </ul>
-            </details>
-          </div>
-        </li>
-        <li>
-          <div class="step-meta" data-label="10" aria-hidden="true"></div>
-          <div class="step-content">
-            <h3>Assignment 10 · Flaky-test clinic</h3>
-            <p class="step-note">The trainer switches on chaos mode: slow rooms, flaky bookings, random order and a cookie pop-up.</p>
-            <ul class="tasks">
-              <li>Make the suite green again</li>
-              <li>Without <code class="inline-code">waitForTimeout</code> and without adding retries</li>
-              <li>Use what you learned today: traces, web-first assertions, mocking, <code class="inline-code">addLocatorHandler</code></li>
-            </ul>
-            <p class="step-note">Practising on your own? Add a <code class="inline-code">chaos</code> project to <code class="inline-code">playwright.config.ts</code>:</p>
-            <div class="command code-block">
-              <pre><code>{
-  name: 'chaos',
-  use: {
-    extraHTTPHeaders: {
-      'x-booker-flags': 'slow-rooms,flaky-booking,random-order,popup-cookie',
-    },
-  },
-}</code></pre>
-              <button class="copy" type="button" data-copy="{&#10;  name: 'chaos',&#10;  use: {&#10;    extraHTTPHeaders: {&#10;      'x-booker-flags': 'slow-rooms,flaky-booking,random-order,popup-cookie',&#10;    },&#10;  },&#10;}">Copy</button>
-            </div>
-            <details class="hints">
-              <summary>Hints</summary>
-              <ul>
-                <li>Open a trace of a failing test first. What did the page look like?</li>
-                <li><code class="inline-code">page.addLocatorHandler()</code> clicks the cookie pop-up away whenever it shows up.</li>
-                <li>Random order: find rooms by name, not by position.</li>
-                <li>Flaky bookings fail before the booking is saved, so it's safe to retry just that step with <code class="inline-code">expect(...).toPass()</code>.</li>
               </ul>
             </details>
           </div>

@@ -34,6 +34,9 @@ a:hover { color: var(--tn-fg-bright); text-decoration-color: currentColor; }
   backdrop-filter: blur(12px);
 }
 
+/* Anchor targets (section headings) stay clear of the fixed top bar, kicker included */
+[id] { scroll-margin-top: 104px; }
+
 .page-menu {
   display: flex;
   width: min(100% - 48px, 1080px);
@@ -550,6 +553,7 @@ button:focus-visible,
   .step-content { width: 100%; padding: 0; }
   .section-header { padding-top: 56px; }
   .site-footer { padding-bottom: 140px; background-size: auto, auto 200px, auto; }
+  [id] { scroll-margin-top: 136px; }
 }
 
 @media (max-width: 460px) {

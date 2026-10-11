@@ -4,33 +4,38 @@ Slides for the Playwright trainings by Ghislain Gabriëlse ([DeTesters](https://
 
 | Deck | File | Live | Test object |
 | --- | --- | --- | --- |
-| Playwright UI workshop | [`ui.md`](ui.md) | [ghislain.dev/playwright/slides/ui/](https://ghislain.dev/playwright/slides/ui/) | [booker-platform](https://github.com/Ghislain89/booker-platform) web UI |
+| Playwright UI workshop (two evenings) | [`ui.md`](ui.md) | [ghislain.dev/playwright/slides/ui/](https://ghislain.dev/playwright/slides/ui/) | [booker-platform](https://github.com/Ghislain89/booker-platform) web UI |
 | API testing with Playwright | [`api.md`](api.md) | [ghislain.dev/playwright/slides/api/](https://ghislain.dev/playwright/slides/api/) | [booker-platform](https://github.com/Ghislain89/booker-platform) API |
 
 Preparation, assignments and an overview of the decks: [ghislain.dev/playwright/](https://ghislain.dev/playwright/).
 
 > Part of the [ghislain.dev](../../README.md) repository. These decks replace the archived (private) repos `PlaywrightWorkshopPresentation` (reveal.js) and `playwright-api-testing`.
 
-Both decks are up to date with **Playwright 1.64**. New features are marked with the version that introduced them, for example `(1.63)`.
+Both decks are up to date with **Playwright 1.64**. The API deck marks new features with the version that introduced them, for example `(1.63)`; the UI deck keeps those versions in the speaker notes, so the slides stay readable for beginners.
+
+The code examples in `ui.md` run against booker-platform in [`playwright/tests/slides/ui-deck.spec.ts`](https://github.com/Ghislain89/booker-platform/blob/main/playwright/tests/slides/ui-deck.spec.ts), one test per slide, and its CI runs them. Change an example? Change its test too.
 
 ## Deck outline
 
-**UI workshop (`ui.md`)**
+**UI workshop (`ui.md`)**: two evenings of about three hours, then *Going further* for self-study.
 
-| # | Module | Assignment |
-| --- | --- | --- |
-| 1 | Why Playwright | — |
-| 2 | Your first test (anatomy, config, running, codegen, linting) | — |
-| 3 | Locators, actions & assertions | 1A |
-| 4 | Debug & report (UI mode, traces, HTML report, parallelism, flaky tests) | 1B |
-| 5 | Page objects & fixtures | 2 |
-| 6 | Authentication (setup projects, storage state) | 3 |
-| 7 | Network & API (wait, mock, modify, seed via API) | 4 |
-| 8 | Time, contexts & environment (clock, contexts, emulation, dialogs, frames) | 5 |
-| 9 | Visual & accessibility | 6, 7 |
-| 10 | Continuous integration | 8 |
-| 11 | AI-assisted testing (copy prompt, MCP, test agents) | 9 (optional) |
-| 12 | Wrap-up: flaky-test clinic | 10 |
+| When | # | Module | Assignment |
+| --- | --- | --- | --- |
+| Evening 1 | 1 | Why Playwright | — |
+| | 2 | Your first test (anatomy, config, running, codegen, linting) | — |
+| | 3 | Locators, strict mode, actions & assertions | 1A |
+| | 4 | Debug & report (UI mode, traces, HTML report, parallelism and test data) | 1B |
+| Evening 2 | 5 | Page objects & fixtures | 2 |
+| | 6 | Authentication (setup projects, storage state, log in via the API) | 3 |
+| | 7 | Network & API (wait, mock, modify, seed via API) | 4 |
+| | 8 | Flaky-test clinic (hunting flaky tests, `addLocatorHandler`, `toPass`, test hooks) | 5 |
+| | 9 | Running in CI, what's next | — |
+| Going further | 10 | Time, contexts & environment (clock, contexts, emulation, dialogs, downloads, frames, shadow DOM) | 6 |
+| | 11 | Visual regression | 7 |
+| | 12 | Accessibility (axe, aria snapshots) | 8 |
+| | 13 | CI in depth (GitHub Actions, sharding) | 9 |
+| | 14 | AI-assisted testing (copy prompt, MCP, test agents) | 10 (optional) |
+| | 15 | More Playwright (locator tricks, custom assertions, network and runner extras) | — |
 
 The UI assignment numbers match §8 of the booker-platform frontend spec.
 

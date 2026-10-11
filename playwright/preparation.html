@@ -107,10 +107,10 @@
             </div>
             <div class="command">
               <span class="prompt" aria-hidden="true">$</span>
-              <pre><code>npx playwright install</code></pre>
-              <button class="copy" type="button" data-copy="npx playwright install">Copy</button>
+              <pre><code>npx playwright install chromium</code></pre>
+              <button class="copy" type="button" data-copy="npx playwright install chromium">Copy</button>
             </div>
-            <p class="step-note">The first command installs the project, the second downloads the browsers Playwright uses (Chromium, Firefox and WebKit). This may take a few minutes. Check that <code class="inline-code">npx playwright --version</code> prints 1.64 or newer.</p>
+            <p class="step-note">The first command installs the project, the second downloads Chromium, the browser we use in the workshop. This may take a few minutes. Want Firefox and WebKit too? Run <code class="inline-code">npx playwright install</code>. Check that <code class="inline-code">npx playwright --version</code> prints 1.64 or newer.</p>
           </div>
         </li>
         <li>
@@ -128,6 +128,7 @@
               <button class="copy" type="button" data-copy="npm run dev">Copy</button>
             </div>
             <p class="step-note"><code class="inline-code">npm run setup</code> creates and seeds a local database; run it again whenever you want a clean slate. Then open <a href="http://localhost:3000" target="_blank" rel="noreferrer"><code class="inline-code">http://localhost:3000</code></a>. You should see the Booker Hotel home page; the API docs are at <a href="http://localhost:3000/api-docs" target="_blank" rel="noreferrer"><code class="inline-code">/api-docs</code></a>. You can log in with <code class="inline-code">user</code> / <code class="inline-code">password123</code>.</p>
+            <p class="step-note">The app won't start on your laptop? It also runs in Docker: <code class="inline-code">docker build -t booker . &amp;&amp; docker run --rm -p 3000:3000 booker</code>. You still need Node.js for Playwright itself. See the <a href="https://github.com/Ghislain89/booker-platform#docker-optional" target="_blank" rel="noreferrer">README</a>.</p>
           </div>
         </li>
         <li>

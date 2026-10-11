@@ -14,22 +14,45 @@ colorSchema: dark
 
 Ghislain Gabriëlse & Jurgen De Reu
 
-[playwright.dev](https://playwright.dev)
-
----
-hideInToc: true
-layout: full
----
-
-# Agenda
-
-<Toc text-sm minDepth="1" maxDepth="1" columns="2" />
+Two evenings · [playwright.dev](https://playwright.dev)
 
 ---
 hideInToc: true
 ---
 
-## Today's test object: booker-platform
+## Agenda
+
+<div class="grid grid-cols-2 gap-10">
+<div>
+
+### Evening 1: your first stable tests
+
+- Why Playwright
+- Your first test
+- Locators, actions & assertions → **1A**
+- Debug & report → **1B**
+
+</div>
+<div>
+
+### Evening 2: scale up your suite
+
+- Page objects & fixtures → **2**
+- Authentication → **3**
+- Network & API → **4**
+- Flaky-test clinic → **5**
+- CI and what's next
+
+</div>
+</div>
+
+*Going further* is at the end of the deck: time and contexts, visual and accessibility testing, CI in depth and AI. Assignments 6–10 are for after the workshop.
+
+---
+hideInToc: true
+---
+
+## Our test object: booker-platform
 
 A hotel booking app with a web UI, a REST API and Swagger docs, all on `http://localhost:3000`.
 
@@ -37,13 +60,14 @@ A hotel booking app with a web UI, a REST API and Swagger docs, all on `http://l
 git clone https://github.com/Ghislain89/booker-platform
 cd booker-platform
 npm install
-npx playwright install
+npx playwright install chromium
 npm run setup     # reset the database + seed data
 npm run dev       # UI, /api and /api-docs on port 3000
 ```
 
 - Seed users: `user` / `password123` and `admin` / `password123`
 - Something broken? `npm run setup` gives you a clean database
+- Built for testing: a seed API, a test mode and chaos flags. More on these in evening 2.
 
 ---
 hideInToc: true
@@ -56,9 +80,17 @@ hideInToc: true
 - booker-platform runs on http://localhost:3000
 - Went through the [preparation page](https://ghislain.dev/playwright/preparation.html)?
 
-> Something not working? Tell us now, not after the first assignment.
+> Something not working? Tell us now, not after the first assignment. The app won't start? booker-platform also runs in Docker: see its README.
 
 All assignments, with hints, are also on [ghislain.dev/playwright/assignments.html](https://ghislain.dev/playwright/assignments.html).
+
+---
+layout: new-section
+---
+
+# Evening 1: your first stable tests
+
+From a first recorded test to tests that pass every time
 
 ---
 layout: new-section
@@ -73,17 +105,13 @@ layout: new-section
 - Open-source framework (Microsoft) for end-to-end testing of web apps
 - Chromium (Chrome, Edge), Firefox and WebKit (Safari) on Windows, Linux and macOS
 - TypeScript / JavaScript, Python, .NET and Java
-- Mobile emulation: Chrome for Android and Mobile Safari
 - Comes with its own test runner: `@playwright/test`
+- No WebDriver: Playwright talks to each browser over its own protocol. The browsers are pinned per Playwright version: `npx playwright install`
 
----
-
-## How Playwright drives browsers
-
-- No WebDriver: Playwright talks to each browser over its own protocol (Chrome DevTools Protocol for Chromium, patched builds of Firefox and WebKit)
-- Browsers are downloaded and pinned per Playwright version: `npx playwright install`
-- Since 1.57 Chromium runs on **Chrome for Testing** builds; use `channel: 'chrome'` or `'msedge'` for branded browsers
-- Fine-grained control: network interception, multiple contexts, emulation, clock
+<!--
+Chromium runs on Chrome for Testing builds since 1.57. Use channel: 'chrome' or 'msedge' for the branded browsers.
+Mobile emulation: Chrome for Android and Mobile Safari (see Going further).
+-->
 
 ---
 
@@ -92,9 +120,9 @@ layout: new-section
 - **Auto-waiting**: actionability checks before every action
 - **Web-first assertions** retry until the condition is met
 - **Isolation**: every test gets a fresh browser context, in milliseconds
-- **Built in**: parallelism, sharding, retries, reporters, API testing
+- **Built in**: parallelism, retries, reporters, API testing, mobile emulation
 - **Tooling**: VS Code extension, codegen, UI mode, trace viewer
-- **AI tooling**: test agents, MCP server and CLI (more at the end of the day)
+- **AI tooling**: MCP server, CLI and test agents (see *Going further*)
 
 ---
 layout: new-section
@@ -138,7 +166,7 @@ layout: two-cols
 - `baseURL`: write `page.goto('/rooms')`
 - `webServer`: Playwright starts the app for you
 - `projects`: browsers, devices or setups
-- `default: false` (1.64): only runs with `--project webkit`
+- `default: false`: only runs with `--project webkit`
 - `retries`, `reporter`, `trace`: more on these later
 
 ::right::
@@ -167,6 +195,10 @@ export default defineConfig({
   ],
 });
 ```
+
+<!--
+default: false on a project: since 1.64.
+-->
 
 ---
 
@@ -197,13 +229,17 @@ layout: two-cols
 
 - `npx playwright codegen localhost:3000` or **Record new** in VS Code
 - Records locators and actions while you click
-- Toolbar adds assertions (visibility, text, value); since 1.55 it can add `toBeVisible()` automatically
+- The toolbar adds assertions: visibility, text, value
 - **Pick locator** shows the best locator for any element
 - A starting point, not the end result: clean it up and add meaningful assertions
 
 ::right::
 
 ![Codegen](/images/codegen.png)
+
+<!--
+Since 1.55 codegen can add toBeVisible() assertions automatically.
+-->
 
 ---
 
@@ -217,10 +253,10 @@ layout: two-cols
 
 ```ts
 // ❌ missing await: the test finishes before this assertion runs
-expect(page.getByText('Welcome')).toBeVisible();
+expect(page.getByText('No bookings yet')).toBeVisible();
 
 // ✅
-await expect(page.getByText('Welcome')).toBeVisible();
+await expect(page.getByText('No bookings yet')).toBeVisible();
 ```
 
 - A missing `await` is the #1 beginner bug
@@ -238,14 +274,36 @@ layout: new-section
 
 ## Locators: find elements like a user would
 
-1. `page.getByRole('button', { name: 'Book now' })`
+1. `page.getByRole('button', { name: 'Log in' })`
 2. `page.getByLabel('Check-in date')`
-3. `page.getByPlaceholder('Search')`, `page.getByText('No bookings yet')`
-4. `page.getByAltText('Room 101')`, `page.getByTitle('Close')`
-5. `page.getByTestId('booking-row')`
+3. `page.getByText('No bookings yet')`, `page.getByPlaceholder('Search rooms')`
+4. `page.getByAltText('Photo 1 of 3 of room 101')`, `page.getByTitle('Map showing the hotel location')`
+5. `page.getByTestId('total-price')`
 6. CSS or XPath: last resort
 
 Locators are **lazy**: they find the element again every time you use them, so they never go stale. (The old `ElementHandle` API, `page.$()`, is discouraged.)
+
+---
+
+## Strict mode: one locator, one element
+
+```ts
+// the register page has "Password" and "Confirm password"
+await page.getByLabel('Password').fill('secret123');
+// Error: strict mode violation: getByLabel('Password') resolved to 2 elements
+```
+
+Names match **case-insensitively** and as a **substring**. Make the locator more specific:
+
+```ts
+page.getByLabel('Password', { exact: true });                // the exact name
+page.getByRole('main').getByRole('link', { name: 'Terms' }); // scope: the footer has a terms link too
+page.getByRole('article', { name: 'Room 201' })              // scope to one card or row
+  .getByRole('link', { name: 'Book now' });
+```
+
+- Read the error: it lists every element it found, each with a locator that would be unique
+- `.first()` and `.nth(1)` hide the error, but break as soon as the order changes
 
 ---
 
@@ -253,18 +311,19 @@ Locators are **lazy**: they find the element again every time you use them, so t
 
 ```ts
 // chain: search inside another locator
-const card = page.getByRole('article').filter({ hasText: 'Deluxe' });
+const card = page.getByRole('article', { name: 'Room 201' });
 await card.getByRole('link', { name: 'Book now' }).click();
 
-// filter by a child locator or by visibility
-page.getByRole('listitem').filter({ has: page.getByText('Cancelled') });
-page.getByRole('button', { name: 'Menu' }).visible();          // 1.63
+// filter a list by text
+const deluxe = page.getByRole('article').filter({ hasText: 'Deluxe' });
 
-// within: resolve relative locators per parent (1.64)
-const prices = page.getByRole('cell').nth(2).within(page.getByRole('row'));
+// or by a child locator: the bookings you can still cancel
+const cancellable = page
+  .getByRole('row')
+  .filter({ has: page.getByRole('button', { name: 'Cancel booking' }) });
 
-// readable names in traces and reports (1.53)
-page.getByRole('button', { name: 'Confirm' }).describe('Confirm booking');
+// lists: assert the count instead of picking one
+await expect(page.getByRole('article')).toHaveCount(6);
 ```
 
 ---
@@ -272,15 +331,21 @@ page.getByRole('button', { name: 'Confirm' }).describe('Confirm booking');
 ## Actions
 
 ```ts
+// /login
 await page.getByLabel('Username').fill('user');
+await page.getByLabel('Password').fill('password123');
 await page.getByLabel('Remember me').check();
-await page.getByLabel('Room type').selectOption('Suite');
-await page.getByRole('button', { name: 'Next' }).click();
-await page.getByLabel('Search').pressSequentially('Deluxe');
-await page.getByLabel('Search').press('Enter');
-await page.getByText('Account').hover();
-await page.getByRole('row').first().dragTo(page.getByRole('row').last());
-await page.getByLabel('Avatar').setInputFiles('fixtures/avatar.png');
+await page.getByRole('button', { name: 'Log in' }).click();
+
+// /rooms
+await page.getByLabel('Suite').check();
+await page.getByLabel('Sort by').selectOption('Price: low to high');
+await page.getByLabel('Check-in date').fill('2031-05-01');
+await page.getByLabel('Check-in date').press('Tab');
+
+// the header and /my/profile
+await page.getByRole('button', { name: 'Account' }).hover();
+await page.getByLabel('Choose a photo').setInputFiles('playwright/fixtures/avatar.png');
 ```
 
 > Before every action Playwright waits until the element is visible, stable, enabled and able to receive events: the *actionability checks*.
@@ -294,10 +359,10 @@ await page.getByLabel('Avatar').setInputFiles('fixtures/avatar.png');
 
 ```ts
 // 👍 retries until the text is visible
-await expect(page.getByText('Welcome')).toBeVisible();
+await expect(page.getByText('No bookings yet')).toBeVisible();
 
 // 👎 checks once, fails if the page is a bit slow
-expect(await page.getByText('Welcome').isVisible()).toBe(true);
+expect(await page.getByText('No bookings yet').isVisible()).toBe(true);
 ```
 
 Use web-first assertions wherever you can.
@@ -307,41 +372,22 @@ Use web-first assertions wherever you can.
 ## Assertions you'll use most
 
 ```ts
+// /my/bookings
 await expect(page).toHaveURL(/\/my\/bookings/);
-await expect(page).toHaveTitle('Booker');
-await expect(page.getByRole('row')).toHaveCount(3);
-await expect(badge).toHaveText('Confirmed');
-await expect(guests).toHaveValue('2');
-await expect(nextButton).toBeEnabled();
-await expect(tab).toContainClass('active');                    // 1.52
-await expect(button).toHaveAccessibleName('Book Deluxe room');  // 1.44
-await expect(message).toHaveRole('alert');                      // 1.44
-await expect.soft(total).toHaveText('€ 240');      // keeps going on failure
-await expect(heading).toBeVisible({ timeout: 10_000 });
+await expect(page).toHaveTitle('My bookings | Booker');
+await expect(page.getByRole('tab', { name: 'Upcoming' })).toHaveAttribute('aria-selected', 'true');
+
+// the booking wizard, /book/203, two nights
+await expect(page.getByLabel('Adults')).toHaveValue('1');
+await expect(page.getByLabel('Breakfast')).not.toBeChecked();
+await expect(page.getByTestId('total-price')).toHaveText('€ 350');
+await expect(page.getByRole('button', { name: 'Confirm booking' })).toBeDisabled();
+await expect.soft(page.getByRole('heading', { level: 1 })).toHaveText('Book room 203'); // keeps going
+
+// /login, after registering: wait longer than the default 5 s
+await expect(page.getByRole('region', { name: 'Notifications' }))
+  .toContainText('Account created', { timeout: 10_000 });
 ```
-
----
-
-## ARIA snapshots
-
-Assert the structure of the page as assistive technology sees it (1.49):
-
-```ts
-await expect(page.getByRole('navigation', { name: 'Main' })).toMatchAriaSnapshot(`
-  - navigation "Main":
-    - list:
-      - listitem:
-        - link "Rooms"
-      - listitem:
-        - link "My bookings"
-    - button "Log out"
-`);
-```
-
-- Generate them with codegen or the aria view in UI mode and the trace viewer
-- Less brittle than screenshots, more complete than single assertions
-- Partial matching: you can leave out elements ("Signed in as user"), but not levels (the `list`)
-- Update them with `--update-snapshots`
 
 ---
 
@@ -357,18 +403,26 @@ await expect(page.getByRole('navigation', { name: 'Main' })).toMatchAriaSnapshot
 
 ## Assignment 1A
 
-Make sure booker-platform runs (`npm run dev`), then create `playwright/tests/ui/register.spec.ts`:
+Make sure booker-platform runs (`npm run dev`), then create `playwright/tests/ui/register.spec.ts`. Start on the login page (`/login`):
 
-- Register a new user
+- Follow the link to *Register* and register a new user
 - Log in with that user
 - Assert that "No bookings yet" is shown
 
-Record it with codegen or write it yourself. Prefer `getByRole` and `getByLabel`, and add a web-first assertion to every step.
+Write it yourself first, then compare with what codegen records. Prefer `getByRole` and `getByLabel`, and add a web-first assertion to every step.
 
-<div class="flex justify-center gap-5 mt-6">
-  <img src="/programming.png" alt="Programming" width="150">
-  <img src="/exam-time.png" alt="Exam time" width="150">
+> Expect a strict mode violation or two. Read the error before you fix it.
+
+<div class="flex justify-center gap-5 mt-2">
+  <img src="/programming.png" alt="Programming" width="100">
+  <img src="/exam-time.png" alt="Exam time" width="100">
 </div>
+
+<!--
+The two violations are deliberate: getByLabel('Password') on /register also matches "Confirm password", and /login has two "Register" links (header and below the form). Fixes: exact: true, and scoping to main.
+Codegen avoids both, so ask the room what codegen picked and why.
+Registering needs the terms checkbox.
+-->
 
 ---
 layout: new-section
@@ -384,7 +438,6 @@ layout: new-section
 - **Playwright Inspector**: `npx playwright test --debug`, or add `await page.pause()`
 - **UI mode**: `npx playwright test --ui` for watch mode, time travel and pick locator
 - **Trace viewer**: replay a run that already happened, for example on CI
-- **For coding agents**: `npx playwright test --debug=cli` attaches via `playwright-cli` (1.59)
 
 ---
 
@@ -404,13 +457,16 @@ A trace records every action with DOM snapshots, network calls, console logs and
 // playwright.config.ts
 use: {
   trace: 'on-first-retry',
-  // 'on' | 'off' | 'retain-on-failure'
-  // 'retain-on-first-failure' (1.43) | 'retain-on-failure-and-retries' (1.59)
+  // or 'on' | 'off' | 'retain-on-failure' | 'retain-on-first-failure'
 },
 ```
 
 - Open it from the HTML report, with `npx playwright show-trace trace.zip`, or at trace.playwright.dev
-- Since 1.63 every action shows the screenshot side by side with its aria snapshot
+- Every action shows a screenshot next to the aria snapshot of the page
+
+<!--
+retain-on-first-failure: 1.43. retain-on-failure-and-retries: 1.59. Screenshot next to the aria snapshot per action: 1.63.
+-->
 
 ---
 
@@ -441,10 +497,13 @@ Or from the CLI: `npx playwright test --reporter=line`
 ### HTML report
 
 - Tests, steps, errors, screenshots, videos and traces
-- **Copy prompt** on errors: a ready-made prompt for your AI assistant (1.51)
-- **Speedboard** tab: find your slowest tests (1.57)
-- Duration waterfall next to test steps (1.63)
-- `captureGitInfo` adds commit and diff info (1.51)
+- **Copy prompt** on errors: a ready-made prompt for your AI assistant
+- **Speedboard** tab: find your slowest tests
+- A duration waterfall next to the test steps
+
+<!--
+Copy prompt: 1.51. Speedboard: 1.57. Waterfall: 1.63. captureGitInfo (commit and diff in the report): 1.51.
+-->
 
 ---
 
@@ -454,33 +513,21 @@ Or from the CLI: `npx playwright test --reporter=line`
 
 ---
 
-## Parallelism & isolation
+## Parallelism & test data
 
 - Test **files** run in parallel across workers; tests in one file run in order
-- Run tests in a file in parallel too: `fullyParallel: true` or `test.describe.configure({ mode: 'parallel' })`
+- `fullyParallel: true` runs the tests inside a file in parallel too
 - Each test gets a fresh browser context: no shared cookies or storage
-- The real enemy is shared **data**: two workers registering the same user will collide
+- The real enemy is shared **data**: two workers registering the same user collide
+- `--repeat-each 5` runs every test five times: the quickest way to find out
 
 ```ts
-// never runs at the same time as other tests holding the 'branding' lock (1.63)
-test('admin changes the hotel name', { lock: 'branding' }, async ({ page }) => {
-  // ...
-});
+// ❌ the same user in every test: the second registration gets "Username already exists"
+const username = 'alice';
+
+// ✅ unique per test
+const username = `alice-${crypto.randomUUID().slice(0, 8)}`;
 ```
-
----
-
-## Hunting flaky tests
-
-```bash
-npx playwright test --repeat-each 10       # run every test 10 times
-npx playwright test --shuffle              # random order; --shuffle <seed> repeats it (1.64)
-npx playwright test --last-failed          # rerun only the failures (1.44)
-npx playwright test --only-changed=main    # test files changed since main (1.46)
-npx playwright test --fail-on-flaky-tests  # passed on retry = failed (1.45)
-```
-
-A flaky test is a test that tells you something. Open the trace before you add a retry.
 
 ---
 
@@ -489,13 +536,44 @@ A flaky test is a test that tells you something. Open the trace before you add a
 - Configure the HTML reporter and set `trace: 'on'`
 - Duplicate your test from 1A a few times and enable `fullyParallel`
 - Run with `--repeat-each 5`. What breaks, and why?
-- Fix it with unique test data per test (for example `faker` or `Date.now()`)
+- Fix it with unique test data per test, for example `createRandomUser()` from `playwright/support/datafactories`
 - Open the report and a trace: which step is the slowest?
 
 <div class="flex justify-center gap-5 mt-6">
   <img src="/programming.png" alt="Programming" width="150">
   <img src="/exam-time.png" alt="Exam time" width="150">
 </div>
+
+---
+
+## Evening 1: recap
+
+- Locate by role and label; `exact: true` or scoping when a locator matches more than one element
+- Web-first assertions wait for you; `isVisible()` doesn't
+- UI mode and the trace viewer show what really happened
+- Every test brings its own data
+
+**Before evening 2**: finish 1A and 1B, and run `git pull` in booker-platform.
+
+Next time: page objects, fixtures, authentication, the network and a flaky-test clinic.
+
+---
+layout: new-section
+---
+
+# Evening 2: scale up your suite
+
+Page objects, fixtures, a shared login, the network and a flaky-test clinic
+
+---
+
+## Welcome back
+
+- `git pull` in booker-platform: it has starter files for assignment 2
+- `npm run setup` for a clean database
+- Questions about 1A and 1B?
+
+Tonight we turn a few tests into a suite: reusable page objects and fixtures, a shared login, control over the network, and a suite that stays green when the app misbehaves.
 
 ---
 layout: new-section
@@ -514,6 +592,7 @@ layout: two-cols
 - Locators live in one place; tests read like scenarios
 - Keep assertions mostly in the tests
 - *KISS*: no deep inheritance trees
+- Starters in booker-platform: `playwright/support/pages/`
 
 ::right::
 
@@ -547,6 +626,7 @@ export class LoginPage {
 - Create your own with `test.extend`: page objects, test data, logged-in users, API clients
 - Lazy: only set up when a test asks for it
 - Scoped per test (default) or per worker
+- booker-platform has a test-support API, `/api/testing/seed`: unique data per test, removed afterwards. Ask your developers for one.
 
 ---
 layout: two-cols
@@ -586,23 +666,30 @@ test('wrong password', async ({ loginPage }) => {
 ```
 
 ---
+class: dense
+---
 
 ## Defining fixtures
 
 ```ts
-// playwright/support/fixtures.ts
+// playwright/support/fixtures/ui.fixture.ts
 import { test as base } from '@playwright/test';
+import { LoginPage } from '../pages/LoginPage';
 
-type Fixtures = { loginPage: LoginPage; newUser: User };
+type Fixtures = { loginPage: LoginPage; guest: { username: string; password: string } };
 
 export const test = base.extend<Fixtures>({
   loginPage: async ({ page }, use) => {
     await use(new LoginPage(page));
   },
-  newUser: async ({ request }, use) => {
-    const user = await registerRandomUser(request); // setup
-    await use(user);                                // the test runs here
-    // teardown: clean up after the test
+  guest: async ({ request }, use) => {
+    const namespace = `t_${crypto.randomUUID().slice(0, 8)}`;
+    const response = await request.post('/api/testing/seed', {   // setup
+      data: { namespace, users: [{ username: 'guest' }] },
+    });
+    const { user, password } = (await response.json()).data.users[0];
+    await use({ username: user.username, password });             // the test runs here
+    await request.delete(`/api/testing/namespace/${namespace}`); // teardown
   },
 });
 export { expect } from '@playwright/test';
@@ -610,35 +697,11 @@ export { expect } from '@playwright/test';
 
 ---
 
-## Custom assertions
-
-```ts
-import { expect as baseExpect, type Locator } from '@playwright/test';
-
-export const expect = baseExpect.extend({
-  async toHaveBookingStatus(row: Locator, status: string) {
-    let pass = true;
-    try {
-      await baseExpect(row.getByTestId('status-badge')).toHaveText(status);
-    } catch {
-      pass = false;
-    }
-    return { pass, name: 'toHaveBookingStatus', message: () => `expected status "${status}"` };
-  },
-});
-
-await expect(page.getByRole('row', { name: /Deluxe/ })).toHaveBookingStatus('Confirmed');
-```
-
-Combine several fixture files with `mergeTests()` and `mergeExpects()`.
-
----
-
 ## Assignment 2
 
-- Create `LoginPage` and `RegisterPage` page objects
+- Finish the starter page objects in `playwright/support/pages/`: `LoginPage` and `RegisterPage`
 - Refactor your test from 1A to use them
-- Expose the page objects as fixtures with `test.extend`
+- Expose them as fixtures in `playwright/support/fixtures/ui.fixture.ts`
 - Bonus: add a `BookingWizard` page object, book a room and verify it in *My bookings*
 
 <div class="flex justify-center gap-5 mt-6">
@@ -707,21 +770,28 @@ Override per file: `test.use({ storageState: 'playwright/.auth/admin.json' })`. 
 
 ---
 
-## Working with storage directly
+## Log in via the API
+
+Faster still: skip the login form and put the token where the app expects it.
 
 ```ts
-// read and write localStorage of the current origin (1.61)
-await page.localStorage.setItem('booker.token', token);
-const stored = await page.localStorage.getItem('booker.token');
+setup('authenticate as user via the API', async ({ page, request }) => {
+  const response = await request.post('/api/auth/login', {
+    data: { username: 'user', password: 'password123' },
+  });
+  const { token } = (await response.json()).data;
 
-// swap the complete state of an existing context (1.59)
-await context.setStorageState('playwright/.auth/admin.json');
-
-// include IndexedDB in the saved state (1.51)
-await context.storageState({ path: userFile, indexedDB: true });
+  await page.goto('/');
+  await page.localStorage.setItem('booker.token', token);
+  await page.context().storageState({ path: userFile });
+});
 ```
 
-Fastest setup of all: log in via the API, then store the token. No login form needed.
+Keep one test that logs in through the form: that's a feature too.
+
+<!--
+page.localStorage: since 1.61. Before that: page.evaluate((t) => localStorage.setItem('booker.token', t), token).
+-->
 
 ---
 
@@ -773,7 +843,7 @@ await page.route('**/api/bookings', async (route) => {
   });
 });
 
-await bookingWizard.confirm();
+await bookingWizard.book({ checkIn: '2031-05-01', checkOut: '2031-05-03' }); // your page object
 await expect(page.getByRole('alert')).toHaveText('Room not available');
 ```
 
@@ -786,26 +856,20 @@ await expect(page.getByRole('alert')).toHaveText('Room not available');
 
 ```ts
 await page.route('**/api/public/rooms*', async (route) => {
-  const response = await route.fetch();      // the real request
+  const response = await route.fetch();              // the real request
   const json = await response.json();
-  json.data.push({ id: 999, number: '999', type: 'SUITE', price: 1, capacity: 2 });
-  await route.fulfill({ response, json });   // the real response, patched body
+  json.data.unshift({ ...json.data[0], id: 'fake-room', number: '999', price: 1 });
+  await route.fulfill({ response, json });           // the real response, patched body
 });
 
 await page.goto('/rooms');
-await expect(page.getByText('Room 999')).toBeVisible();
+await expect(page.getByRole('article', { name: 'Room 999' })).toContainText('€ 1');
 ```
 
+Copying a real room keeps every field the page needs.
+
 ---
-
-## More network tools
-
-- **HAR**: record and replay traffic with `page.routeFromHAR('booker.har', { update: true })`
-- **WebSockets**: intercept and mock with `page.routeWebSocket()` (1.48)
-- **Block resources**: `page.route('**/*.{png,jpg}', (route) => route.abort())`
-- **Context-wide**: `context.route()` applies to every page, popups included
-- **Service workers** can hide requests from `page.route`: set `serviceWorkers: 'block'`
-
+class: dense
 ---
 
 ## Seed data via the API
@@ -817,20 +881,27 @@ test('a booking shows up in My bookings', async ({ page, request }) => {
   const login = await request.post('/api/auth/login', {
     data: { username: 'user', password: 'password123' },
   });
-  const { data } = await login.json();
+  const headers = { Authorization: `Bearer ${(await login.json()).data.token}` };
+  const room = (await (await request.get('/api/public/rooms/203')).json()).data;
 
-  const booking = await request.post('/api/bookings', {
-    headers: { Authorization: `Bearer ${data.token}` },
-    data: { roomId, checkIn: '2030-06-01T00:00:00.000Z', checkOut: '2030-06-03T00:00:00.000Z' },
+  const response = await request.post('/api/bookings', {
+    headers,
+    data: { roomId: room.id, checkIn: '2030-06-01', checkOut: '2030-06-03' },
   });
-  await expect(booking).toBeOK();
+  await expect(response).toBeOK();
+  const booking = (await response.json()).data;
 
-  await page.goto('/my/bookings');
+  await page.goto('/my/bookings'); // logged in as user (storage state)
   await expect(page.getByRole('row', { name: /June 1, 2030/ })).toBeVisible();
+
+  await request.delete(`/api/bookings/${booking.id}`, { headers }); // clean up: free the dates
 });
 ```
 
-Or the other way round: act in the UI, verify through the API.
+<!--
+Or the other way round: act in the UI, verify through the API (assignment 4).
+Run it twice without the clean-up: the second run gets a 409. A fixture can clean up even when the test fails (assignment 4 bonus).
+-->
 
 ---
 
@@ -851,6 +922,175 @@ Or the other way round: act in the UI, verify through the API.
 layout: new-section
 ---
 
+# Flaky-test clinic
+
+---
+
+## Hunting flaky tests
+
+```bash
+npx playwright test --repeat-each 10       # run every test 10 times
+npx playwright test --last-failed          # rerun only the failures
+npx playwright test --fail-on-flaky-tests  # passed on retry = failed
+```
+
+A flaky test is a test that tells you something. Open the trace before you add a retry.
+
+Usual suspects: shared data, fixed waits, `nth()` on a list that changes order, overlays, a slow or unreliable backend.
+
+<!--
+--last-failed: 1.44. --fail-on-flaky-tests: 1.45. --shuffle [seed] and --only-changed: see Going further.
+-->
+
+---
+
+## Tools for unstable pages
+
+```ts
+// an overlay that may or may not show up
+await page.addLocatorHandler(
+  page.getByRole('dialog', { name: 'We value your privacy' }),
+  async (dialog) => {
+    await dialog.getByRole('button', { name: 'Accept all' }).click();
+  },
+);
+
+// retry one step, and only where a real user would retry too
+await expect(async () => {
+  await page.getByRole('button', { name: 'Confirm booking' }).click();
+  await expect(page).toHaveURL(/\/my\/bookings$/, { timeout: 5_000 });
+}).toPass({ timeout: 30_000 });
+```
+
+Find list items by name, not by position: `getByRole('article', { name: 'Room 201' })`, not `getByRole('article').nth(3)`.
+
+<!--
+addLocatorHandler: since 1.42.
+-->
+
+---
+
+## Ask for testability
+
+booker-platform has test hooks. Your app can have them too: ask your developers.
+
+- `?test=1`: test mode. No animations, the same "deal of the day" every time, notifications stay open
+- `POST /api/testing/reset` and `/seed`: known data, unique per test
+- `x-booker-flags`: switch on chaos or bugs for one test or project
+
+```ts
+{
+  name: 'chaos',
+  use: {
+    extraHTTPHeaders: {
+      'x-booker-flags': 'slow-rooms,flaky-booking,random-order,popup-cookie',
+    },
+  },
+}
+```
+
+---
+
+## Assignment 5: flaky-test clinic
+
+The trainer switches on chaos mode: slow rooms, flaky bookings, random order and a cookie pop-up.
+
+- Make your suite green again
+- Without `waitForTimeout` and without adding retries
+- Use what you learned: traces, web-first assertions, locators by name, `addLocatorHandler`, `toPass`
+
+Practising on your own? Add the `chaos` project from the previous slide and run `npx playwright test --project chaos`.
+
+<!--
+The trainer switches flags on for everyone at /__trainer (admin only); participants can also use the x-booker-flags header (see the README for the full list of flags).
+Expected fixes: addLocatorHandler for the "We value your privacy" dialog, find rooms by name instead of position, rely on web-first assertions for slow-rooms, and use expect(...).toPass() only around the confirm step (flaky-booking fails before the booking is saved).
+Reference solution: assignment5.chaos.spec.ts on the solutions branch.
+-->
+
+---
+layout: two-cols
+---
+
+## Running in CI
+
+```yaml
+name: Playwright Tests
+on: [push, pull_request]
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-node@v6
+        with: { node-version: lts/* }
+      - run: npm ci
+      - run: npx playwright install --with-deps
+      - run: npx playwright test
+      - uses: actions/upload-artifact@v5
+        if: ${{ !cancelled() }}
+        with: { name: playwright-report, path: playwright-report/ }
+```
+
+::right::
+
+<div class="mt-12">
+
+- `--with-deps`: browsers plus their Linux packages
+- `forbidOnly` on CI: a forgotten `test.only` fails the run
+- `retries: 2` on CI, with a trace on the first retry
+- Upload the report, also when tests fail
+- Sharding, Docker and more: *Going further*
+
+</div>
+
+---
+
+## What's next
+
+*Going further*, in the rest of this deck, with an assignment per topic:
+
+- **6** Time, contexts & environment: clock, two users, mobile, dialogs, downloads, frames
+- **7** Visual regression testing
+- **8** Accessibility testing
+- **9** CI in depth: sharding and merged reports
+- **10** AI-assisted testing (optional)
+
+Reference solutions for every assignment are on the `solutions` branch of booker-platform.
+
+---
+
+## Resources
+
+1. Docs and release notes: https://playwright.dev
+2. Discord: https://playwright.dev/community/welcome#community-discord
+3. Stack Overflow: https://stackoverflow.com/tags/playwright
+4. Playwright Solutions: https://playwrightsolutions.com
+5. Test object and solutions: https://github.com/Ghislain89/booker-platform
+6. All assignments with hints: https://ghislain.dev/playwright/assignments.html
+7. These slides: https://github.com/Ghislain89/ghislain.dev/tree/main/decks/playwright-training
+
+---
+
+## Thank you!
+
+Everything from these two evenings is on GitHub: booker-platform (with a `solutions` branch) and these slides.
+
+Feedback or questions? Let us know!
+
+Ghislain@DeTesters.nl · Jurgen@DeTesters.nl
+
+---
+layout: new-section
+---
+
+# Going further
+
+Self-study after the workshop: assignments 6–10
+
+---
+layout: new-section
+---
+
 # Time, contexts & environment
 
 ---
@@ -858,16 +1098,23 @@ layout: new-section
 ## Controlling time: `page.clock`
 
 ```ts
-await page.clock.install({ time: new Date('2030-06-01T14:59:00') });
+// user's booking for room 302 starts today (`today` is 'yyyy-mm-dd'); check-in opens at 15:00
+await page.clock.setFixedTime(new Date(`${today}T14:59:50`));
 await page.goto('/my/bookings');
-await expect(page.getByRole('button', { name: 'Check in' })).toBeDisabled();
+const countdown = page.getByTestId('check-in-countdown').filter({ hasText: 'room 302' });
+await expect(countdown).toHaveText('Check-in for room 302 opens in 00:00:10');
 
-await page.clock.fastForward('01:00');   // one minute later
-await expect(page.getByRole('button', { name: 'Check in' })).toBeEnabled();
+await page.clock.setFixedTime(new Date(`${today}T15:00:00`));
+await expect(countdown).toHaveText('Check-in for room 302 is open');
 ```
 
-- `setFixedTime()` freezes `Date.now()` but keeps timers running
-- `runFor()`, `pauseAt()` and `resume()` control timers precisely (1.45)
+- `setFixedTime()` fixes `Date.now()` and keeps timers running, so the page works as usual
+- `install()` with `fastForward()`, `runFor()` or `pauseAt()` controls the timers too; they stop the app's own timers as well
+
+<!--
+runFor(), pauseAt() and resume(): since 1.45.
+In booker-platform, install() + pauseAt() freezes React Query's timers, so the page never finishes loading. Use setFixedTime.
+-->
 
 ---
 
@@ -880,11 +1127,14 @@ test('the guest sees the admin approval', async ({ browser }) => {
   const guestPage = await guest.newPage();
   const adminPage = await admin.newPage();
 
+  // the guest has a pending booking for room `number`
   await guestPage.goto('/my/bookings');
   await adminPage.goto('/admin/bookings');
-  await adminPage.getByRole('button', { name: 'Approve' }).first().click();
+  const pending = adminPage.getByRole('row', { name: `Room ${number}` });
+  await pending.getByRole('button', { name: 'Approve' }).click();
 
-  await expect(guestPage.getByText('Confirmed')).toBeVisible();
+  const booking = guestPage.getByRole('row', { name: `Room ${number}` });
+  await expect(booking.getByTestId('status-badge')).toHaveText('Confirmed'); // no reload
   await guest.close();
   await admin.close();
 });
@@ -924,45 +1174,41 @@ test.use({
 
 ```ts
 // native dialogs are dismissed by default: accept explicitly
+const row = page.getByRole('row', { name: /Room 201/ });
 page.once('dialog', (dialog) => dialog.accept());
-await page.getByRole('button', { name: 'Cancel booking' }).click();
+await row.getByRole('button', { name: 'Cancel booking' }).click();
 
 // downloads
 const downloadPromise = page.waitForEvent('download');
-await page.getByRole('link', { name: 'Invoice (CSV)' }).click();
+await page.getByRole('button', { name: 'Download CSV invoice for room 302' }).click();
 const download = await downloadPromise;
-expect(download.suggestedFilename()).toMatch(/invoice-\d+\.csv/);
+expect(download.suggestedFilename()).toMatch(/^invoice-room-302-[\d-]+\.csv$/);
 
 // new tabs
 const popupPromise = page.waitForEvent('popup');
-await page.getByRole('link', { name: 'Terms' }).click();
-await expect(await popupPromise).toHaveTitle(/Terms/);
+await page.getByRole('main').getByRole('link', { name: 'Terms' }).click();
+await expect(await popupPromise).toHaveTitle(/Terms and conditions/);
 ```
 
 ---
 
-## Frames, shadow DOM & unexpected overlays
+## Frames & shadow DOM
 
 ```ts
-// iframes
-const map = page.locator('iframe[title="Map"]').contentFrame();
+// iframes: the map on the home page
+const map = page.getByTitle('Map showing the hotel location').contentFrame();
 await expect(map.getByRole('button', { name: 'Zoom in' })).toBeVisible();
 
-// open shadow roots are pierced automatically
+// open shadow roots are pierced automatically: the payment form in the booking wizard
 await page.getByLabel('Card number').fill('4242 4242 4242 4242');
-
-// overlays that may or may not appear (1.42)
-await page.addLocatorHandler(
-  page.getByRole('dialog', { name: 'Cookie consent' }),
-  async (dialog) => {
-    await dialog.getByRole('button', { name: 'Accept' }).click();
-  },
-);
 ```
+
+- `contentFrame()` turns an iframe locator into a frame locator
+- Closed shadow roots can't be reached: test those through their public API
 
 ---
 
-## Assignment 5
+## Assignment 6
 
 Pick one (or more):
 
@@ -981,14 +1227,14 @@ Pick one (or more):
 <!--
 All of these exist in booker-platform. Payment test card: 4242 4242 4242 4242 (any future date and CVC); 4000 0000 0000 0002 is declined.
 Hints: page.waitForEvent('download'), browser.newContext() with the admin storage state, page.clock.setFixedTime (not install+pauseAt: that freezes React Query timers), devices['Pixel 7'] + locale + colorScheme, setInputFiles with a buffer, locator.dragTo, context.waitForEvent('page'). The payment form is in an open shadow root, so ordinary locators reach it.
-Reference solutions: the assignment5.*.spec.ts files on the solutions branch.
+Reference solutions: the assignment6.*.spec.ts files on the solutions branch.
 -->
 
 ---
 layout: new-section
 ---
 
-# Visual & accessibility
+# Visual regression
 
 ---
 
@@ -1000,21 +1246,25 @@ test('home page', async ({ page }) => {
   await expect(page).toHaveScreenshot('home.png');
 });
 
-test('occupancy chart', async ({ page }) => {
-  await page.goto('/admin/reports');
-  await expect(page.getByTestId('occupancy-chart')).toHaveScreenshot();
+test('room card', async ({ page }) => {
+  await page.goto('/rooms');
+  await expect(page.getByRole('article', { name: 'Room 201' })).toHaveScreenshot();
 });
 ```
 
 - First run: no baseline yet, so the test writes one and fails
 - Next runs: pixel comparison against the baseline
-- Name a snapshot `home.webp`, or set `toHaveScreenshot: { type: 'webp' }`, for smaller files (1.62 / 1.64)
+- Name a snapshot `home.webp`, or set `toHaveScreenshot: { type: 'webp' }`, for smaller files
+
+<!--
+WebP snapshots: 1.62 (file name) and 1.64 (type option).
+-->
 
 ---
 
 ## The challenges
 
-- **Volatile content** (dates, banners, animations): mask or hide it
+- **Volatile content** (dates, banners, animations): mask or hide it, or ask for a test mode. booker's `?test=1` turns off animations and fixes the "deal of the day"
 - **Browsers and operating systems render differently**: baselines are stored per project and platform (`home-chromium-darwin.png`)
 - Screenshots generated on macOS or Windows won't match on Linux CI: generate the baselines where CI runs (for example in the Playwright Docker image)
 - Tune the tolerance with `maxDiffPixels`, `maxDiffPixelRatio` and `threshold`
@@ -1047,27 +1297,38 @@ expect: {
 
 ```bash
 npx playwright test --update-snapshots            # same as =changed
-npx playwright test --update-snapshots=changed    # only rewrite what differs (1.50)
-npx playwright test --update-snapshots=missing    # only write new baselines; passes since 1.64
+npx playwright test --update-snapshots=changed    # only rewrite what differs
+npx playwright test --update-snapshots=missing    # only write new baselines
 npx playwright test --update-snapshots=all        # rewrite everything
 npx playwright test --update-snapshots=none       # never write
 ```
 
 > Review baseline changes like code changes: they *are* your expected results.
 
+<!--
+The modes: 1.50. Since 1.64 a run with =missing passes when it only wrote new baselines.
+-->
+
 ---
 
-## Assignment 6
+## Assignment 7
 
 - Take a screenshot of the home page; run the test twice. Does it pass?
 - Mask the "deal of the day" banner and update the baseline
 - Then hide the banner with `stylePath` instead. Which do you prefer?
+- Now open the page with `?test=1`. Do you still need either?
 - Bonus: switch the snapshot to WebP and compare the file size
 
 <div class="flex justify-center gap-5 mt-6">
   <img src="/programming.png" alt="Programming" width="150">
   <img src="/exam-time.png" alt="Exam time" width="150">
 </div>
+
+---
+layout: new-section
+---
+
+# Accessibility
 
 ---
 
@@ -1094,13 +1355,41 @@ test('the booking wizard has no detectable a11y issues', async ({ page }) => {
 ## Accessibility in your assertions
 
 - `getByRole` locators double as a11y checks: if you can't find it by role, neither can a screen reader
-- `toHaveAccessibleName`, `toHaveAccessibleDescription` and `toHaveRole` (1.44)
-- `toMatchAriaSnapshot` for whole structures (1.49), also on page level (1.60)
-- `page.accessibility` was removed in 1.57: use aria snapshots or axe
+- A strict mode violation can be an a11y finding too: two buttons both called "Show" are ambiguous for a screen reader user as well
+- `toHaveAccessibleName`, `toHaveAccessibleDescription` and `toHaveRole`
+- `toMatchAriaSnapshot` for whole structures
+
+<!--
+toHaveAccessibleName, toHaveAccessibleDescription, toHaveRole: 1.44. toMatchAriaSnapshot: 1.49, on page level since 1.60.
+page.accessibility was removed in 1.57: use aria snapshots or axe.
+-->
 
 ---
 
-## Assignment 7
+## ARIA snapshots
+
+Assert the structure of the page as assistive technology sees it:
+
+```ts
+await expect(page.getByRole('navigation', { name: 'Main' })).toMatchAriaSnapshot(`
+  - navigation "Main":
+    - list:
+      - listitem:
+        - link "Rooms"
+      - listitem:
+        - link "My bookings"
+    - button "Log out"
+`);
+```
+
+- Generate them with codegen or the aria view in UI mode and the trace viewer
+- Less brittle than screenshots, more complete than single assertions
+- Partial matching: you can leave out elements ("Signed in as user"), but not levels (the `list`)
+- Update them with `--update-snapshots`
+
+---
+
+## Assignment 8
 
 - Run an axe scan on each step of the booking wizard. How many violations?
 - Attach the results to the report with `testInfo.attach()`
@@ -1111,11 +1400,15 @@ test('the booking wizard has no detectable a11y issues', async ({ page }) => {
   <img src="/exam-time.png" alt="Exam time" width="150">
 </div>
 
+<!--
+Trainer variant: switch on the bug-a11y flag and compare the results.
+-->
+
 ---
 layout: new-section
 ---
 
-# Continuous integration
+# CI in depth
 
 ---
 
@@ -1192,14 +1485,18 @@ npx playwright merge-reports \
 ## Keeping CI trustworthy
 
 - `forbidOnly: !!process.env.CI`: a forgotten `test.only` fails the run
-- `retries: 2` on CI to detect flaky tests, plus `failOnFlakyTests: true` (1.52) so they don't go unnoticed
-- `retryStrategy: 'isolated'` (1.62): run all retries at the end, one by one
+- `retries: 2` on CI to detect flaky tests, plus `failOnFlakyTests: true` so they don't go unnoticed
+- `retryStrategy: 'isolated'`: run all retries at the end, one by one
 - `trace: 'on-first-retry'` and upload the report as an artifact
 - Run `npm run lint` before the tests
 
+<!--
+failOnFlakyTests: 1.52. retryStrategy: 1.62.
+-->
+
 ---
 
-## Assignment 8
+## Assignment 9
 
 - Fork booker-platform and add a GitHub Actions workflow that runs your UI tests
 - Upload the HTML report as an artifact; download it and open a trace
@@ -1220,11 +1517,15 @@ layout: new-section
 
 ## Playwright & AI
 
-- **Copy prompt** on failures in the HTML report, UI mode and trace viewer (1.51)
+- **Copy prompt** on failures in the HTML report, UI mode and trace viewer
 - **Playwright MCP**: lets an AI agent drive a real browser through the accessibility tree
-- **`playwright-cli`**: a token-efficient CLI for coding agents; both are bundled since 1.62 (`npx playwright mcp`, `npx playwright cli`)
-- **`--debug=cli`**: an agent can attach to a paused test and step through it (1.59)
-- **Test agents**: planner, generator and healer (1.56)
+- **`playwright-cli`**: a token-efficient CLI for coding agents; both are bundled (`npx playwright mcp`, `npx playwright cli`)
+- **`--debug=cli`**: an agent can attach to a paused test and step through it
+- **Test agents**: planner, generator and healer
+
+<!--
+Copy prompt: 1.51. Test agents: 1.56. --debug=cli: 1.59. MCP and CLI bundled: 1.62.
+-->
 
 ---
 
@@ -1250,7 +1551,7 @@ npx playwright init-agents --loop=vscode    # or: claude, codex, opencode
 
 ---
 
-## Assignment 9 (optional)
+## Assignment 10 (optional)
 
 - Run `npx playwright init-agents` in booker-platform
 - Let the planner write a plan for "cancel a booking", then generate the test
@@ -1265,55 +1566,90 @@ npx playwright init-agents --loop=vscode    # or: claude, codex, opencode
 layout: new-section
 ---
 
-# Wrap-up
+# More Playwright
 
 ---
 
-## Assignment 10: flaky-test clinic
-
-The trainer switches on chaos mode: slow rooms, flaky bookings, random order and a cookie pop-up.
-
-- Make the suite green again
-- Without `waitForTimeout` and without adding retries
-- Use what you learned today: traces, web-first assertions, mocking, `addLocatorHandler`
-
-Practise on your own with a `chaos` project:
+## More locator tricks
 
 ```ts
-{
-  name: 'chaos',
-  use: {
-    extraHTTPHeaders: {
-      'x-booker-flags': 'slow-rooms,flaky-booking,random-order,popup-cookie',
-    },
-  },
-}
+// only the visible matches, for example when a desktop and a mobile menu both exist
+page.getByRole('link', { name: 'My bookings' }).visible();
+
+// resolve nth() per row: the check-in date of every booking
+const checkIns = page.getByRole('cell').nth(1).within(page.getByRole('row'));
+
+// a readable name in traces and reports
+page.getByRole('button', { name: 'Confirm booking' }).describe('Confirm booking');
+
+// everything except: rooms that can't be booked
+page.getByRole('article').filter({ hasNot: page.getByRole('link', { name: 'Book now' }) });
 ```
 
 <!--
-The trainer switches flags on for everyone at /__trainer (admin only); participants can also use the x-booker-flags header (see the README for the full list of flags).
-Expected fixes: addLocatorHandler for the "We value your privacy" dialog, find rooms by name instead of position, rely on web-first assertions for slow-rooms, and use expect(...).toPass() only around the confirm step (flaky-booking fails before the booking is saved).
-Reference solution: assignment10.chaos.spec.ts on the solutions branch.
+describe(): 1.53. visible(): 1.63. within(): 1.64.
 -->
 
 ---
 
-## Resources
+## Custom assertions
 
-1. Docs and release notes: https://playwright.dev
-2. Discord: https://playwright.dev/community/welcome#community-discord
-3. Stack Overflow: https://stackoverflow.com/tags/playwright
-4. Playwright Solutions: https://playwrightsolutions.com
-5. Test object and solutions: https://github.com/Ghislain89/booker-platform
-6. All assignments with hints: https://ghislain.dev/playwright/assignments.html
-7. These slides: https://github.com/Ghislain89/ghislain.dev/tree/main/decks/playwright-training
+```ts
+import { expect as baseExpect, type Locator } from '@playwright/test';
+
+export const expect = baseExpect.extend({
+  async toHaveBookingStatus(row: Locator, status: string) {
+    let pass = true;
+    try {
+      await baseExpect(row.getByTestId('status-badge')).toHaveText(status);
+    } catch {
+      pass = false;
+    }
+    return { pass, name: 'toHaveBookingStatus', message: () => `expected status "${status}"` };
+  },
+});
+
+await expect(page.getByRole('row', { name: /Room 302/ })).toHaveBookingStatus('Confirmed');
+```
+
+Combine several fixture files with `mergeTests()` and `mergeExpects()`.
 
 ---
 
-## Thank you!
+## More network tools
 
-Everything from today is on GitHub: booker-platform (with a `solutions` branch) and these slides.
+- **HAR**: record and replay traffic with `page.routeFromHAR('booker.har', { update: true })`
+- **WebSockets**: intercept and mock with `page.routeWebSocket()`
+- **Block resources**: `page.route('**/*.{png,jpg}', (route) => route.abort())`
+- **Context-wide**: `context.route()` applies to every page, popups included
+- **Service workers** can hide requests from `page.route`: set `serviceWorkers: 'block'`
 
-Feedback or questions? Let us know!
+<!--
+routeWebSocket: 1.48.
+-->
 
-Ghislain@DeTesters.nl · Jurgen@DeTesters.nl
+---
+
+## More runner and storage features
+
+```ts
+// never runs at the same time as other tests holding the 'branding' lock
+test('admin changes the hotel name', { lock: 'branding' }, async ({ page }) => {
+  // ...
+});
+
+// swap the complete state of an existing context
+await context.setStorageState('playwright/.auth/admin.json');
+
+// include IndexedDB in the saved state
+await context.storageState({ path: userFile, indexedDB: true });
+```
+
+```bash
+npx playwright test --shuffle              # random order; --shuffle <seed> repeats it
+npx playwright test --only-changed=main    # only test files changed since main
+```
+
+<!--
+IndexedDB in storageState: 1.51. setStorageState: 1.59. lock: 1.63. --shuffle <seed>: 1.64. --only-changed: 1.46.
+-->
