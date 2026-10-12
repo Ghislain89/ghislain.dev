@@ -57,8 +57,11 @@ To bring in an existing repo with its history: `git subtree add --prefix=decks/<
 | Workflow | Runs when | Does |
 | --- | --- | --- |
 | [Site](.github/workflows/site.yml) | push to `main` changing `site/`, `tokens.css` or the build script | builds `dist/site` and uploads it to `public_html/` |
-| [Decks build](.github/workflows/decks-build.yml) | pull requests and pushes changing `decks/` or `theme/` | builds every deck |
+| [Decks build](.github/workflows/decks-build.yml) | every pull request, and pushes changing `decks/` or `theme/` | builds every deck; **All decks build** is the check `main` requires |
 | [Decks](.github/workflows/decks-deploy.yml) | push to `main` changing `decks/` or `theme/` | builds and uploads every deck: the training to `/playwright/slides/`, talks to `/slides/<deck>/` |
+| [Dependabot auto-merge](.github/workflows/dependabot-auto-merge.yml) | Dependabot pull requests | turns on auto-merge for minor and patch updates |
+
+[Dependabot](.github/dependabot.yml) checks npm and the GitHub Actions every Monday, and the Quarkus demo monthly. It opens one grouped PR per ecosystem for minor and patch updates, which merge themselves once **All decks build** passes, and a PR per major update for you to review. Quarkus demo PRs are never auto-merged, because CI doesn't build the demo. Auto-merged updates don't trigger a deploy: the next push to `main` deploys them, or run **Decks** by hand. A ruleset on `main` requires **All decks build** for pull requests; admins can still push directly.
 
 Both deploys share the `deploy` concurrency group, so only one talks to the server at a time, and both can be started by hand under **Actions → Run workflow**. After uploading they check the live URLs.
 

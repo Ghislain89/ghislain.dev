@@ -1,14 +1,10 @@
 name: Decks build
 
 on:
+  # Every pull request, without path filters: "All decks build" is a
+  # required check (the "main" ruleset), and a filtered-out workflow
+  # would leave it pending forever.
   pull_request:
-    paths:
-      - decks/**
-      - theme/**
-      - scripts/write-htaccess.mjs
-      - package.json
-      - package-lock.json
-      - .github/workflows/decks-build.yml
   push:
     branches: [main]
     paths:
@@ -30,7 +26,11 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        deck: [playwright-training, agents-skills-101, testcontainers, keep-your-minions-in-line]
+        deck:
+          - playwright-training
+          - agents-skills-101
+          - testcontainers
+          - keep-your-minions-in-line
     steps:
       - uses: actions/checkout@v4
 
@@ -43,3 +43,14 @@ jobs:
       - run: npm ci
 
       - run: npm run build -w decks/${{ matrix.deck }}
+
+  # One stable check for the ruleset, however many decks the matrix has.
+  all-decks:
+    name: All decks build
+    needs: build
+    if: always()
+    runs-on: ubuntu-latest
+    steps:
+      - run: test "$RESULT" = success
+        env:
+          RESULT: ${{ needs.build.result }}
