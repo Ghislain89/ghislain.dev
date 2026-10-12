@@ -345,7 +345,7 @@ await page.getByLabel('Check-in date').press('Tab');
 
 // the header and /my/profile
 await page.getByRole('button', { name: 'Account' }).hover();
-await page.getByLabel('Choose a photo').setInputFiles('playwright/fixtures/avatar.png');
+await page.getByLabel('Choose a photo').setInputFiles('playwright/test-data/avatar.png');
 ```
 
 > Before every action Playwright waits until the element is visible, stable, enabled and able to receive events: the *actionability checks*.

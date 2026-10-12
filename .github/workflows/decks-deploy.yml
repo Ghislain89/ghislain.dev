@@ -7,6 +7,8 @@ on:
       - decks/**
       - theme/**
       - scripts/write-htaccess.mjs
+      - package.json
+      - package-lock.json
       - .github/workflows/decks-deploy.yml
       - .github/actions/sftp-upload/**
   workflow_dispatch:
@@ -47,9 +49,6 @@ jobs:
     environment:
       name: production
       url: ${{ matrix.url }}/
-    defaults:
-      run:
-        working-directory: decks/${{ matrix.deck }}
     steps:
       - uses: actions/checkout@v4
 
@@ -66,11 +65,11 @@ jobs:
         with:
           node-version: 22
           cache: npm
-          cache-dependency-path: decks/${{ matrix.deck }}/package-lock.json
 
+      # One lockfile for all decks (npm workspaces), so install at the root.
       - run: npm ci
 
-      - run: npm run build
+      - run: npm run build -w decks/${{ matrix.deck }}
 
       # Same upload action as the site: only changed files are sent.
       - name: Upload to mijn.host

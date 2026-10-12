@@ -234,7 +234,7 @@
                 <li>Contexts: <code class="inline-code">browser.newContext({ storageState: 'playwright/.auth/admin.json' })</code> gives you a second user in the same test.</li>
                 <li>Clock: use <code class="inline-code">page.clock.setFixedTime()</code>. With <code class="inline-code">install()</code> plus <code class="inline-code">pauseAt()</code> the app's timers stop too, and the page keeps loading.</li>
                 <li>Mobile: combine <code class="inline-code">devices['Pixel 7']</code> with <code class="inline-code">locale</code> and <code class="inline-code">colorScheme</code>.</li>
-                <li>Upload with <code class="inline-code">setInputFiles()</code>; <code class="inline-code">playwright/fixtures/avatar.png</code> is a test image. Drag with <code class="inline-code">locator.dragTo()</code>.</li>
+                <li>Upload with <code class="inline-code">setInputFiles()</code>; <code class="inline-code">playwright/test-data/avatar.png</code> is a test image. Drag with <code class="inline-code">locator.dragTo()</code>.</li>
                 <li>New tab: <code class="inline-code">context.waitForEvent('page')</code>. The payment form is in an open shadow root, so ordinary locators reach it.</li>
                 <li>Test card <code class="inline-code">4242 4242 4242 4242</code> (any future date and CVC) is accepted; <code class="inline-code">4000 0000 0000 0002</code> is declined.</li>
               </ul>
