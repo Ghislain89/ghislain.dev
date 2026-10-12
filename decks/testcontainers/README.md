@@ -21,7 +21,7 @@ Open [localhost:3030](http://localhost:3030) to view the presentation.
 npm run export
 ```
 
-Generates `slides-export.pdf`. Requires [Playwright Chromium](https://playwright.dev).
+Generates `slides-export.pdf` (not committed). Requires [Playwright Chromium](https://playwright.dev).
 
 ## 🗂 Structure
 

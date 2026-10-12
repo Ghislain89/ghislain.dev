@@ -7,11 +7,14 @@
   "scripts": {
     "site": "node scripts/build-site.mjs --serve",
     "build:site": "node scripts/build-site.mjs",
-    "decks": "node scripts/decks.mjs",
-    "setup": "node scripts/decks.mjs ci",
-    "build": "node scripts/decks.mjs run build && node scripts/build-site.mjs"
+    "setup": "npm ci",
+    "build": "npm run build:decks && node scripts/build-site.mjs",
+    "build:decks": "npm run build --workspaces"
   },
   "engines": {
     "node": ">=20.19.0"
-  }
+  },
+  "workspaces": [
+    "decks/*"
+  ]
 }

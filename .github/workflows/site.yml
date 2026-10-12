@@ -4,8 +4,7 @@ on:
   push:
     branches: [main]
     paths:
-      - "home/**"
-      - "playwright/**"
+      - "site/**"
       - "theme/styles/tokens.css"
       - "scripts/build-site.mjs"
       - ".github/workflows/site.yml"
@@ -41,7 +40,7 @@ jobs:
         with:
           node-version: 22
 
-      # home/ at the root, playwright/ and the shared theme/tokens.css next to it.
+      # site/ at the root, with the shared theme/tokens.css next to it.
       - run: node scripts/build-site.mjs
 
       - name: Upload the site
@@ -58,6 +57,6 @@ jobs:
             curl --fail --silent --show-error --output /dev/null "https://ghislain.dev/$page?v=$GITHUB_SHA"
             echo "ok: /$page"
           done
-          curl --fail --silent "https://ghislain.dev/?v=$GITHUB_SHA" | grep -q "Hi, I'm Ghislain" || { echo "::error::/ does not serve home/index.html"; exit 1; }
+          curl --fail --silent "https://ghislain.dev/?v=$GITHUB_SHA" | grep -q "Hi, I'm Ghislain" || { echo "::error::/ does not serve site/index.html"; exit 1; }
           location=$(curl --silent --output /dev/null --write-out '%{redirect_url}' "https://ghislain.dev/slides/")
           [ "$location" = "https://ghislain.dev/#talks" ] || { echo "::error::/slides/ redirects to '$location' instead of /#talks"; exit 1; }

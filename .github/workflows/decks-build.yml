@@ -6,6 +6,8 @@ on:
       - decks/**
       - theme/**
       - scripts/write-htaccess.mjs
+      - package.json
+      - package-lock.json
       - .github/workflows/decks-build.yml
   push:
     branches: [main]
@@ -13,6 +15,8 @@ on:
       - decks/**
       - theme/**
       - scripts/write-htaccess.mjs
+      - package.json
+      - package-lock.json
       - .github/workflows/decks-build.yml
   workflow_dispatch:
 
@@ -27,9 +31,6 @@ jobs:
       fail-fast: false
       matrix:
         deck: [playwright-training, agents-skills-101, testcontainers, keep-your-minions-in-line]
-    defaults:
-      run:
-        working-directory: decks/${{ matrix.deck }}
     steps:
       - uses: actions/checkout@v4
 
@@ -37,8 +38,8 @@ jobs:
         with:
           node-version: 22
           cache: npm
-          cache-dependency-path: decks/${{ matrix.deck }}/package-lock.json
 
+      # One lockfile for all decks (npm workspaces), so install at the root.
       - run: npm ci
 
-      - run: npm run build
+      - run: npm run build -w decks/${{ matrix.deck }}

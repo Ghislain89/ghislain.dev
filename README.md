@@ -4,13 +4,13 @@ Everything on [ghislain.dev](https://ghislain.dev) in one repository: the site p
 
 | Folder | What | Live |
 | --- | --- | --- |
-| [`home/`](home/) | The homepage, favicon and the street/skyline art | https://ghislain.dev/ |
-| [`playwright/`](playwright/) | Playwright training: preparation (default via `.htaccess`), assignments and slides overview | https://ghislain.dev/playwright/ |
-| [`decks/`](decks/) | The Slidev decks, one folder (and `package.json`) per deck | see below |
+| [`site/`](site/) | The static site, uploaded as is: the homepage, favicon and the street/skyline art | https://ghislain.dev/ |
+| [`site/playwright/`](site/playwright/) | Playwright training: preparation (default via `.htaccess`), assignments and slides overview | https://ghislain.dev/playwright/ |
+| [`decks/`](decks/) | The Slidev decks, one folder (and `package.json`) per deck, as npm workspaces | see below |
 | [`theme/`](theme/) | The Slidev theme and the shared design tokens, [`theme/styles/tokens.css`](theme/styles/tokens.css) | `/theme/tokens.css` |
-| [`scripts/`](scripts/) | `build-site.mjs` (site), `decks.mjs` (run npm in decks), `write-htaccess.mjs` (deck deep links) | |
+| [`scripts/`](scripts/) | `build-site.mjs` (site), `write-htaccess.mjs` (deck deep links) | |
 
-`home/slides/` only holds an `.htaccess`: https://ghislain.dev/slides/ redirects to the talks on the homepage.
+`site/slides/` only holds an `.htaccess`: https://ghislain.dev/slides/ redirects to the talks on the homepage.
 
 ## Decks
 
@@ -21,7 +21,7 @@ Everything on [ghislain.dev](https://ghislain.dev) in one repository: the site p
 | Introduction to Testcontainers | Talk, 2026 | [`decks/testcontainers`](decks/testcontainers) | [slides](https://ghislain.dev/slides/testcontainers/) |
 | Keep your minions in line: behavioural testing for AI skills | Talk, 2026 | [`decks/keep-your-minions-in-line`](decks/keep-your-minions-in-line) | [slides](https://ghislain.dev/slides/keep-your-minions-in-line/) |
 
-Every deck has its own `package.json` and assets, so decks can stay on different Slidev versions.
+Every deck has its own `package.json` and assets, so decks can stay on different Slidev versions. The decks are [npm workspaces](https://docs.npmjs.com/cli/using-npm/workspaces) with one `package-lock.json` at the root: shared dependencies are installed once.
 
 ## Usage
 
@@ -29,26 +29,26 @@ Node 22 (or 20.19+).
 
 ```bash
 npm run site                               # build the site to dist/site and preview it on http://localhost:4321
-npm run setup                              # npm ci in every deck
-npm run decks -- run dev testcontainers    # start one deck (any script, any deck)
+npm run setup                              # npm ci: installs every deck
+npm run dev -w decks/testcontainers        # start one deck (any script, any deck)
 npm run build                              # build every deck and the site
 ```
 
-Or work inside a deck folder as usual: `cd decks/testcontainers && npm install && npm run dev`.
+Or work inside a deck folder as usual: `cd decks/testcontainers && npm run dev`. Add a dependency to one deck with `npm install <pkg> -w decks/<name>`.
 
 ## One theme
 
 All colours and fonts are defined once, in [`theme/styles/tokens.css`](theme/styles/tokens.css):
 
 - the decks get it through the Slidev theme (`theme/styles/index.ts`);
-- the site gets it as `/theme/tokens.css`: [`scripts/build-site.mjs`](scripts/build-site.mjs) copies it next to the pages. The homepage links it, `playwright/style.css` imports it.
+- the site gets it as `/theme/tokens.css`: [`scripts/build-site.mjs`](scripts/build-site.mjs) copies it next to the pages. The homepage links it, `site/playwright/style.css` imports it.
 
 Use the `--tn-*` variables, never raw colours. Change the palette there and both the site and every deck follow. See [`.github/copilot-instructions.md`](.github/copilot-instructions.md) for the style rules and [`theme/README.md`](theme/README.md) for the layouts and artwork.
 
 ## Adding a deck
 
-1. Create `decks/<name>/` with its own `package.json` (scripts `dev`, `build`, `export`), `slides.md` (headmatter `theme: ../../theme`) and `public/`. Talk decks build with `--base /slides/<name>/` and run [`scripts/write-htaccess.mjs`](scripts/write-htaccess.mjs) so deep links work.
-2. Add it to the matrices in [`decks-build.yml`](.github/workflows/decks-build.yml) and [`decks-deploy.yml`](.github/workflows/decks-deploy.yml), to the table above and to the talks on the homepage (`#talks` in [`home/index.html`](home/index.html)). One commit, one push.
+1. Create `decks/<name>/` with its own `package.json` (name `<name>`, scripts `dev`, `build`, `export`), `slides.md` (headmatter `theme: ../../theme`) and `public/`. Talk decks build with `--base /slides/<name>/` and run [`scripts/write-htaccess.mjs`](scripts/write-htaccess.mjs) so deep links work. Run `npm install` at the root to add it to the lockfile.
+2. Add it to the matrices in [`decks-build.yml`](.github/workflows/decks-build.yml) and [`decks-deploy.yml`](.github/workflows/decks-deploy.yml), to the table above and to the talks on the homepage (`#talks` in [`site/index.html`](site/index.html)). One commit, one push.
 
 To bring in an existing repo with its history: `git subtree add --prefix=decks/<name> <repo-url> <branch>`.
 
@@ -56,7 +56,7 @@ To bring in an existing repo with its history: `git subtree add --prefix=decks/<
 
 | Workflow | Runs when | Does |
 | --- | --- | --- |
-| [Site](.github/workflows/site.yml) | push to `main` changing `home/`, `playwright/`, `tokens.css` or the build script | builds `dist/site` and uploads it to `public_html/` |
+| [Site](.github/workflows/site.yml) | push to `main` changing `site/`, `tokens.css` or the build script | builds `dist/site` and uploads it to `public_html/` |
 | [Decks build](.github/workflows/decks-build.yml) | pull requests and pushes changing `decks/` or `theme/` | builds every deck |
 | [Decks](.github/workflows/decks-deploy.yml) | push to `main` changing `decks/` or `theme/` | builds and uploads every deck: the training to `/playwright/slides/`, talks to `/slides/<deck>/` |
 

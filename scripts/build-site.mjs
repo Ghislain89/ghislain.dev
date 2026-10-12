@@ -1,6 +1,5 @@
 // Assembles the static site in dist/site, exactly as it is uploaded to public_html:
-//   home/*                      -> /
-//   playwright/*                -> /playwright/
+//   site/*                      -> /   (site/playwright/ -> /playwright/)
 //   theme/styles/tokens.css     -> /theme/tokens.css (the shared Tokyo Night palette)
 // The decks are built and uploaded separately (see .github/workflows/decks-deploy.yml).
 //
@@ -15,8 +14,7 @@ const root = resolve(dirname(fileURLToPath(import.meta.url)), '..')
 const out = join(root, 'dist/site')
 
 const copies = [
-  ['home', '.'],
-  ['playwright', 'playwright'],
+  ['site', '.'],
   ['theme/styles/tokens.css', 'theme/tokens.css'],
 ]
 

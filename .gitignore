@@ -6,3 +6,6 @@ exports
 .remote-assets
 .idea/
 components.d.ts
+
+# PDF exports: generate them locally (npm run export), attach them to a release if needed
+slides-export.pdf
