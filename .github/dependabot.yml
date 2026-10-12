@@ -1,0 +1,39 @@
+# Dependabot: every Monday, one grouped PR per ecosystem with all minor and patch updates,
+# and a separate PR for every major update. Minor and patch PRs merge themselves once
+# "All decks build" passes (workflows/dependabot-auto-merge.yml); majors wait for a review.
+version: 2
+updates:
+  # The decks are npm workspaces: one root package-lock.json covers every deck.
+  - package-ecosystem: npm
+    directory: /
+    schedule:
+      interval: weekly
+      day: monday
+      time: "06:00"
+      timezone: Europe/Amsterdam
+    groups:
+      npm-minor-and-patch:
+        update-types: [minor, patch]
+
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: weekly
+      day: monday
+      time: "06:00"
+      timezone: Europe/Amsterdam
+    groups:
+      actions-minor-and-patch:
+        update-types: [minor, patch]
+
+  # The Quarkus demo of the testcontainers talk. No CI builds it, so these PRs are never
+  # auto-merged: check the demo (./mvnw verify) before merging.
+  - package-ecosystem: maven
+    directory: /decks/testcontainers/quarkus-demo
+    schedule:
+      interval: monthly
+      time: "06:00"
+      timezone: Europe/Amsterdam
+    groups:
+      maven-minor-and-patch:
+        update-types: [minor, patch]
