@@ -183,14 +183,15 @@ test('list rooms', async ({ request }) => {
 
 // your own context, for example per role
 test('admin can list all bookings', async ({ playwright }) => {
-  const admin = await playwright.request.newContext({
+  await using admin = await playwright.request.newContext({
     baseURL: 'http://localhost:3000/api/',
     extraHTTPHeaders: { Authorization: `Bearer ${adminToken}` },
   });
   await expect(await admin.get('bookings')).toBeOK();
-  await admin.dispose();
 });
 ```
+
+`await using` disposes the context when the test ends, even when it fails (1.59). Without it, call `admin.dispose()` yourself.
 
 <!-- Ghislain -->
 
@@ -359,7 +360,7 @@ const suites = await request.get('public/rooms', {
 `params` also accepts a `URLSearchParams` or a query string (1.47).
 
 <!--
-The public rooms endpoint with filters is part of the booker-platform frontend spec (A7/A8). Until it exists, use it as a syntax example only.
+Demo it live: public/rooms needs no token. Filters: type (repeat it for more types), minPrice, maxPrice, capacity, featured, checkIn and checkOut. sort: number, price, -price, capacity or -capacity. Paging: page and pageSize.
 -->
 
 ---
@@ -596,6 +597,9 @@ type ApiResponse<T> = { success: boolean; data: T };
 const response = await request.get<ApiResponse<Room[]>>('rooms', { headers });
 const body = await response.json();        // ApiResponse<Room[]>
 expect(body.data[0].price).toBeGreaterThan(0);
+
+// or derive the type from a Zod schema you already have
+const rooms = await request.get<z.infer<typeof getApiRoomsResponse>>('rooms', { headers });
 ```
 
 - Autocomplete and compile errors instead of typos in property names
@@ -639,13 +643,13 @@ const api = await playwright.request.newContext({
 });
 
 await api.post(`rooms/${roomId}/image`, { multipart: formData });   // FormData (1.44)
-await api.post('contact', { form: new URLSearchParams({ name, email }) }); // URL-encoded (1.47)
+await api.post('contact', { form: { name, email } });               // URL-encoded; or a FormData (1.48)
 
 const response = await api.get('rooms');
 console.log(response.timing());     // DNS, connect, request and response timings (1.62)
 ```
 
-`failOnStatusCode` is handy for setup code, but not for negative tests.
+`failOnStatusCode` is handy for setup code, but not for negative tests. Logging in with a cookie? `api.addCookies()`, `api.cookies()` and `api.clearCookies()` manage the cookies of a request context, like on a browser context (1.64).
 
 <!-- Lars -->
 
