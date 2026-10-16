@@ -111,6 +111,7 @@ layout: new-section
 <!--
 Chromium runs on Chrome for Testing builds since 1.57. Use channel: 'chrome' or 'msedge' for the branded browsers.
 Mobile emulation: Chrome for Android and Mobile Safari (see Going further).
+Platforms: WebKit needs macOS 15 or newer (macOS 13 was dropped in 1.58, macOS 14 in 1.59). Ubuntu 20.04 (1.63) and Debian 11 (1.62) are no longer supported.
 -->
 
 ---
@@ -166,7 +167,7 @@ layout: two-cols
 - `baseURL`: write `page.goto('/rooms')`
 - `webServer`: Playwright starts the app for you
 - `projects`: browsers, devices or setups
-- `default: false`: only runs with `--project webkit`
+- `default: false`: only runs with `--project webkit`; `--project="*"` runs them all
 - `retries`, `reporter`, `trace`: more on these later
 
 ::right::
@@ -197,7 +198,7 @@ export default defineConfig({
 ```
 
 <!--
-default: false on a project: since 1.64.
+default: false on a project: since 1.64. A plain npx playwright test skips those projects, on CI too: pass --project="*" to run every project.
 -->
 
 ---
@@ -458,14 +459,17 @@ A trace records every action with DOM snapshots, network calls, console logs and
 use: {
   trace: 'on-first-retry',
   // or 'on' | 'off' | 'retain-on-failure' | 'retain-on-first-failure'
+
+  // plus a screenshot and the aria snapshot of every action:
+  // trace: { mode: 'on-first-retry', snapshots: { dom: true, aria: true, screen: true } },
 },
 ```
 
 - Open it from the HTML report, with `npx playwright show-trace trace.zip`, or at trace.playwright.dev
-- Every action shows a screenshot next to the aria snapshot of the page
+- With aria and screen snapshots on, the viewer shows each action's screenshot next to its aria snapshot
 
 <!--
-retain-on-first-failure: 1.43. retain-on-failure-and-retries: 1.59. Screenshot next to the aria snapshot per action: 1.63.
+retain-on-first-failure: 1.43. retain-on-failure-and-retries: 1.59. The snapshots object: 1.63. By default a trace only has DOM snapshots (snapshots: true means { dom: true }); in the viewer, Display Aria puts the screenshot next to the aria snapshot.
 -->
 
 ---
@@ -490,7 +494,7 @@ export default defineConfig({
 });
 ```
 
-Or from the CLI: `npx playwright test --reporter=line`
+Or from the CLI: `--reporter=line` replaces these, `--add-reporter=line` adds one
 
 ::right::
 
@@ -502,7 +506,7 @@ Or from the CLI: `npx playwright test --reporter=line`
 - A duration waterfall next to the test steps
 
 <!--
-Copy prompt: 1.51. Speedboard: 1.57. Waterfall: 1.63. captureGitInfo (commit and diff in the report): 1.51.
+Copy prompt: 1.51. Speedboard: 1.57. Waterfall: 1.63. captureGitInfo (commit and diff in the report): 1.51. --add-reporter: 1.63.
 -->
 
 ---
@@ -1020,13 +1024,13 @@ jobs:
   test:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v5
-      - uses: actions/setup-node@v6
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
         with: { node-version: lts/* }
       - run: npm ci
       - run: npx playwright install --with-deps
       - run: npx playwright test
-      - uses: actions/upload-artifact@v5
+      - uses: actions/upload-artifact@v7
         if: ${{ !cancelled() }}
         with: { name: playwright-report, path: playwright-report/ }
 ```
@@ -1122,8 +1126,8 @@ In booker-platform, install() + pauseAt() freezes React Query's timers, so the p
 
 ```ts
 test('the guest sees the admin approval', async ({ browser }) => {
-  const guest = await browser.newContext({ storageState: 'playwright/.auth/user.json' });
-  const admin = await browser.newContext({ storageState: 'playwright/.auth/admin.json' });
+  await using guest = await browser.newContext({ storageState: 'playwright/.auth/user.json' });
+  await using admin = await browser.newContext({ storageState: 'playwright/.auth/admin.json' });
   const guestPage = await guest.newPage();
   const adminPage = await admin.newPage();
 
@@ -1135,10 +1139,14 @@ test('the guest sees the admin approval', async ({ browser }) => {
 
   const booking = guestPage.getByRole('row', { name: `Room ${number}` });
   await expect(booking.getByTestId('status-badge')).toHaveText('Confirmed'); // no reload
-  await guest.close();
-  await admin.close();
 });
 ```
+
+`await using` closes both contexts when the test ends, also when it fails.
+
+<!--
+await using: since 1.59. Without it, close the contexts yourself at the end of the test. Those lines don't run when an assertion fails, and Playwright doesn't close contexts that you created.
+-->
 
 ---
 layout: two-cols
@@ -1163,10 +1171,15 @@ test.use({
   locale: 'nl-NL',
   timezoneId: 'Europe/Amsterdam',
   colorScheme: 'dark',
+  reducedMotion: 'reduce',
   geolocation: { latitude: 52.08, longitude: 4.88 },
   permissions: ['geolocation'],
 });
 ```
+
+<!--
+reducedMotion, forcedColors and contrast as test options: since 1.63 (before: contextOptions). Since 1.64 the devices also set the screen size, so window.screen and device media queries follow the device; opt out with screen: undefined.
+-->
 
 ---
 
@@ -1199,12 +1212,20 @@ await expect(await popupPromise).toHaveTitle(/Terms and conditions/);
 const map = page.getByTitle('Map showing the hotel location').contentFrame();
 await expect(map.getByRole('button', { name: 'Zoom in' })).toBeVisible();
 
+// or search every frame, without locating the iframe first
+await expect(page.frameLocator().getByRole('button', { name: 'Zoom in' })).toBeVisible();
+
 // open shadow roots are pierced automatically: the payment form in the booking wizard
 await page.getByLabel('Card number').fill('4242 4242 4242 4242');
 ```
 
 - `contentFrame()` turns an iframe locator into a frame locator
+- `frameLocator()` without a selector searches every frame; it throws when elements match in more than one frame
 - Closed shadow roots can't be reached: test those through their public API
+
+<!--
+page.frameLocator() without a selector: since 1.63.
+-->
 
 ---
 
@@ -1254,10 +1275,10 @@ test('room card', async ({ page }) => {
 
 - First run: no baseline yet, so the test writes one and fails
 - Next runs: pixel comparison against the baseline
-- Name a snapshot `home.webp`, or set `toHaveScreenshot: { type: 'webp' }`, for smaller files
+- Name a snapshot `home.webp`, or set `toHaveScreenshot: { type: 'webp' }`, to store lossless WebP instead of PNG
 
 <!--
-WebP snapshots: 1.62 (file name) and 1.64 (type option).
+WebP snapshots: 1.62 (file name) and 1.64 (type option). Not always smaller: in Chromium the browser encodes the WebP itself, and booker's home page comes out at about twice the size of the PNG (1.64: 251 against 134 KB on macOS, 274 against 130 KB on Linux). That's the answer to the bonus of assignment 7.
 -->
 
 ---
@@ -1268,6 +1289,11 @@ WebP snapshots: 1.62 (file name) and 1.64 (type option).
 - **Browsers and operating systems render differently**: baselines are stored per project and platform (`home-chromium-darwin.png`)
 - Screenshots generated on macOS or Windows won't match on Linux CI: generate the baselines where CI runs (for example in the Playwright Docker image)
 - Tune the tolerance with `maxDiffPixels`, `maxDiffPixelRatio` and `threshold`
+- **Upgrading Playwright** upgrades the browsers too, and rendering can shift: update the baselines in a separate pull request
+
+<!--
+An example: since 1.64 the devices also set the screen size, which changes pages that read window.screen or use device media queries.
+-->
 
 ---
 
@@ -1420,9 +1446,13 @@ npx playwright install --with-deps    # browsers + OS packages (Linux)
 npx playwright test
 ```
 
-- Or skip the install: run in the official image `mcr.microsoft.com/playwright:v1.64.0-noble` (Ubuntu 24.04)
+- Or skip the install: run in the official image `mcr.microsoft.com/playwright:v1.64.0-noble` (Ubuntu 24.04); its version must match your `@playwright/test`
 - `npm init playwright@latest` can generate a GitHub Actions workflow for you
-- Node 18 is no longer supported: use the current LTS
+- Use a supported Node.js LTS, such as 22 or 24: Node 20 reached end-of-life in April 2026
+
+<!--
+Image tags also exist for Ubuntu 22.04 (-jammy) and, since 1.61, Ubuntu 26.04 (-resolute). The images run Node 24 since 1.57. Playwright itself needs Node 20 or newer.
+-->
 
 ---
 
@@ -1435,13 +1465,13 @@ jobs:
   test:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v5
-      - uses: actions/setup-node@v6
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
         with: { node-version: lts/*, cache: npm }
       - run: npm ci
       - run: npx playwright install --with-deps
       - run: npx playwright test
-      - uses: actions/upload-artifact@v5
+      - uses: actions/upload-artifact@v7
         if: ${{ !cancelled() }}
         with: { name: playwright-report, path: playwright-report/, retention-days: 30 }
 ```
@@ -1507,6 +1537,11 @@ failOnFlakyTests: 1.52. retryStrategy: 1.62.
   <img src="/exam-time.png" alt="Exam time" width="150">
 </div>
 
+<!--
+Downloaded the report artifact? npx playwright show-report playwright-report.zip opens it without unzipping (1.60).
+The actions in the workflow: v7 of checkout, setup-node and upload-artifact (Node 24). GitHub runs every JavaScript action on Node 24 since September 2026.
+-->
+
 ---
 layout: new-section
 ---
@@ -1520,11 +1555,14 @@ layout: new-section
 - **Copy prompt** on failures in the HTML report, UI mode and trace viewer
 - **Playwright MCP**: lets an AI agent drive a real browser through the accessibility tree
 - **`playwright-cli`**: a token-efficient CLI for coding agents; both are bundled (`npx playwright mcp`, `npx playwright cli`)
-- **`--debug=cli`**: an agent can attach to a paused test and step through it
+- **`--debug=cli`** and **`npx playwright trace`**: an agent can step through a paused test, or read a trace from the command line
+- **Agent skills**: `npx playwright init-skills` installs skills for the CLI, for traces and for component testing
 - **Test agents**: planner, generator and healer
 
 <!--
-Copy prompt: 1.51. Test agents: 1.56. --debug=cli: 1.59. MCP and CLI bundled: 1.62.
+Copy prompt: 1.51. Test agents: 1.56. --debug=cli and npx playwright trace: 1.59. MCP and CLI bundled, init-skills: 1.62.
+init-skills writes to .claude/skills; --loop=agents writes to .agents/skills.
+WebMCP (1.64): Playwright MCP also offers the agent the tools that a page registers through the experimental WebMCP API, and page.webmcp tests them.
 -->
 
 ---
@@ -1532,7 +1570,7 @@ Copy prompt: 1.51. Test agents: 1.56. --debug=cli: 1.59. MCP and CLI bundled: 1.
 ## Test agents
 
 ```bash
-npx playwright init-agents --loop=vscode    # or: claude, codex, opencode
+npx playwright init-agents --loop=vscode    # or: claude, codex, copilot, opencode
 ```
 
 - 🎭 **planner** explores the app and writes a Markdown test plan
