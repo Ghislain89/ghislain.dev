@@ -25,7 +25,7 @@ Every deck has its own `package.json` and assets, so decks can stay on different
 
 ## Usage
 
-Node 22 (or 20.19+).
+Node 22.12 or newer (Slidev 53 requires it).
 
 ```bash
 npm run site                               # build the site to dist/site and preview it on http://localhost:4321
