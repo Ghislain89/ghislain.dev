@@ -50,7 +50,7 @@ jobs:
       name: production
       url: ${{ matrix.url }}/
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
 
       - name: Check that the FTP password is set
         env:
