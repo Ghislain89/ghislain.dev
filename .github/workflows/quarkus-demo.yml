@@ -1,0 +1,40 @@
+name: Quarkus demo
+
+# The Testcontainers deck's demo app: build it and run its tests. They start
+# PostgreSQL, Kafka and WireMock with Testcontainers, so they need Docker,
+# which GitHub's Ubuntu runners have. Not a required check: it only runs when
+# the demo changes, and a required check that doesn't run stays pending.
+on:
+  pull_request:
+    paths:
+      - decks/testcontainers/quarkus-demo/**
+      - .github/workflows/quarkus-demo.yml
+  push:
+    branches: [main]
+    paths:
+      - decks/testcontainers/quarkus-demo/**
+      - .github/workflows/quarkus-demo.yml
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    name: Quarkus demo tests
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    defaults:
+      run:
+        working-directory: decks/testcontainers/quarkus-demo
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: actions/setup-java@v6
+        with:
+          distribution: temurin
+          java-version: 21
+          cache: maven
+          cache-dependency-path: decks/testcontainers/quarkus-demo/pom.xml
+
+      - run: ./mvnw -B verify
