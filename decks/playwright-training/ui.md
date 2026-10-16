@@ -75,7 +75,7 @@ hideInToc: true
 
 ## Preparation check
 
-- Node.js LTS, Git and VS Code with the Playwright Test extension installed
+- Node.js LTS (22.22 or newer), Git and VS Code with the Playwright Test extension installed
 - `npx playwright --version` prints **1.64** or newer
 - booker-platform runs on http://localhost:3000
 - Went through the [preparation page](https://ghislain.dev/playwright/preparation.html)?
