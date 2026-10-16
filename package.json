@@ -16,5 +16,9 @@
   },
   "workspaces": [
     "decks/*"
-  ]
+  ],
+  "overrides": {
+    "dompurify": "^3.4.16",
+    "image-size": "^2.0.3"
+  }
 }
