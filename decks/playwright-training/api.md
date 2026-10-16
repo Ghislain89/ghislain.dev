@@ -577,7 +577,7 @@ export const expect = baseExpect.extend({
 });
 
 const responseBody: unknown = await response.json();
-await expect(responseBody).toMatchSchema(getApiRoomsResponse);
+await expect(responseBody).toMatchSchema(GetApiRoomsResponse);
 ```
 
 - `json()` returns `any`, and Playwright's types hide custom matchers on `any` values. Type the body as `unknown` (or a real type) first
@@ -599,7 +599,7 @@ const body = await response.json();        // ApiResponse<Room[]>
 expect(body.data[0].price).toBeGreaterThan(0);
 
 // or derive the type from a Zod schema you already have
-const rooms = await request.get<z.infer<typeof getApiRoomsResponse>>('rooms', { headers });
+const rooms = await request.get<z.infer<typeof GetApiRoomsResponse>>('rooms', { headers });
 ```
 
 - Autocomplete and compile errors instead of typos in property names
