@@ -1,4 +1,8 @@
 export default () => ({
+  // Mermaid 12 lays out with ELK and a new look by default; keep the dagre layout
+  // and the classic look the decks were designed with.
+  layout: 'dagre',
+  look: 'classic',
   theme: 'base',
   themeVariables: {
     darkMode: true,

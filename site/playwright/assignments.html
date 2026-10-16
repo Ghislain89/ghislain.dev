@@ -231,7 +231,7 @@
               <summary>Hints</summary>
               <ul>
                 <li>Downloads: start <code class="inline-code">page.waitForEvent('download')</code> before you click.</li>
-                <li>Contexts: <code class="inline-code">browser.newContext({ storageState: 'playwright/.auth/admin.json' })</code> gives you a second user in the same test.</li>
+                <li>Contexts: <code class="inline-code">browser.newContext({ storageState: 'playwright/.auth/admin.json' })</code> gives you a second user in the same test. Declare it with <code class="inline-code">await using</code>, so it's closed even when the test fails.</li>
                 <li>Clock: use <code class="inline-code">page.clock.setFixedTime()</code>. With <code class="inline-code">install()</code> plus <code class="inline-code">pauseAt()</code> the app's timers stop too, and the page keeps loading.</li>
                 <li>Mobile: combine <code class="inline-code">devices['Pixel 7']</code> with <code class="inline-code">locale</code> and <code class="inline-code">colorScheme</code>.</li>
                 <li>Upload with <code class="inline-code">setInputFiles()</code>; <code class="inline-code">playwright/test-data/avatar.png</code> is a test image. Drag with <code class="inline-code">locator.dragTo()</code>.</li>
@@ -294,6 +294,7 @@
               <ul>
                 <li>In CI, run <code class="inline-code">npx playwright install --with-deps</code> and <code class="inline-code">npm run setup</code> before the tests.</li>
                 <li>Upload the report with <code class="inline-code">actions/upload-artifact</code> and <code class="inline-code">if: ${{ !cancelled() }}</code>, so you also get it when tests fail.</li>
+                <li>No need to unzip the downloaded artifact: <code class="inline-code">npx playwright show-report playwright-report.zip</code> opens it.</li>
                 <li>Sharding: <code class="inline-code">--shard 1/2</code> with the <code class="inline-code">blob</code> reporter, then <code class="inline-code">npx playwright merge-reports</code>.</li>
               </ul>
             </details>

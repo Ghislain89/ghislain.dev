@@ -449,7 +449,7 @@ hideInToc: true
 
 Model Context Protocol servers expose capabilities as structured tools.
 
-```mermaid {scale: 0.68}
+```mermaid {scale: 0.42}
 flowchart LR
     A[Agent] -->|tool call| M[MCP Server]
     M -->|authenticated API call| S[External System]
@@ -791,7 +791,7 @@ hideInToc: true
 
 # ISSUE-1234, From Request to Pull Request
 
-```mermaid {scale: 0.4}
+```mermaid {scale: 0.36}
 flowchart LR
     A[Jira story] --> B[Plan agent]
     B --> C[Quality agent]

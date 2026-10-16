@@ -1,6 +1,7 @@
 # Turns on auto-merge for Dependabot's minor and patch updates. GitHub merges them once the
 # check required by the "main" ruleset ("All decks build") passes. Major updates, and the
-# Quarkus demo (Maven, not built in CI), wait for a review.
+# Quarkus demo (Maven; its tests run in the "Quarkus demo" workflow, which isn't a
+# required check), wait for a review.
 #
 # Merges done this way don't trigger the deploy workflows (GitHub doesn't start workflows
 # for events caused by GITHUB_TOKEN): the next push to main deploys them, or run "Decks" by hand.
