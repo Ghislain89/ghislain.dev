@@ -14,13 +14,13 @@
     "export:api": "slidev export api.md --output exports/playwright-api-testing.pdf"
   },
   "dependencies": {
-    "@slidev/cli": "53.0.0"
+    "@slidev/cli": "53.1.0"
   },
   "devDependencies": {
     "@iconify-json/la": "^1.2.0",
-    "@iconify-json/logos": "^1.2.18",
+    "@iconify-json/logos": "^1.2.19",
     "@iconify-json/simple-icons": "^1.2.101",
-    "playwright-chromium": "^1.64.1"
+    "playwright-chromium": "^1.65.0"
   },
   "license": "CC-BY-NC-SA-4.0"
 }
