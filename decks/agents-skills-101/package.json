@@ -9,8 +9,8 @@
     "export": "slidev export slides.md"
   },
   "devDependencies": {
-    "@iconify-json/logos": "^1.2.19",
-    "@iconify-json/simple-icons": "^1.2.101",
+    "@iconify-json/logos": "^1.2.20",
+    "@iconify-json/simple-icons": "^1.2.102",
     "@slidev/cli": "53.1.0",
     "playwright-chromium": "^1.65.0"
   }
