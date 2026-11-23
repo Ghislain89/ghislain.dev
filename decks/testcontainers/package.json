@@ -10,8 +10,8 @@
   },
   "devDependencies": {
     "@iconify-json/logos": "^1.2.20",
-    "@iconify-json/simple-icons": "^1.2.102",
+    "@iconify-json/simple-icons": "^1.2.103",
     "@slidev/cli": "^53.1.0",
-    "playwright-chromium": "^1.65.0"
+    "playwright-chromium": "^1.65.1"
   }
 }
